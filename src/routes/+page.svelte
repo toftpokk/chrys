@@ -1,7 +1,7 @@
 <script lang="ts">
-    import Card from '../Card.svelte'
-    import PageNav from '../PageNav.svelte';
-    import Footer from '../Footer.svelte'
+    import Card from '../lib/Card.svelte'
+    import PageNav from '../lib/PageNav.svelte';
+    import Footer from '../lib/Footer.svelte'
     import type { work } from '../lib/types'
 	import { image_server } from '$lib/consts';
 

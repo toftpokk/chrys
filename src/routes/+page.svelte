@@ -15,7 +15,7 @@
         {#each works as w}
             <Card
                 image={`${image_server}/images/works/${encodeURIComponent(w.author_name)}/${encodeURIComponent(w.name)}/${w.images[0]}`}
-                url={`/work/${encodeURIComponent(w.author_name)}/${encodeURIComponent(w.name)}`}
+                url={`/work/${w.work_id}`}
                 author={w.author_name}
                 title={w.name}
                 viewed={w.viewed}

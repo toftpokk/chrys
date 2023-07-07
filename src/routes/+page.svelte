@@ -3,8 +3,10 @@
     import PageNav from '../PageNav.svelte';
     import Footer from '../Footer.svelte'
     import type { work } from '../lib/types'
+	import { image_server } from '$lib/consts';
+
 	export let data : {work: work[]};
-    const works : work[] = []
+    const works = data.work;
     const page = 1
 </script>
 <main class="w-full mt-6" >
@@ -12,8 +14,8 @@
     <ul role="list" class="max-w-7xl flex flex-wrap justify-center mx-auto">
         {#each works as w}
             <Card
-                image={w.images[0]}
-                url={'/work/'+w.work_id}
+                image={`${image_server}/images/works/${encodeURIComponent(w.author_name)}/${encodeURIComponent(w.name)}/${w.images[0]}`}
+                url={`/work/${encodeURIComponent(w.author_name)}/${encodeURIComponent(w.name)}`}
                 author={w.author_name}
                 title={w.name}
                 viewed={w.viewed}

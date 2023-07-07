@@ -227,5 +227,3 @@ export async function list_work(page: number) : Promise<work[]>{
     }
     return works
 }
-
-init_table()

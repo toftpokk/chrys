@@ -1,11 +1,15 @@
 import sqlite from 'sqlite3'
 import type { author, db_work, work } from '../../types'
-import { image_server } from '$lib/consts'
+import { database_file, image_server, page_size } from '$lib/consts'
 
-const WORK_ROOT = './static/works'
 sqlite.verbose()
-const db = new sqlite.Database('./db.sqlite')
-const CACHE = []
+const db = new sqlite.Database(database_file)
+
+function paginate(page: number){
+    const start = (page-1)*page_size
+    const end = page*page_size
+    return {start,end}
+}
 
 function get(sql: string, params: any[]) {
     return new Promise<any>((resolve, reject) => {
@@ -214,9 +218,10 @@ export async function get_work(work_id: number) : Promise<work|null> {
     return null
 }
 
-export async function list_work() : Promise<work[]>{
+export async function list_work(page: number) : Promise<work[]>{
     const partial_works = await db_work_author()
-    const works = partial_works.slice(0,10)
+    const {start,end} = paginate(page)
+    const works = partial_works.slice(start,end)
     for(let w of works){
         w.images = await get_images(w.author_name,w.name)
     }

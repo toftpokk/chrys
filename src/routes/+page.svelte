@@ -4,10 +4,10 @@
     import Footer from '../lib/Footer.svelte'
     import type { work } from '../lib/types'
 	import { image_server } from '$lib/consts';
-
-	export let data : {work: work[]};
+    
+	export let data : {work: work[], page: number};
     const works = data.work;
-    const page = 1
+    const page = data.page
 </script>
 <main class="w-full mt-6" >
     <PageNav page={page} max={-1} url="/"/>

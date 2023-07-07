@@ -14,7 +14,7 @@
 
 </script>
 <div class="max-w-7xl flex justify-center text-4xl mx-auto my-2">
-    <a class="w-8 {leftHidden? "hidden":""}" href={url+"?page="+(page-1)}>&larr;</a>
+    <a data-sveltekit-reload class="w-8 {leftHidden? "hidden":""}" href={url+"?page="+(page-1)}>&larr;</a>
     <span class="text-3xl w-10 mx-6 text-center">{page}</span>
-    <a class="w-8 {rightHidden? "hidden":""}" href={url+"?page="+(page+1)}>&rarr;</a>
+    <a data-sveltekit-reload class="w-8 {rightHidden? "hidden":""}" href={url+"?page="+(page+1)}>&rarr;</a>
 </div>

@@ -1,5 +1,6 @@
 import sqlite from 'sqlite3'
 import type { work } from '../../types'
+import { image_server } from '$lib/consts'
 
 const WORK_ROOT = './static/works'
 sqlite.verbose()
@@ -74,45 +75,34 @@ export async function init_table() {
     console.log("Initializing Tables")
     create_author()
     create_work()
-    const {author_list,work_list} = await scan()
-    console.log(author_list)
+    const work_list = await scan()
 }
 
 async function scan(){
-    const author_list = []
-    const work_list = []
+    let author_list : string[] = []
+    let work_list : Record<string,string[]> = {}
 
-    const authors = await readdir(WORK_ROOT);
-
-    for(let a_idx=0;a_idx<authors.length;a_idx++){
-        const author_name = authors[a_idx];
-        const author = {
-            name: author_name,
-            proto_author_id: a_idx, // temporary id
-            path: "/"+author_name
-        }
-
-        author_list.push(author)
-        
-        const works = await readdir(`${WORK_ROOT}/${author_name}`)
-        for(let w_idx=0;w_idx<works.length;w_idx++){
-            const work_name = works[w_idx]
-            const isdir = (await lstat(`${WORK_ROOT}/${author_name}/${work_name}`)).isDirectory()
-            if(!isdir){
-                continue // skip zip files
-            }
-            const work = {
-                name: work_name,
-                path: "/"+author_name+"/"+work_name,
-                proto_author_id: a_idx,
-                viewed: false,
-                favorite: false,
-                tags: ["test1","test2"]
-            }
-            work_list.push(work)
-        }
+    const res = await fetch(`${image_server}/api/repo/works/`)
+    if(!res.ok){
+        console.log(`Could not get author list image server ${image_server}`)
     }
-    return {author_list, work_list}
+    else{
+        const data = await res.json()
+        author_list = data["dirs"]
+    }
+    await Promise.all(author_list.map(async (author)=>{
+        const res = await fetch(`${image_server}/api/repo/works/${author}`)
+        let works = []
+        if(!res.ok){
+            console.log(`Could not get works from author '${author}' from image server ${image_server}`)
+        }
+        else{
+            const data = await res.json()
+            works = data["subdirs"]
+        }
+        work_list[author] = works
+    }))
+    return work_list
 }
 
 export async function list_work() : Promise<work[]>{

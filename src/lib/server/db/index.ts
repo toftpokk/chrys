@@ -162,6 +162,18 @@ export function db_work_by_id(work_id: number): Promise<db_work | undefined>{
     return get(sql, [work_id])
 }
 
+export async function db_work_author_by_id(work_id:number) : Promise<any | undefined>{
+    const sql = `
+    SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,a.name AS author_name
+    FROM work w
+    LEFT JOIN author a
+    ON w.author_id = a.author_id
+    WHERE w.work_id = ?
+    `
+    return await get(sql,[work_id])
+
+}
+
 export async function db_work_author() : Promise<work[]>{
     const sql = `
     SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,a.name AS author_name
@@ -173,7 +185,7 @@ export async function db_work_author() : Promise<work[]>{
 
 }
 
-async function get_images(author_name:string,work_name:string){
+async function get_images(author_name:string,work_name:string) : Promise<string[]>{
     const author_comp = encodeURIComponent(author_name)
     const work_comp = encodeURIComponent(work_name)
     const res = await fetch(`${image_server}/api/repo/works/${author_comp}/${work_comp}`)
@@ -186,6 +198,20 @@ async function get_images(author_name:string,work_name:string){
         images = data["items"]
     }
     return images
+}
+export async function get_work(work_id: number) : Promise<work|null> {
+    const work = await db_work_author_by_id(work_id)
+    if(typeof work === "object"){
+        work.images = await get_images(work.author_name,work.name)
+        if(work.tags === ''){
+            work.tags = []
+        }
+        else{
+            work.tags = work.tags.split(' ')
+        }
+        return work
+    }
+    return null
 }
 
 export async function list_work() : Promise<work[]>{

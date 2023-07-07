@@ -1,5 +1,5 @@
 <script>
-    import Footer from '../../Footer.svelte'
+    import Footer from '../../lib/Footer.svelte'
 </script>
 <main class="w-full my-6" >
     <div class="max-w-4xl block mx-auto my-8 text-xl">

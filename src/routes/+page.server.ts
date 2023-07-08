@@ -1,4 +1,4 @@
-import { list_work } from "../lib/server/db";
+import { list_work } from "$lib/server/db";
 
 export function load({url}){
     let page = Number(url.searchParams.get("page"))

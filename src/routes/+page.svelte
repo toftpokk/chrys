@@ -1,8 +1,8 @@
 <script lang="ts">
-    import Card from '../lib/Card.svelte'
-    import PageNav from '../lib/PageNav.svelte';
-    import Footer from '../lib/Footer.svelte'
-    import type { work } from '../lib/types'
+    import Card from '$lib/Card.svelte'
+    import PageNav from '$lib/PageNav.svelte';
+    import Footer from '$lib/Footer.svelte'
+    import type { work } from '$lib/types'
 	import { image_server } from '$lib/consts';
     
 	export let data : {work: work[], page: number};

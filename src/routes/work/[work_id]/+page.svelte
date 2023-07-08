@@ -1,6 +1,6 @@
 <script lang="ts">
     import { image_server } from '$lib/consts';
-    import type { work } from '../../../lib/types'
+    import type { work } from '$lib/types'
     export let data : {work:work|null};
 
     let work_name = "Unnamed Work";

@@ -1,5 +1,5 @@
 import Database from 'better-sqlite3'
-import type { author, db_work, work } from '../../types'
+import type { author, db_work, work } from '$lib/types'
 import { database_file, image_server, page_size } from '$lib/consts'
 const db = new Database(database_file)
 

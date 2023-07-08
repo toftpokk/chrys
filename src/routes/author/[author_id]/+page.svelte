@@ -12,7 +12,7 @@
     console.log(works)
 </script>
 <main class="w-full mt-6" >
-    <PageNav page={page} max={-1} url="/"/>
+    <PageNav page={page} max={-1}/>
     <h1 class="text-4xl flex justify-center my-8">{author_name}</h1>
     <ul role="list" class="max-w-7xl flex flex-wrap justify-center mx-auto">
         {#each works as w}
@@ -27,6 +27,6 @@
             />
         {/each}
     </ul>
-    <PageNav page={page} max={-1} url="/"/>
+    <PageNav page={page} max={-1}/>
     <Footer/>
 </main>

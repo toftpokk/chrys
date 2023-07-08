@@ -10,7 +10,7 @@
     const page = data.page
 </script>
 <main class="w-full mt-6" >
-    <PageNav page={page} max={-1} url="/"/>
+    <PageNav page={page} max={-1}/>
     <ul role="list" class="max-w-7xl flex flex-wrap justify-center mx-auto">
         {#each works as w}
             <Card
@@ -24,6 +24,6 @@
             />
         {/each}
     </ul>
-    <PageNav page={page} max={-1} url="/"/>
+    <PageNav page={page} max={-1}/>
     <Footer/>
 </main>

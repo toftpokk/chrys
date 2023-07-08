@@ -97,38 +97,38 @@ const scan = async ()=>{
 
 // // DATABASE OPERATIONS
 
-export const db_insert_author = (name: string, path: string): number =>{
+const db_insert_author = (name: string, path: string): number =>{
     const info = db.prepare('INSERT INTO author (name,path) VALUES (?,?)')
                    .run([name, path])
     return Number(info.lastInsertRowid)
 }
 
-export const db_insert_work = (name: string, path: string, author_id: number,tags: string[]) : number =>{
+const db_insert_work = (name: string, path: string, author_id: number,tags: string[]) : number =>{
     const t = tags.join(" ")
     const info = db.prepare('INSERT INTO work (name,path,author_id,viewed,favorite,tags) VALUES (?,?,?,?,?,?)')
                    .run([name, path, author_id, 0, 0,t])
     return Number(info.lastInsertRowid)
 }
 
-export const db_author_by_name = (name: string): author | undefined => {
+const db_author_by_name = (name: string): author | undefined => {
     const a : any = db.prepare('SELECT * FROM author WHERE name = ?')
                            .get([name])
     return a
 }
 
-export const db_work_by_name_author = (name: string, author_id: number): db_work | undefined =>{
+const db_work_by_name_author = (name: string, author_id: number): db_work | undefined =>{
     const w : any= db.prepare('SELECT * FROM work WHERE name = ? AND author_id = ?')
                            .get([name,author_id])
     return w
 }
 
-export const db_work_by_id = (work_id: number): db_work | undefined =>{
+const db_work_by_id = (work_id: number): db_work | undefined =>{
     const w : any = db.prepare('SELECT * FROM work WHERE work_id = ?')
                       .get([work_id])
     return w
 }
 
-export const db_work_author_by_id = (work_id:number) : any | undefined =>{
+const db_work_author_by_id = (work_id:number) : any | undefined =>{
     const w : any = db.prepare(`
     SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,a.name AS author_name
     FROM work w
@@ -139,7 +139,7 @@ export const db_work_author_by_id = (work_id:number) : any | undefined =>{
     return w
 }
 
-export const db_work_author = () : work[] =>{
+const db_work_author = () : work[] =>{
     const ws : any[] = db.prepare(`
     SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,a.name AS author_name
     FROM work w

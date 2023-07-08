@@ -101,7 +101,7 @@
                 <img class="object-contain" src={ `${image_prefix}/${images[index]}` } alt="Im"/>
             </div>
             <div class="absolute text-white text-right right-0 top-0 z-10">
-                <button class="w-16 touch-none select-none text-left text-xl px-4 py-2 bg-light">{(index+1)+"/"+images.length}</button>
+                <button class="touch-none select-none text-left text-xl px-4 py-2 bg-light">{(index+1)+"/"+images.length}</button>
             </div>
             <div role="button" on:keydown={prevIndex} tabindex="0" on:click={prevIndex} class="touch-none min-w-[20%] fixed  h-screen bottom-0">
             </div>

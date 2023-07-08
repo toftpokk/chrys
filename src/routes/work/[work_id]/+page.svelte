@@ -102,7 +102,7 @@
         </aside>
         <div class="grow text-light overflow-scroll h-screen">
             <div class="grow flex justify-center h-screen">
-                <img class="object-contain" src={ `${image_prefix}/${images[index]}` } alt="Im"/>
+                <img class="object-contain" src={ `${image_prefix}/${images[index]}` } alt="page"/>
             </div>
             <div class="absolute text-white text-right right-0 top-0 z-10">
                 <button class="touch-none select-none text-left text-xl px-4 py-2 bg-light">{(index+1)+"/"+images.length}</button>

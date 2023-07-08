@@ -28,4 +28,4 @@ In a development environment
 
 First build the project, then run
 
-    docker build -t toftpokk/chrys
+    docker build -t toftpokk/chrys .

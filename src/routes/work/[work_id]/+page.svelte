@@ -15,7 +15,6 @@
 
 
     if(data.work){
-        console.log(data.work.tags)
         work_name = data.work.name
         author_name = data.work.author_name
         author_url = `/author/${data.work.author_id}`

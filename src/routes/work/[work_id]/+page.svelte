@@ -11,6 +11,7 @@
     let image_prefix = ""
     let author_comp = ""
     let work_comp = ""
+    let tags: string[]
 
 
     if(data.work){
@@ -19,6 +20,7 @@
         author_name = data.work.author_name
         author_url = `/author/${data.work.author_id}`
         images = data.work.images
+        tags = data.work.tags
         
         author_comp = encodeURIComponent(author_name)
         work_comp = encodeURIComponent(work_name)
@@ -86,12 +88,9 @@
                     <h2 class="font-bold text-lg mb-3">Tags</h2>
                     <ul>
                         <!-- Tags -->
-                        <!-- {#each tags as tag}
-                            
-                        {/each} -->
-                        <!-- {w?w.tags.map(t=>
-                            <a href={"/tag/"+t} class="bg-light px-2 py-1 rounded-lg mx-1">{t}</a>
-                        ):<></>} -->
+                        {#each tags as tag}
+                            <a href={"/tag/"+tag} class="bg-light px-2 py-1 rounded-lg mx-1">{tag}</a>
+                        {/each}
                     </ul>
                 </div>
             </div>

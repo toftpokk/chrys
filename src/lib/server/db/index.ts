@@ -3,13 +3,13 @@ import type { author, db_work, work } from '$lib/types'
 import { database_file, image_server, page_size } from '$lib/consts'
 const db = new Database(database_file)
 
-function paginate(page: number){
+const paginate = (page: number)=>{
     const start = (page-1)*page_size
     const end = page*page_size
     return {start,end}
 }
 
-function create_author() {
+const create_author = ()=>{
     const sql = db.prepare(`
     CREATE TABLE IF NOT EXISTS author (
         author_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -19,7 +19,7 @@ function create_author() {
     sql.run()
 }
 
-function create_work() {
+const create_work = ()=>{
     const sql = db.prepare(`
     CREATE TABLE IF NOT EXISTS work (
         work_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,7 +34,7 @@ function create_work() {
     sql.run()
 }
 
-export async function init_table() {
+export const init_table = async ()=>{
     console.log("Initializing Tables")
     create_author()
     create_work()
@@ -44,7 +44,7 @@ export async function init_table() {
     console.log("Syncing Tables Done!")
 }
 
-async function sync(work_list : Record<string,string[]>) {
+const sync = async (work_list : Record<string,string[]>)=>{
     const author_names = Object.keys(work_list)
     author_names.map(async (author_name)=>{
         let author_id = -1
@@ -68,7 +68,7 @@ async function sync(work_list : Record<string,string[]>) {
     })
 }
 
-async function scan(){
+const scan = async ()=>{
     let author_list : string[] = []
     let work_list : Record<string,string[]> = {}
 
@@ -97,38 +97,38 @@ async function scan(){
 
 // // DATABASE OPERATIONS
 
-export function db_insert_author(name: string, path: string): number {
+export const db_insert_author = (name: string, path: string): number =>{
     const info = db.prepare('INSERT INTO author (name,path) VALUES (?,?)')
                    .run([name, path])
     return Number(info.lastInsertRowid)
 }
 
-export function db_insert_work(name: string, path: string, author_id: number,tags: string[]) : number {
+export const db_insert_work = (name: string, path: string, author_id: number,tags: string[]) : number =>{
     const t = tags.join(" ")
     const info = db.prepare('INSERT INTO work (name,path,author_id,viewed,favorite,tags) VALUES (?,?,?,?,?,?)')
                    .run([name, path, author_id, 0, 0,t])
     return Number(info.lastInsertRowid)
 }
 
-export function db_author_by_name(name: string): author | undefined {
+export const db_author_by_name = (name: string): author | undefined => {
     const a : any = db.prepare('SELECT * FROM author WHERE name = ?')
                            .get([name])
     return a
 }
 
-export function db_work_by_name_author(name: string, author_id: number): db_work | undefined {
+export const db_work_by_name_author = (name: string, author_id: number): db_work | undefined =>{
     const w : any= db.prepare('SELECT * FROM work WHERE name = ? AND author_id = ?')
                            .get([name,author_id])
     return w
 }
 
-export function db_work_by_id(work_id: number): db_work | undefined{
+export const db_work_by_id = (work_id: number): db_work | undefined =>{
     const w : any = db.prepare('SELECT * FROM work WHERE work_id = ?')
                       .get([work_id])
     return w
 }
 
-export function db_work_author_by_id(work_id:number) : any | undefined{
+export const db_work_author_by_id = (work_id:number) : any | undefined =>{
     const w : any = db.prepare(`
     SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,a.name AS author_name
     FROM work w
@@ -139,7 +139,7 @@ export function db_work_author_by_id(work_id:number) : any | undefined{
     return w
 }
 
-export function db_work_author() : work[]{
+export const db_work_author = () : work[] =>{
     const ws : any[] = db.prepare(`
     SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,a.name AS author_name
     FROM work w
@@ -149,7 +149,7 @@ export function db_work_author() : work[]{
     return ws
 }
 
-async function get_images(author_name:string,work_name:string) : Promise<string[]>{
+const get_images = async (author_name:string,work_name:string) : Promise<string[]>=>{
     const author_comp = encodeURIComponent(author_name)
     const work_comp = encodeURIComponent(work_name)
     const res = await fetch(`${image_server}/api/repo/works/${author_comp}/${work_comp}`)
@@ -164,7 +164,7 @@ async function get_images(author_name:string,work_name:string) : Promise<string[
     return images
 }
 
-export async function get_work(work_id: number) : Promise<work|null> {
+export const get_work = async (work_id: number) : Promise<work|null> =>{
     const work = db_work_author_by_id(work_id)
     if(typeof work === "object"){
         work.images = await get_images(work.author_name,work.name)
@@ -179,7 +179,7 @@ export async function get_work(work_id: number) : Promise<work|null> {
     return null
 }
 
-export async function list_work(page: number) : Promise<work[]>{
+export const list_work = async (page: number) : Promise<work[]>=>{
     const partial_works = db_work_author()
     const {start,end} = paginate(page)
     const works = partial_works.slice(start,end)

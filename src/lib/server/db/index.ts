@@ -116,6 +116,12 @@ const db_author_by_name = (name: string): author | undefined => {
     return a
 }
 
+const db_author_by_id = (author_id: number): author | undefined => {
+    const a : any = db.prepare('SELECT * FROM author WHERE author_id = ?')
+                           .get([author_id])
+    return a
+}
+
 const db_work_by_name_author = (name: string, author_id: number): db_work | undefined =>{
     const w : any= db.prepare('SELECT * FROM work WHERE name = ? AND author_id = ?')
                            .get([name,author_id])
@@ -136,6 +142,17 @@ const db_work_author_by_id = (work_id:number) : any | undefined =>{
     ON w.author_id = a.author_id
     WHERE w.work_id = ?
     `).get([work_id])
+    return w
+}
+
+const db_work_author_by_author = (author_id:number) : any | undefined =>{
+    const w : any = db.prepare(`
+    SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,a.name AS author_name
+    FROM work w
+    LEFT JOIN author a
+    ON w.author_id = a.author_id
+    WHERE w.author_id = ?
+    `).all([author_id])
     return w
 }
 
@@ -164,6 +181,14 @@ const get_images = async (author_name:string,work_name:string) : Promise<string[
     return images
 }
 
+export const get_author = async (author_id:number) : Promise<author|null>=> {
+    const author = db_author_by_id(author_id)
+    if(typeof author === "object"){
+        return author
+    }
+    return null
+}
+
 export const get_work = async (work_id: number) : Promise<work|null> =>{
     const work = db_work_author_by_id(work_id)
     if(typeof work === "object"){
@@ -186,5 +211,16 @@ export const list_work = async (page: number) : Promise<work[]>=>{
     for(let w of works){
         w.images = await get_images(w.author_name,w.name)
     }
+    return works
+}
+
+export const list_work_by_author = async (author_id: number, page: number) : Promise<work[]>=>{
+    const partial_works = db_work_author_by_author(author_id)
+    const {start,end} = paginate(page)
+    const works = partial_works.slice(start,end)
+    for(let w of works){
+        w.images = await get_images(w.author_name,w.name)
+    }
+    console.log(page)
     return works
 }

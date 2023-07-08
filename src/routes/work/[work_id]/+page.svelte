@@ -7,6 +7,7 @@
     let author_name = "Unnamed Author";
     let author_url = ""
     let images : string[]= []
+    $: images_load = images.slice(index, index+3)
     let index = 0
     let image_prefix = ""
     let author_comp = ""
@@ -65,6 +66,11 @@
 </script>
 
 <svelte:window on:keydown={handleKeyDown}/>
+<svelte:head>
+  {#each images_load as image}
+    <link rel="preload" as="image" href={`${image_prefix}/${image}`} />
+  {/each}
+</svelte:head>
 
 <div>
     <main>

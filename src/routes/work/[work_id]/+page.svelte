@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { image_repo, image_server } from '$lib/consts';
+    import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER } from '$env/static/public';
     import Reactions from '$lib/Reactions.svelte'
     import type { work } from '$lib/types'
     export let data : {work:work|null,work_id:number};
@@ -30,7 +30,7 @@
         author_comp = encodeURIComponent(author_name)
         work_comp = encodeURIComponent(work_name)
 
-        image_prefix = `${image_server}/images/${image_repo}/${author_comp}/${work_comp}`
+        image_prefix = `${PUBLIC_IMAGE_SERVER}/images/${PUBLIC_IMAGE_REPO}/${author_comp}/${work_comp}`
     }
 
     const prevIndex = ()=>{

@@ -1,7 +1,9 @@
 import Database from 'better-sqlite3'
 import type { author, db_work, work } from '$lib/types'
-import { database_file, image_repo, image_server, page_size } from '$lib/consts'
-const db = new Database(database_file)
+import { page_size } from '$lib/consts'
+import {DB_FILE } from '$env/static/private'
+import { PUBLIC_IMAGE_SERVER, PUBLIC_IMAGE_REPO } from '$env/static/public'
+const db = new Database(DB_FILE)
 
 const paginate = (page: number)=>{
     const start = (page-1)*page_size
@@ -72,19 +74,19 @@ const scan = async ()=>{
     let author_list : string[] = []
     let work_list : Record<string,string[]> = {}
 
-    const res = await fetch(`${image_server}/api/repo/${image_repo}/`)
+    const res = await fetch(`${PUBLIC_IMAGE_SERVER}/api/repo/${PUBLIC_IMAGE_REPO}/`)
     if(!res.ok){
-        console.log(`Could not get author list image server ${image_server}`)
+        console.log(`Could not get author list image server ${PUBLIC_IMAGE_SERVER}`)
     }
     else{
         const data = await res.json()
         author_list = data["dirs"]
     }
     await Promise.all(author_list.map(async (author)=>{
-        const res = await fetch(`${image_server}/api/repo/${image_repo}/${author}`)
+        const res = await fetch(`${PUBLIC_IMAGE_SERVER}/api/repo/${PUBLIC_IMAGE_REPO}/${author}`)
         let works = []
         if(!res.ok){
-            console.log(`Could not get works from author '${author}' from image server ${image_server}`)
+            console.log(`Could not get works from author '${author}' from image server ${PUBLIC_IMAGE_SERVER}`)
         }
         else{
             const data = await res.json()
@@ -193,10 +195,10 @@ export const setTag = async (work_id: number, tag_string: string)=>{
 const get_images = async (author_name:string,work_name:string) : Promise<string[]>=>{
     const author_comp = encodeURIComponent(author_name)
     const work_comp = encodeURIComponent(work_name)
-    const res = await fetch(`${image_server}/api/repo/${image_repo}/${author_comp}/${work_comp}`)
+    const res = await fetch(`${PUBLIC_IMAGE_SERVER}/api/repo/${PUBLIC_IMAGE_REPO}/${author_comp}/${work_comp}`)
     let images = []
     if(!res.ok){
-        console.log(`Could not get images of work '${work_name} by ${author_name}' from image server ${image_server}`)
+        console.log(`Could not get images of work '${work_name} by ${author_name}' from image server ${PUBLIC_IMAGE_SERVER}`)
     }
     else{
         const data = await res.json()

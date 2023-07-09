@@ -166,6 +166,22 @@ const db_work_author = () : work[] =>{
     return ws
 }
 
+export const setFav = async (work_id: number, state: boolean)=>{
+    const fav = db.prepare(`
+    UPDATE work SET favorite = ?
+    WHERE work_id = ?
+    `).run([Number(state),work_id])
+    return state
+}
+
+export const setView = async (work_id: number, state: boolean)=>{
+    const fav = db.prepare(`
+    UPDATE work SET viewed = ?
+    WHERE work_id = ?
+    `).run([Number(state),work_id])
+    return state
+}
+
 const get_images = async (author_name:string,work_name:string) : Promise<string[]>=>{
     const author_comp = encodeURIComponent(author_name)
     const work_comp = encodeURIComponent(work_name)

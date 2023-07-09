@@ -1,7 +1,8 @@
 <script lang="ts">
     import { image_server } from '$lib/consts';
+    import Reactions from '$lib/Reactions.svelte'
     import type { work } from '$lib/types'
-    export let data : {work:work|null};
+    export let data : {work:work|null,work_id:number};
 
     let work_name = "Unnamed Work";
     let author_name = "Unnamed Author";
@@ -13,6 +14,8 @@
     let author_comp = ""
     let work_comp = ""
     let tags: string[]
+    let favorite = false
+    let viewed = false
 
 
     if(data.work){
@@ -21,6 +24,8 @@
         author_url = `/author/${data.work.author_id}`
         images = data.work.images
         tags = data.work.tags
+        favorite = data.work.favorite
+        viewed = data.work.viewed
         
         author_comp = encodeURIComponent(author_name)
         work_comp = encodeURIComponent(work_name)
@@ -49,6 +54,29 @@
         }
     }
 
+    const toggleView = async ()=>{
+        const res = await fetch(`/api/${data.work_id}/viewed`,{
+            method: 'POST',
+            body: JSON.stringify({state: !viewed}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const results = await res.json()
+        viewed = results.state
+    }
+
+    const toggleFav = async()=>{
+        const res = await fetch(`/api/${data.work_id}/favorite`,{
+            method: 'POST',
+            body: JSON.stringify({state: !favorite}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const results = await res.json()
+        favorite = results.state
+    }
     // Frontend
     
     let buttonClass = ""
@@ -97,6 +125,7 @@
                             <a href={"/tag/"+tag} class="bg-light px-2 py-1 rounded-lg mx-1">{tag}</a>
                         {/each}
                     </ul>
+                    <Reactions favorite={favorite} viewed={viewed} on:toggleView={toggleView} on:toggleFav={toggleFav}/>
                 </div>
             </div>
         </aside>

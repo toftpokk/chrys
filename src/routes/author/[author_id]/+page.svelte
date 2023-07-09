@@ -9,7 +9,6 @@
     const works = data.work;
     const page = data.page
     const author_name = data.author_name
-    console.log(works)
 </script>
 <main class="w-full mt-6" >
     <PageNav page={page} max={-1}/>

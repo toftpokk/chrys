@@ -42,7 +42,6 @@
         if(index< images.length-1){
             index+=1
         }
-        console.log("next")
     }
 
     const handleKeyDown = (event:KeyboardEvent)=>{

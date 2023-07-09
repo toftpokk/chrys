@@ -117,6 +117,7 @@
                     <p>Pages: <span class="text-lg">{images.length}</span></p>
                 </div>
                 <div>
+                    <Reactions favorite={favorite} viewed={viewed} on:toggleView={toggleView} on:toggleFav={toggleFav}/>
                     <h2 class="font-bold text-lg mb-3">Tags</h2>
                     <ul>
                         <!-- Tags -->
@@ -124,7 +125,6 @@
                             <a href={"/tag/"+tag} class="bg-light px-2 py-1 rounded-lg mx-1">{tag}</a>
                         {/each}
                     </ul>
-                    <Reactions favorite={favorite} viewed={viewed} on:toggleView={toggleView} on:toggleFav={toggleFav}/>
                 </div>
             </div>
         </aside>

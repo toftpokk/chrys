@@ -10,6 +10,10 @@ First install npm packages
 
 Optionally, make edit to the consts file in `/src/lib/consts.ts`
 
+Next, create a `.env` file, and optionally make edits to the variables
+
+    cp env.example .env
+
 Then build the project
 
     npm run build

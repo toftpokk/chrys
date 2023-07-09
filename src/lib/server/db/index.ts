@@ -182,6 +182,14 @@ export const setView = async (work_id: number, state: boolean)=>{
     return state
 }
 
+export const setTag = async (work_id: number, tag_string: string)=>{
+    
+    db.prepare(`
+    UPDATE work SET tags = ?
+    WHERE work_id = ?
+    `).run([tag_string,work_id])
+}
+
 const get_images = async (author_name:string,work_name:string) : Promise<string[]>=>{
     const author_comp = encodeURIComponent(author_name)
     const work_comp = encodeURIComponent(work_name)

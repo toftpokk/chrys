@@ -230,8 +230,69 @@ export const get_work = async (work_id: number) : Promise<work|null> =>{
     return null
 }
 
-export const list_work = async (page: number) : Promise<work[]>=>{
+// Sorting
+const sort_name = (a:work,b:work)=>{
+    const a_name = a.name
+    const b_name = b.name
+    if(a_name == b_name){
+        return 0
+    }
+    if(a_name > b_name){
+        return 1
+    }
+    return -1
+}
+
+const sort_fav = (a:work,b:work)=>{
+    const a_fav = a.favorite
+    const b_fav = b.favorite
+    if(a_fav == b_fav){
+        return 0
+    }
+    if(a_fav < b_fav){
+        return 1
+    }
+    return -1
+}
+
+const sort_view = (a:work,b:work)=>{
+    const a_view = a.viewed
+    const b_view = b.viewed
+    if(a_view == b_view){
+        return 0
+    }
+    if(a_view < b_view){
+        return 1
+    }
+    return -1
+}
+
+const sort_author = (a:work,b:work)=>{
+    const a_author = a.author_id
+    const b_author = b.author_id
+    if(a_author == b_author){
+        return 0
+    }
+    if(a_author > b_author){
+        return 1
+    }
+    return -1
+}
+
+export const list_work = async (page: number, sort: string) : Promise<work[]>=>{
     const partial_works = db_work_author()
+    if(sort === "name"){
+        partial_works.sort(sort_name)
+    }
+    else if(sort === "favorite"){
+        partial_works.sort(sort_fav)
+    }
+    else if(sort === "viewed"){
+        partial_works.sort(sort_view)
+    }
+    else if(sort === "author"){
+        partial_works.sort(sort_author)
+    }
     const {start,end} = paginate(page)
     const works = partial_works.slice(start,end)
     for(let w of works){

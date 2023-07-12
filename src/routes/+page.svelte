@@ -2,15 +2,18 @@
     import Card from '$lib/Card.svelte'
     import PageNav from '$lib/PageNav.svelte';
     import Footer from '$lib/Footer.svelte'
+	import Sorting from '$lib/Sorting.svelte';
     import type { work } from '$lib/types'
 	import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER } from '$env/static/public';
     
-	export let data : {work: work[], page: number};
+	export let data : {work: work[], page: number, sort : string, search_params: string};
     const works = data.work;
     const page = data.page
+    let search_params = new URLSearchParams(data.search_params)
 </script>
 <main class="w-full mt-6" >
-    <PageNav page={page} max={-1}/>
+    <PageNav search_params={search_params} page={page} max={-1}/>
+    <Sorting search_params={search_params} sort={data.sort} />
     <ul role="list" class="max-w-7xl flex flex-wrap justify-center mx-auto">
         {#each works as w}
             <Card
@@ -24,6 +27,6 @@
             />
         {/each}
     </ul>
-    <PageNav page={page} max={-1}/>
+    <PageNav search_params={search_params} page={page} max={-1}/>
     <Footer/>
 </main>

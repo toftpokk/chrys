@@ -13,7 +13,7 @@
 		<img alt="cover" class="h-72 w-72 object-cover" src={image} />
 	</a>
 	<div class="p-3">
-		<span class="font-bold block">{title}</span>
+		<span class="font-bold block break-words">{title}</span>
 		<span class="block"><a class="text-lg" href={"/author/"+author_id}>{author}</a></span>
 		<div class="inline-block my-3">
 			<img

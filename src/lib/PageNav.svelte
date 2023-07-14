@@ -1,15 +1,9 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
-	import { page } from "$app/stores";
-	import { get_page } from "./helper";
-
     export let max : number;
+    export let page_num : number;
 
-
-    const searchParams = $page.url.searchParams
     let leftHidden = true;
     let rightHidden = true;
-    let page_num = get_page(searchParams)
 
     // Left/right arrows
     $: {
@@ -19,14 +13,20 @@
     
     // Left/right function
     const goto_prev = ()=>{
-        searchParams.set("page",String(page_num-1))
-        goto("?"+searchParams.toString())
-        page_num = get_page(searchParams)
+        if(page_num > 1){
+            page_num-=1
+        }
+        else{
+            page_num = 1
+        }
     }
     const goto_next = ()=>{
-        searchParams.set("page",String(page_num+1))
-        goto("?"+searchParams.toString())
-        page_num = get_page(searchParams)
+        if(max < 0 || page_num < max){
+            page_num+=1
+        }
+        else{
+            page_num = max
+        }
     }
 </script>
 

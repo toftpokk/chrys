@@ -6,16 +6,14 @@
     import type { work } from '$lib/types'
 	import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER } from '$env/static/public';
     
-	export let data : {work: work[], page: number, sort : string, search_params: string};
+	export let data : {work: work[]};
     let work : work[]= [];
     $: {
         work = data.work
     }
-    const page = data.page
-    let search_params = new URLSearchParams(data.search_params)
 </script>
 <main class="w-full mt-6" >
-    <PageNav search_params={search_params} page={page} max={-1}/>
+    <PageNav max={-1}/>
     <Sorting />
     <ul role="list" class="max-w-7xl flex flex-wrap justify-center mx-auto">
         {#each work as w}
@@ -30,6 +28,6 @@
             />
         {/each}
     </ul>
-    <PageNav search_params={search_params} page={page} max={-1}/>
+    <PageNav max={-1}/>
     <Footer/>
 </main>

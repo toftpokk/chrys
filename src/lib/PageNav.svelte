@@ -1,28 +1,40 @@
 <script lang="ts">
-    export let page : number;
+	import { goto } from "$app/navigation";
+	import { page } from "$app/stores";
+
     export let max : number;
-    export let search_params: URLSearchParams;
-    const new_search_params = new URLSearchParams(search_params)
+
+    const get_page = (searchParams: URLSearchParams)=>{
+        const page_str = searchParams.get("page")
+        return page_str ? Number(page_str) : 1
+    }
+
+    const searchParams = $page.url.searchParams
     let leftHidden = true;
     let rightHidden = true;
-    
-    // previous url
-    new_search_params.set("page",String(page-1))
-    const prev_url = "?"+new_search_params.toString()
+    let page_num = get_page(searchParams)
 
-    // next url
-    new_search_params.set("page",String(page+1))
-    const next_url = "?"+new_search_params.toString()
-
-    if(page > 1){
-        leftHidden = false
+    // Left/right arrows
+    $: {
+        leftHidden = !(page_num > 1)
+        rightHidden = !(max < 0 || page_num < max)
     }
-    if(max < 0 || page < max){
-        rightHidden = false
+    
+    // Left/right function
+    const goto_prev = ()=>{
+        searchParams.set("page",String(page_num-1))
+        goto("?"+searchParams.toString())
+        page_num = get_page(searchParams)
+    }
+    const goto_next = ()=>{
+        searchParams.set("page",String(page_num+1))
+        goto("?"+searchParams.toString())
+        page_num = get_page(searchParams)
     }
 </script>
+
 <div class="max-w-7xl flex justify-center text-4xl mx-auto my-2">
-    <a data-sveltekit-reload class="w-8 {leftHidden? "invisible":""}" href={prev_url}>&larr;</a>
-    <span class="text-3xl w-10 mx-6 text-center">{page}</span>
-    <a data-sveltekit-reload class="w-8 {rightHidden? "invisible":""}" href={next_url}>&rarr;</a>
+    <button class="w-8 {leftHidden? "invisible":""}" on:click={goto_prev}>&larr;</button>
+    <span class="text-3xl w-10 mx-6 text-center">{page_num}</span>
+    <button class="w-8 {rightHidden? "invisible":""}" on:click={goto_next}>&rarr;</button>
 </div>

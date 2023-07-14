@@ -1,13 +1,10 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
+	import { get_page } from "./helper";
 
     export let max : number;
 
-    const get_page = (searchParams: URLSearchParams)=>{
-        const page_str = searchParams.get("page")
-        return page_str ? Number(page_str) : 1
-    }
 
     const searchParams = $page.url.searchParams
     let leftHidden = true;

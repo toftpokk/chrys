@@ -12,7 +12,6 @@ export function load({url}){
     }
     return {
         page,
-        sort,
         search_params: url.searchParams.toString(),
         work: list_work(page,sort)
     }

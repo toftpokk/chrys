@@ -7,15 +7,18 @@
 	import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER } from '$env/static/public';
     
 	export let data : {work: work[], page: number, sort : string, search_params: string};
-    const works = data.work;
+    let work : work[]= [];
+    $: {
+        work = data.work
+    }
     const page = data.page
     let search_params = new URLSearchParams(data.search_params)
 </script>
 <main class="w-full mt-6" >
     <PageNav search_params={search_params} page={page} max={-1}/>
-    <Sorting search_params={search_params} sort={data.sort} />
+    <Sorting />
     <ul role="list" class="max-w-7xl flex flex-wrap justify-center mx-auto">
-        {#each works as w}
+        {#each work as w}
             <Card
                 image={`${PUBLIC_IMAGE_SERVER}/images/${PUBLIC_IMAGE_REPO}/${encodeURIComponent(w.author_name)}/${encodeURIComponent(w.name)}/${w.images[0]}`}
                 url={`/work/${w.work_id}`}

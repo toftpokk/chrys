@@ -1,22 +1,26 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+    import { page } from '$app/stores';
 	import { sort_type } from "./consts";
-    export let sort : string
-    export let search_params : URLSearchParams
-    const new_search_params = new URLSearchParams(search_params)
-
-    const next_sort = ()=>{
-        const n_idx = sort_type.indexOf(sort)
-        const next_sort = sort_type[n_idx+1]
-        if(next_sort){
-            return next_sort
-        }
-        else{
-            return sort_type[0]
+	import { browser } from '$app/environment';
+    const searchParams = $page.url.searchParams
+    
+    let current_sort = "default"
+    $: if (browser){
+    let searchParamSort = searchParams.get("sort")
+        if (current_sort !== searchParamSort){
+            if (!(current_sort === "default" && searchParamSort === null)){
+                searchParams.set("sort",current_sort)
+                goto("?"+searchParams.toString())
+            }
         }
     }
-    new_search_params.set("sort",next_sort())
-    const sort_url = "?"+new_search_params.toString()
 </script>
-<div class="max-w-7xl mx-auto flex justify-end py-3">
-    <a class="inline-block text-xl bg-light px-2 py-1 select-none" data-sveltekit-reload href={sort_url}>Sort by: <span class="font-bold">{sort}</span></a>
+<div class="max-w-7xl mx-auto flex justify-start py-3">
+    <label class="text-xl mx-2" for="sort">Sort:</label>
+    <select name="sort" id="sort" class="bg-main px-3 py-2" bind:value={current_sort}>
+        {#each sort_type as t }
+            <option value={t}>{t}</option>
+        {/each}
+    </select>
 </div>

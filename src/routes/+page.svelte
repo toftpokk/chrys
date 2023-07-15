@@ -1,11 +1,11 @@
 <script lang="ts">
-    import Footer from '$lib/Footer.svelte'
+    import Header from '$lib/Header.svelte'
     import type { work } from '$lib/types'
 	import CardList from '$lib/CardList.svelte';
     
 	export let data : {work: work[]};
 </script>
-<main class="w-full mt-6" >
+<main class="w-full" >
+    <Header/>
     <CardList data={data}/>
-    <Footer/>
 </main>

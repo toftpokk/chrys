@@ -1,7 +1,8 @@
 <script>
-    import Footer from '$lib/Footer.svelte'
+    import Header from '$lib/Header.svelte'
 </script>
-<main class="w-full my-6" >
+<main class="w-full" >
+    <Header/>
     <div class="max-w-4xl block mx-auto my-8 text-xl">
         <h1 class="text-2xl font-bold mb-4">Chrys</h1>
         <p class="mb-4">Image-set viewer for viewing manga, comics, and doujinshi</p>
@@ -29,5 +30,4 @@
         </ul>
         <h2 class="text-2xl mb-8">This project is part of the Pandan Project</h2>
     </div>
-    <Footer/>
 </main>

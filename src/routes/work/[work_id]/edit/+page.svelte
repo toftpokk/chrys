@@ -4,7 +4,7 @@
     const work = data.work
     const tag_string = work.tags.join(' ')
 
-    import Footer from '$lib/Footer.svelte'
+    import Header from '$lib/Header.svelte'
 
     function handleSubmit(this: HTMLFormElement){
         const data = new FormData(this);
@@ -30,5 +30,5 @@
         </form>
         <a class="text-xl font-bold bg-light px-2 py-1 " href={`/work/${work.work_id}`}>&larr; Return</a>
     </div>
-    <Footer/>
+    <Header/>
 </main>

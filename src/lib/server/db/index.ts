@@ -73,15 +73,22 @@ const sync = async (work_list : Record<string,string[]>)=>{
 const scan = async ()=>{
     let author_list : string[] = []
     let work_list : Record<string,string[]> = {}
-
-    const res = await fetch(`${PUBLIC_IMAGE_SERVER}/api/repo/${PUBLIC_IMAGE_REPO}/`)
-    if(!res.ok){
-        console.log(`Could not get author list image server ${PUBLIC_IMAGE_SERVER}`)
+    let res : Response;
+    try {
+        res = await fetch(`${PUBLIC_IMAGE_SERVER}/api/repo/${PUBLIC_IMAGE_REPO}/`)
+        if(!res.ok){
+            throw new Error("Response not OK")
+        }
+        else{
+            const data = await res.json()
+            author_list = data["dirs"]
+        }
+    } catch (error) {
+        console.log(`Error: Could not get author list image server ${PUBLIC_IMAGE_SERVER}`)
+    } finally {
+        work_list = {}
     }
-    else{
-        const data = await res.json()
-        author_list = data["dirs"]
-    }
+    
     await Promise.all(author_list.map(async (author)=>{
         const res = await fetch(`${PUBLIC_IMAGE_SERVER}/api/repo/${PUBLIC_IMAGE_REPO}/${author}`)
         let works = []
@@ -195,14 +202,19 @@ export const setTag = async (work_id: number, tag_string: string)=>{
 const get_images = async (author_name:string,work_name:string) : Promise<string[]>=>{
     const author_comp = encodeURIComponent(author_name)
     const work_comp = encodeURIComponent(work_name)
-    const res = await fetch(`${PUBLIC_IMAGE_SERVER}/api/repo/${PUBLIC_IMAGE_REPO}/${author_comp}/${work_comp}`)
     let images = []
-    if(!res.ok){
-        console.log(`Could not get images of work '${work_name} by ${author_name}' from image server ${PUBLIC_IMAGE_SERVER}`)
+    try{
+        const res = await fetch(`${PUBLIC_IMAGE_SERVER}/api/repo/${PUBLIC_IMAGE_REPO}/${author_comp}/${work_comp}`)
+        if(!res.ok){
+            throw new Error("Response not OK")
+        }
+        else{
+            const data = await res.json()
+            images = data["items"]
+        }
     }
-    else{
-        const data = await res.json()
-        images = data["items"]
+    catch(error){
+        console.log(`Error: Could not get images of ${work_name} by ${author_name} from image server`)
     }
     return images
 }

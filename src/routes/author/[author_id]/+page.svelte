@@ -4,15 +4,25 @@
     import Footer from '$lib/Footer.svelte'
     import type { work } from '$lib/types'
 	import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER } from '$env/static/public';
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
     
 	export let data : {work: work[], page: number, author_name: string};
-    const works = data.work;
-    const page = data.page
+    let page_num = data.page
+    let works : work[] = []
+    $: {
+        works = data.work;
+        $page.url.searchParams.set("page",String(page_num))
+        if(browser){
+            goto("?"+$page.url.searchParams.toString())
+        }
+    }
     const author_name = data.author_name
 </script>
 <main class="w-full mt-6" >
-    <PageNav page={page} max={-1}/>
-    <h1 class="text-4xl flex justify-center my-8">{author_name}</h1>
+    <PageNav bind:page_num={page_num} max={-1}/>
+    <h1 class="text-4xl flex justify-center my-8">Author: {author_name}</h1>
     <ul role="list" class="max-w-7xl flex flex-wrap justify-center mx-auto">
         {#each works as w}
             <Card
@@ -26,6 +36,6 @@
             />
         {/each}
     </ul>
-    <PageNav page={page} max={-1}/>
+    <PageNav bind:page_num={page_num} max={-1}/>
     <Footer/>
 </main>

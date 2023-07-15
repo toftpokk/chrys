@@ -6,3 +6,7 @@ export const sort_type = [
     "viewed",
     "author"
 ]
+export const tags = [
+    "a",
+    "b"
+]

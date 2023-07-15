@@ -13,6 +13,5 @@ export const load = async ({params,url})=>{
     return {
         author_name,
         work,
-        page
     }
 }

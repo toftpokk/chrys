@@ -10,6 +10,5 @@ export const load = async ({params,url})=>{
 
     return {
         work,
-        page
     }
 }

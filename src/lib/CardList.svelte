@@ -5,7 +5,7 @@
 	import Sorting from "./Sorting.svelte";
 	import { get_page } from "./helper";
 	import type { work } from "./types";
-    import { page } from '$app/stores';
+    import { navigating, page } from '$app/stores';
 	import { browser } from "$app/environment";
 	import { goto } from "$app/navigation";
 
@@ -24,18 +24,33 @@
 <div class="max-w-7xl mx-auto">
     <PageNav bind:page_num={page_num} max={-1}/>
     <Sorting />
+    
     <ul class="flex flex-wrap justify-center">
-        {#each work as w}
-            <Card
-                image={`${PUBLIC_IMAGE_SERVER}/images/${PUBLIC_IMAGE_REPO}/${encodeURIComponent(w.author_name)}/${encodeURIComponent(w.name)}/${w.images[0]}`}
-                url={`/work/${w.work_id}`}
-                author={w.author_name}
-                title={w.name}
-                viewed={w.viewed}
-                favorite={w.favorite}
-                author_id={w.author_id}
-            />
-        {/each}
+        {#if $navigating}
+            {#each Array(30) as w}
+                <Card
+                        image={""}
+                        url={""}
+                        author={"loading..."}
+                        title={"loading..."}
+                        viewed={false}
+                        favorite={false}
+                        author_id={-1}
+                    />
+            {/each}
+        {:else}
+            {#each work as w}
+                <Card
+                    image={`${PUBLIC_IMAGE_SERVER}/images/${PUBLIC_IMAGE_REPO}/${encodeURIComponent(w.author_name)}/${encodeURIComponent(w.name)}/${w.images[0]}`}
+                    url={`/work/${w.work_id}`}
+                    author={w.author_name}
+                    title={w.name}
+                    viewed={w.viewed}
+                    favorite={w.favorite}
+                    author_id={w.author_id}
+                />
+            {/each}
+        {/if}
     </ul>
     <PageNav bind:page_num={page_num} max={-1}/>
 </div>

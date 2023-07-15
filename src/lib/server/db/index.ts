@@ -308,6 +308,5 @@ export const list_work_by_author = async (author_id: number, page: number) : Pro
     for(let w of works){
         w.images = await get_images(w.author_name,w.name)
     }
-    console.log(page)
     return works
 }

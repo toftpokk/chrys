@@ -293,6 +293,9 @@ export const list_work = async (page: number, sort: string) : Promise<work[]>=>{
     else if(sort === "author"){
         partial_works.sort(sort_author)
     }
+    else if(sort === "random"){
+        partial_works.sort((a,b)=>(0.5-Math.random()))
+    }
     const {start,end} = paginate(page)
     const works = partial_works.slice(start,end)
     for(let w of works){

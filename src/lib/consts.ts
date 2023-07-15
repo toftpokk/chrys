@@ -4,7 +4,8 @@ export const sort_type = [
     "name",
     "favorite",
     "viewed",
-    "author"
+    "author",
+    "random"
 ]
 export const tags = [
     "a",

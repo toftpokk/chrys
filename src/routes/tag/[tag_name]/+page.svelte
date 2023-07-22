@@ -8,7 +8,7 @@
 	export let data : {work: work[]};
 </script>
 <main class="w-full" >
+    <Header/>
     <h1 class="text-4xl flex justify-center my-8">Tag: {tag_name}</h1>
     <CardList data={data}/>
-    <Header/>
 </main>

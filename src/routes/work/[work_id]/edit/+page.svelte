@@ -20,6 +20,7 @@
     }
 </script>
 <main class="w-full my-6" >
+    <Header/>
     <div class="max-w-4xl block mx-auto my-8 text-xl">
         <h1 class="text-2xl font-bold mb-4">{work.name}</h1>
         <h2 class="mb-3 font-semibold">by {work.author_name}</h2>
@@ -30,5 +31,4 @@
         </form>
         <a class="text-xl font-bold bg-light px-2 py-1 " href={`/work/${work.work_id}`}>&larr; Return</a>
     </div>
-    <Header/>
 </main>

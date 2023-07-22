@@ -12,17 +12,16 @@ const paginate = (page: number)=>{
 }
 
 const create_author = ()=>{
-    const sql = db.prepare(`
+    db.prepare(`
     CREATE TABLE IF NOT EXISTS author (
         author_id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT VARCHAR(50),
         path VARCHAR(50)
-    )`)
-    sql.run()
+    )`).run()
 }
 
 const create_work = ()=>{
-    const sql = db.prepare(`
+    db.prepare(`
     CREATE TABLE IF NOT EXISTS work (
         work_id INTEGER PRIMARY KEY AUTOINCREMENT,
         name VARCHAR(50),
@@ -33,8 +32,7 @@ const create_work = ()=>{
         tags VARCHAR(100),
         active INTEGER(1),
         FOREIGN KEY(author_id) REFERENCES author(author_id)
-    )`)
-    sql.run()
+    )`).run()
 }
 
 const add_active_if_not_exist = ()=>{
@@ -164,12 +162,6 @@ const db_work_by_name_author = (name: string, author_id: number): db_work | unde
     return w
 }
 
-const db_work_by_id = (work_id: number): db_work | undefined =>{
-    const w : any = db.prepare('SELECT * FROM work WHERE work_id = ?')
-                      .get([work_id])
-    return w
-}
-
 const db_work_author_by_id = (work_id:number) : any | undefined =>{
     const w : any = db.prepare(`
     SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.active,a.name AS author_name
@@ -204,7 +196,7 @@ const db_work_author = () : work[] =>{
 }
 
 export const setFav = async (work_id: number, state: boolean)=>{
-    const fav = db.prepare(`
+    db.prepare(`
     UPDATE work SET favorite = ?
     WHERE work_id = ?
     `).run([Number(state),work_id])
@@ -220,7 +212,7 @@ const setActive = async (work_id: number, state: boolean)=>{
 }
 
 export const setView = async (work_id: number, state: boolean)=>{
-    const fav = db.prepare(`
+    db.prepare(`
     UPDATE work SET viewed = ?
     WHERE work_id = ?
     `).run([Number(state),work_id])
@@ -228,7 +220,6 @@ export const setView = async (work_id: number, state: boolean)=>{
 }
 
 export const setTag = async (work_id: number, tag_string: string)=>{
-    
     db.prepare(`
     UPDATE work SET tags = ?
     WHERE work_id = ?

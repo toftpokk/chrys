@@ -368,6 +368,30 @@ export const list_work = async (page: number, sort: string) : Promise<work[]>=>{
     }))
 }
 
+export const list_work_by_tag = async (tag_name: string, page: number) : Promise<work[]>=>{
+    const partial_works : any = db_work_author()
+    const tagged_works = partial_works.filter((w: any)=>{
+        if(w.tags == ''){
+            return false
+        }
+        else{
+            const tags = tag_deserialize(w.tags)
+            if(tags.includes(tag_name)){
+                return true
+            }
+            else{
+                return false
+            }
+        }
+    })
+    const {start,end} = paginate(page)
+    const works = tagged_works.slice(start,end)
+    return Promise.all(works.map(async (w: any)=>{
+        w.images = await get_images(w.author_name,w.name)
+        return w
+    }))
+}
+
 export const list_work_by_author = async (author_id: number, page: number) : Promise<work[]>=>{
     const partial_works = db_work_author_by_author(author_id)
     const {start,end} = paginate(page)

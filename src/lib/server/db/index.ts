@@ -11,6 +11,21 @@ const paginate = (page: number)=>{
     return {start,end}
 }
 
+const tag_serialize = (tags : string[])=>{
+    tags.join(" ")
+}
+
+const tag_deserialize = (tag_string : string)=>{
+    let tags : string[];
+    if(tag_string === ''){
+        tags = []
+    }
+    else{
+        tags = tag_string.split(' ')
+    }
+    return tags
+}
+
 const create_author = ()=>{
     db.prepare(`
     CREATE TABLE IF NOT EXISTS author (
@@ -138,7 +153,7 @@ const db_insert_author = (name: string, path: string): number =>{
 }
 
 const db_insert_work = (name: string, path: string, author_id: number,tags: string[], active=true) : number =>{
-    const t = tags.join(" ")
+    const t = tag_serialize(tags)
     const info = db.prepare('INSERT INTO work (name,path,author_id,viewed,favorite,tags,active) VALUES (?,?,?,?,?,?,?)')
                    .run([name, path, author_id, 0, 0,t,active])
     return Number(info.lastInsertRowid)
@@ -251,7 +266,7 @@ export const get_tag = ()=>{
     const has_tags = work.filter((w:any)=>w.tags != "")
     const all_tags : string[] = []
     has_tags.forEach((w : any)=>{
-        const tags = w.tags.split(' ')
+        const tags = tag_deserialize(w.tags)
         tags.forEach((t : string)=>{
             if(!(all_tags.includes(t))){
                 all_tags.push(t)
@@ -273,12 +288,7 @@ export const get_work = async (work_id: number) : Promise<work|null> =>{
     const work = db_work_author_by_id(work_id)
     if(typeof work === "object"){
         work.images = await get_images(work.author_name,work.name)
-        if(work.tags === ''){
-            work.tags = []
-        }
-        else{
-            work.tags = work.tags.split(' ')
-        }
+        work.tags = tag_deserialize(work.tags)
         return work
     }
     return null

@@ -368,6 +368,12 @@ export const list_work = async (page: number, sort: string) : Promise<work[]>=>{
     }))
 }
 
+export const list_all_work = async () : Promise<any[]>=>{
+    // Note: incomplete work object
+    const works = db_work_author()
+    return works
+}
+
 export const list_work_by_tag = async (tag_name: string, page: number) : Promise<work[]>=>{
     const partial_works : any = db_work_author()
     const tagged_works = partial_works.filter((w: any)=>{

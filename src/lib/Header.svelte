@@ -3,5 +3,6 @@
         <li class="m-4 inline"><a class="text-xl" href="/">Index</a></li>
         <li class="m-4 inline"><a class="text-xl" href="/about">About</a></li>
         <li class="m-4 inline"><a class="text-xl" href="/tag">Tags</a></li>
+        <li class="m-4 inline"><a class="text-xl" href="/export">Export</a></li>
     </ul>
 </div>

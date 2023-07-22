@@ -246,6 +246,21 @@ const get_images = async (author_name:string,work_name:string) : Promise<string[
     return images
 }
 
+export const get_tag = ()=>{
+    const work : any = db_work_author()
+    const has_tags = work.filter((w:any)=>w.tags != "")
+    const all_tags : string[] = []
+    has_tags.forEach((w : any)=>{
+        const tags = w.tags.split(' ')
+        tags.forEach((t : string)=>{
+            if(!(all_tags.includes(t))){
+                all_tags.push(t)
+            }
+        })
+    })
+    return all_tags
+}
+
 export const get_author = async (author_id:number) : Promise<author|null>=> {
     const author = db_author_by_id(author_id)
     if(typeof author === "object"){

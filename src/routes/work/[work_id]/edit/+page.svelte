@@ -19,7 +19,8 @@
             }
         })
     }
-    const tag_suggestions = PUBLIC_TAG_SUGGESTIONS.split(" ")
+    const tag_subsets = PUBLIC_TAG_SUGGESTIONS.split("\n")
+    const tags = tag_subsets.map((tag_subset)=>(tag_subset.split(" ")))
 </script>
 <main class="w-full my-6" >
     <Header/>
@@ -33,8 +34,11 @@
         </form>
         <h2 class="text-2xl mt-3 ms-2">Suggestions:</h2>
         <ul class="my-3 block">
-            {#each tag_suggestions as tag}
-                <li class="mb-2 text-xl inline-block bg-light px-2 py-1 rounded-lg mx-1">{tag}</li>
+            {#each tags as tag_subset}
+                {#each tag_subset as tag}
+                    <li class="mb-2 text-xl inline-block bg-light px-2 py-1 rounded-lg mx-1">{tag}</li>
+                {/each}
+                <hr class="my-3"/>
             {/each}
         </ul>
         <a class="text-xl font-bold bg-light px-2 py-1 " href={`/work/${work.work_id}`}>&larr; Return</a>

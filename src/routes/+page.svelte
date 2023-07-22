@@ -7,5 +7,5 @@
 </script>
 <main class="w-full" >
     <Header/>
-    <CardList data={data}/>
+    <CardList data={data} frameLoad={true}/>
 </main>

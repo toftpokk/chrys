@@ -9,6 +9,7 @@
 	import { browser } from "$app/environment";
 	import { goto } from "$app/navigation";
 
+    export let frameLoad = false; // show empty frames when load
     export let data: {work: work[]}
 
     let page_num = get_page($page.url.searchParams)
@@ -26,7 +27,7 @@
     <Sorting />
     
     <ul class="flex flex-wrap justify-center">
-        {#if $navigating}
+        {#if $navigating && frameLoad}
             {#each Array(30) as w}
                 <Card
                         image={""}

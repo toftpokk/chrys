@@ -337,18 +337,18 @@ export const list_work = async (page: number, sort: string) : Promise<work[]>=>{
     }
     const {start,end} = paginate(page)
     const works = partial_works.slice(start,end)
-    for(let w of works){
+    return Promise.all(works.map(async (w: any)=>{
         w.images = await get_images(w.author_name,w.name)
-    }
-    return works
+        return w
+    }))
 }
 
 export const list_work_by_author = async (author_id: number, page: number) : Promise<work[]>=>{
     const partial_works = db_work_author_by_author(author_id)
     const {start,end} = paginate(page)
     const works = partial_works.slice(start,end)
-    for(let w of works){
+    return Promise.all(works.map(async (w: any)=>{
         w.images = await get_images(w.author_name,w.name)
-    }
-    return works
+        return w
+    }))
 }

@@ -31,15 +31,26 @@ const create_work = ()=>{
         viewed INTEGER(1),
         favorite INTEGER(1),
         tags VARCHAR(100),
+        active INTEGER(1),
         FOREIGN KEY(author_id) REFERENCES author(author_id)
     )`)
     sql.run()
+}
+
+const add_active_if_not_exist = ()=>{
+    const table_info : any = db.prepare("PRAGMA table_info(work)").all()
+    const col_names = table_info.map((c: any)=>(c.name))
+    if(!col_names.includes("active")){
+        db.prepare("ALTER TABLE work ADD active INTEGER(1)").run()
+        console.log("Warning: no column active")
+    }
 }
 
 export const init_table = async ()=>{
     console.log("Initializing Tables")
     create_author()
     create_work()
+    add_active_if_not_exist()
     console.log("Syncing Tables...")
     const work_list = await scan()
     await sync(work_list)
@@ -48,25 +59,41 @@ export const init_table = async ()=>{
 
 const sync = async (work_list : Record<string,string[]>)=>{
     const author_names = Object.keys(work_list)
-    author_names.map(async (author_name)=>{
+    const author_id_list : number[] = []
+    // additive sync
+    author_names.forEach(async (author_name)=>{
         let author_id = -1
         const author = db_author_by_name(author_name)
         if(typeof author === "object"){
+            // old author_id
             author_id = author.author_id
         }
         else{
+            // new author_id
             author_id = db_insert_author(author_name,author_name)
         }
+        author_id_list.push(author_id)
         work_list[author_name].map(async (work_name)=>{
             let work_id = -1
             const work = db_work_by_name_author(work_name,author_id)
             if(typeof work === "object"){
+                // old work_id
                 work_id = work.work_id
+                setActive(work_id,true)
             }
             else{
+                // new work_id
                 work_id = db_insert_work(work_name, `${author_name}/${work_name}`,author_id,[])
             }
         })
+    })
+    // subtractive sync
+    const partial_work = db_work_author()
+    partial_work.forEach(async (work)=>{
+        if (!author_id_list.includes(work.author_id)){
+            // not exists
+            setActive(work.work_id,false)
+        }
     })
 }
 
@@ -112,10 +139,10 @@ const db_insert_author = (name: string, path: string): number =>{
     return Number(info.lastInsertRowid)
 }
 
-const db_insert_work = (name: string, path: string, author_id: number,tags: string[]) : number =>{
+const db_insert_work = (name: string, path: string, author_id: number,tags: string[], active=true) : number =>{
     const t = tags.join(" ")
-    const info = db.prepare('INSERT INTO work (name,path,author_id,viewed,favorite,tags) VALUES (?,?,?,?,?,?)')
-                   .run([name, path, author_id, 0, 0,t])
+    const info = db.prepare('INSERT INTO work (name,path,author_id,viewed,favorite,tags,active) VALUES (?,?,?,?,?,?,?)')
+                   .run([name, path, author_id, 0, 0,t,active])
     return Number(info.lastInsertRowid)
 }
 
@@ -145,7 +172,7 @@ const db_work_by_id = (work_id: number): db_work | undefined =>{
 
 const db_work_author_by_id = (work_id:number) : any | undefined =>{
     const w : any = db.prepare(`
-    SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,a.name AS author_name
+    SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.active,a.name AS author_name
     FROM work w
     LEFT JOIN author a
     ON w.author_id = a.author_id
@@ -156,7 +183,7 @@ const db_work_author_by_id = (work_id:number) : any | undefined =>{
 
 const db_work_author_by_author = (author_id:number) : any | undefined =>{
     const w : any = db.prepare(`
-    SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,a.name AS author_name
+    SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.active,a.name AS author_name
     FROM work w
     LEFT JOIN author a
     ON w.author_id = a.author_id
@@ -167,10 +194,11 @@ const db_work_author_by_author = (author_id:number) : any | undefined =>{
 
 const db_work_author = () : work[] =>{
     const ws : any[] = db.prepare(`
-    SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,a.name AS author_name
+    SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.active,a.name AS author_name
     FROM work w
     LEFT JOIN author a
     ON w.author_id = a.author_id
+    WHERE w.active = 1
     `).all([])
     return ws
 }
@@ -178,6 +206,14 @@ const db_work_author = () : work[] =>{
 export const setFav = async (work_id: number, state: boolean)=>{
     const fav = db.prepare(`
     UPDATE work SET favorite = ?
+    WHERE work_id = ?
+    `).run([Number(state),work_id])
+    return state
+}
+
+const setActive = async (work_id: number, state: boolean)=>{
+    db.prepare(`
+    UPDATE work SET active = ?
     WHERE work_id = ?
     `).run([Number(state),work_id])
     return state

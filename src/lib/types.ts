@@ -9,6 +9,7 @@ export interface db_work{
     favorite: boolean;
     viewed: boolean;
     tags: string[];
+    active: boolean;
 }
 
 export interface work extends db_work{

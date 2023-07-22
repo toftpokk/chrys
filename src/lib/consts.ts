@@ -7,7 +7,3 @@ export const sort_type = [
     "author",
     "random"
 ]
-export const tags = [
-    "a",
-    "b"
-]

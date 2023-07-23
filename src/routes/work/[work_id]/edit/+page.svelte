@@ -10,6 +10,7 @@
     let taglist : string[] = work.tags.slice(0)
     let taglist_element : HTMLElement;
     let tag_included : Record<string,boolean> = {}
+    let custom_tag : string = ""
 
     function handleSubmit(this: HTMLFormElement){
         fetch(`/api/${work.work_id}/tag`,{
@@ -59,6 +60,16 @@
     onMount(()=>{
         rerender_el()
     })
+    function addCustom(){
+        custom_tag = custom_tag.trim()
+        if(custom_tag == ""){
+            return
+        }
+        if(!(taglist.includes(custom_tag))){
+            taglist.push(custom_tag)
+            rerender_el()   
+        }
+    }
 </script>
 <main class="w-full my-6" >
     <Header/>
@@ -72,6 +83,9 @@
         <h2 class="mb-3 font-semibold">by {work.author_name}</h2>
         <div bind:this={taglist_element} class="bg-mid rounded-md h-32 leading-10 overflow-scroll"></div>
         <button class="bg-light font-bold my-3 px-2 py-2 rounded-sm" on:click={handleSubmit}>Submit &rarr;</button>
+        <h2 class="text-2xl mt-3 ms-2 mb-3">Add Tag:</h2>
+        <input bind:value={custom_tag} class="bg-light rounded-md leading-10"/>
+        <button class="bg-light font-bold my-3 px-2 py-2 rounded-sm" on:click={addCustom}>Add</button>
         <h2 class="text-2xl mt-3 ms-2">Suggestions:</h2>
         <ul class="my-3 block">
             {#each tags as tag_subset}

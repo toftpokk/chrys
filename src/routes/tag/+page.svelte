@@ -1,6 +1,6 @@
 <script lang="ts">
     import Header from '$lib/Header.svelte'
-    export let data : {tags: string}
+    export let data : {tags: string[]}
 </script>
 <main class="w-full" >
     <Header/>

@@ -296,8 +296,8 @@ export const get_work = async (work_id: number) : Promise<work|null> =>{
 
 // Sorting
 const sort_name = (a:work,b:work)=>{
-    const a_name = a.name
-    const b_name = b.name
+    const a_name = a.name.toUpperCase()
+    const b_name = b.name.toUpperCase()
     if(a_name == b_name){
         return 0
     }

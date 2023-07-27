@@ -210,6 +210,14 @@ const db_work_author = () : work[] =>{
     return ws
 }
 
+const db_author = () : author[]=>{
+    const a : any[] = db.prepare(`
+    SELECT *
+    FROM author
+    `).all([])
+    return a
+}
+
 export const setFav = async (work_id: number, state: boolean)=>{
     db.prepare(`
     UPDATE work SET favorite = ?
@@ -341,6 +349,10 @@ const sort_author = (a:work,b:work)=>{
         return 1
     }
     return -1
+}
+
+export const list_author = async () : Promise<author[]>=>{
+    return db_author()
 }
 
 export const list_work = async (page: number, sort: string) : Promise<work[]>=>{

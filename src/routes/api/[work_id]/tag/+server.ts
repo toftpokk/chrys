@@ -1,4 +1,4 @@
-import { setTag } from '$lib/server/db/index.js'
+import { setTag } from '$lib/server/db'
 import { json } from '@sveltejs/kit'
 
 export const POST = async ({request,params})=>{

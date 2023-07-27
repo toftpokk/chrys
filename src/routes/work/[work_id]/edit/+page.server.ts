@@ -1,4 +1,4 @@
-import { get_work, setTag } from '$lib/server/db/index.js'
+import { get_work } from '$lib/server/db'
 
 export const load = async ({params})=>{
     const work_id = Number(params.work_id)

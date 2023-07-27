@@ -1,4 +1,4 @@
-import { get_author, list_work_by_author } from '$lib/server/db/index.js'
+import { get_author, list_works } from '$lib/server/db'
 
 export const load = async ({params,url})=>{
     let page = Number(url.searchParams.get("page"))
@@ -6,7 +6,7 @@ export const load = async ({params,url})=>{
         page = 1
     }
     const author_id = Number(params.author_id)
-    const work = await list_work_by_author(author_id,page)
+    const work = await list_works(page, "default", author_id)
     const author = await get_author(author_id)
     const author_name = author? author.name : "Unnamed Author"
 

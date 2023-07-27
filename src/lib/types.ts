@@ -1,4 +1,4 @@
-export interface db_work{
+export interface db_work {
     // work
     work_id: number;
     name: string;
@@ -8,12 +8,13 @@ export interface db_work{
 
     favorite: boolean;
     viewed: boolean;
-    tags: string[];
+    tags: string;
     active: boolean;
 }
 
-export interface work extends db_work{
+export interface work extends Omit<db_work,"tags"> {
     author_name: string;
+    tags: string[];
     images: string[];
 }
 

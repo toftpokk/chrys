@@ -1,6 +1,6 @@
-import { get_tag } from '$lib/server/db/index.js'
+import { list_tags } from '$lib/server/db'
 
 export const load = async ({params})=>{
-    const tags = get_tag()
+    const tags = list_tags()
     return {tags}
 }

@@ -144,8 +144,13 @@ const insert_author = (name: string, path: string): number =>{
 
 const insert_work = (name: string, path: string, author_id: number,tags: string[], active=true) : number =>{
     const t = tag_serialize(tags)
+    let active_val = 1;
+    if(!active){
+        active_val = 0
+    }
+    console.log([name, path, author_id, 0, 0,t,active_val])
     const info = db.prepare('INSERT INTO work (name,path,author_id,viewed,favorite,tags,active) VALUES (?,?,?,?,?,?,?)')
-                   .run([name, path, author_id, 0, 0,t,active])
+                   .run([name, path, author_id, 0, 0,t,active_val])
     return Number(info.lastInsertRowid)
 }
 

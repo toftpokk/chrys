@@ -168,11 +168,9 @@ const select_work_with_name_author = (name: string, author_id: number): db_work 
 
 export const select_author_with_id = (work_id:number)=>{
     return db.prepare(`
-    SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.active,a.name AS author_name
-    FROM work w
-    LEFT JOIN author a
-    ON w.author_id = a.author_id
-    WHERE w.work_id = ?
+    SELECT *
+    FROM author
+    WHERE author_id = ?
     `).get([work_id]) as author | undefined
 }
 

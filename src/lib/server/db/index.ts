@@ -77,6 +77,34 @@ export const get_work = async (work_id: number) : Promise<work|null> =>{
 
 // Lists
 
+export const list_alpha = () =>{
+    const works = select_works()
+    const alphabets : string[] = []
+    
+    works.forEach((w)=>{
+        const char = w.name[0]
+        if(!alphabets.includes(char)){
+            alphabets.push(char)
+        }
+    })
+    alphabets.sort()
+    return alphabets
+}
+
+export const list_work_with_alpha = (alpha : string)=>{
+    const works = select_work_authors()
+    const alpha_works = works.filter((w)=>(w.name[0] == alpha))
+
+    return Promise.all(alpha_works.map(async (w: db_work & {author_name: string})=>{
+        const images = await get_images(w.author_name,w.name)
+        return {
+            ...w,
+            images,
+            tags: tag_deserialize(w.tags)
+        }
+    }))
+}
+
 export const list_tags = () : string[]=>{
     const works = select_works()
     const all_tags : string[] = []

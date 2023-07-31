@@ -148,7 +148,6 @@ const insert_work = (name: string, path: string, author_id: number,tags: string[
     if(!active){
         active_val = 0
     }
-    console.log([name, path, author_id, 0, 0,t,active_val])
     const info = db.prepare('INSERT INTO work (name,path,author_id,viewed,favorite,tags,active) VALUES (?,?,?,?,?,?,?)')
                    .run([name, path, author_id, 0, 0,t,active_val])
     return Number(info.lastInsertRowid)

@@ -11,6 +11,7 @@
 
     export let frameLoad = false; // show empty frames when load
     export let data: {work: work[]}
+    export let hasNav = true;
 
     let page_num = get_page($page.url.searchParams)
     let work : work[]= []
@@ -23,8 +24,10 @@
     }
 </script>
 <div class="max-w-7xl mx-auto">
-    <PageNav bind:page_num={page_num} max={-1}/>
-    <Sorting />
+    {#if hasNav}
+        <PageNav bind:page_num={page_num} max={-1}/>
+        <Sorting />
+    {/if}
     
     <ul class="flex flex-wrap justify-center">
         {#if $navigating && frameLoad}
@@ -53,5 +56,7 @@
             {/each}
         {/if}
     </ul>
-    <PageNav bind:page_num={page_num} max={-1}/>
+    {#if hasNav}
+        <PageNav bind:page_num={page_num} max={-1}/>
+    {/if}   
 </div>

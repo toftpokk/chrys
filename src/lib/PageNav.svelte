@@ -1,37 +1,32 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
+	import { page } from "$app/stores";
+	import { get_page } from "./helper";
+
     export let max : number;
-    export let page_num : number;
 
     let leftHidden = true;
     let rightHidden = true;
 
-    // Left/right arrows
-    $: {
+    let leftUrl = ""
+    let rightUrl = ""
+    let page_num = 1
+    $:{
+        page_num = get_page($page.url.searchParams);
         leftHidden = !(page_num > 1)
         rightHidden = !(max < 0 || page_num < max)
+
+        const u = new URLSearchParams($page.url.searchParams)
+        u.set("page",String(page_num-1))
+        leftUrl = "?"+u.toString()
+        u.set("page",String(page_num+1))
+        rightUrl = "?"+u.toString()
     }
-    
-    // Left/right function
-    const goto_prev = ()=>{
-        if(page_num > 1){
-            page_num-=1
-        }
-        else{
-            page_num = 1
-        }
-    }
-    const goto_next = ()=>{
-        if(max < 0 || page_num < max){
-            page_num+=1
-        }
-        else{
-            page_num = max
-        }
-    }
+
 </script>
 
 <div class="max-w-7xl flex justify-center text-4xl mx-auto my-2">
-    <button class="w-8 {leftHidden? "invisible":""}" on:click={goto_prev}>&larr;</button>
+    <a class:invisible={leftHidden} class="w-8" href={leftUrl}>&larr;</a>
     <span class="text-3xl w-10 mx-6 text-center">{page_num}</span>
-    <button class="w-8 {rightHidden? "invisible":""}" on:click={goto_next}>&rarr;</button>
+    <a class:invisible={rightHidden} class="w-8" href={rightUrl}>&rarr;</a>
 </div>

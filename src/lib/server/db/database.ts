@@ -2,7 +2,7 @@ import Database from 'better-sqlite3'
 import {DB_FILE } from '$env/static/private'
 import { PUBLIC_IMAGE_SERVER, PUBLIC_IMAGE_REPO } from '$env/static/public'
 import { tag_serialize } from '$lib/helper'
-import type { author, db_work, work } from '$lib/types'
+import type { author, db_history, db_work, work } from '$lib/types'
 
 export const db = new Database(DB_FILE)
 
@@ -11,6 +11,7 @@ export const init_table = async ()=>{
     console.log("Initializing Tables")
     create_author()
     create_work()
+    create_history()
     add_active_if_not_exist()
     console.log("Syncing Tables...")
     const work_list = await scan()
@@ -54,6 +55,17 @@ const add_active_if_not_exist = ()=>{
         db.prepare("ALTER TABLE work ADD active INTEGER(1)").run()
         console.log("Warning: no column active")
     }
+}
+
+const create_history = ()=>{
+    db.prepare(`
+    CREATE TABLE IF NOT EXISTS history (
+        history_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        work_id INTEGER,
+        datetime INTEGER,
+        viewed INTEGER(1),
+        FOREIGN KEY(work_id) REFERENCES work(work_id)
+    )`).run()
 }
 
 const scan = async ()=>{
@@ -150,6 +162,13 @@ const insert_work = (name: string, path: string, author_id: number,tags: string[
     return Number(info.lastInsertRowid)
 }
 
+const insert_history = (work_id:number,unixtime:number,viewed:boolean)=>{
+    let viewed_val = viewed?1:0;
+    const info = db.prepare('INSERT INTO history (work_id,datetime,viewed) VALUES (?,?,?)')
+                   .run([work_id, unixtime,viewed_val])
+    return Number(info.lastInsertRowid)
+}
+
 // Select
 
 const select_author_with_name = (name: string): author | undefined => {
@@ -228,6 +247,15 @@ export const select_authors = ()=>{
     `).all([]) as author[]
 }
 
+export const select_histories = ()=>{
+    return db.prepare(`
+    SELECT h.history_id,h.datetime,h.viewed,w.name,w.work_id
+    FROM history h
+    LEFT JOIN work w
+    ON w.work_id = h.work_id
+    `).all([]) as db_history[]
+}
+
 // updates
 
 const update_active = async (work_id: number, state: boolean)=>{
@@ -243,6 +271,7 @@ export const update_view = async (work_id: number, state: boolean)=>{
     UPDATE work SET viewed = ?
     WHERE work_id = ?
     `).run([Number(state),work_id])
+    insert_history(work_id,Date.now(),state)
     return state
 }
 

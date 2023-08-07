@@ -23,3 +23,11 @@ export interface author{
     name: string;
     path: string;
 }
+
+export interface db_history{
+    history_id:number;
+    datetime:number;
+    viewed:number;
+    name:string;
+    work_id:number;
+}

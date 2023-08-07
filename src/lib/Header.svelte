@@ -4,6 +4,7 @@
         <li class="m-4 inline"><a class="text-xl" href="/author">Authors</a></li>
         <li class="m-4 inline"><a class="text-xl" href="/tag">Tags</a></li>
         <li class="m-4 inline"><a class="text-xl" href="/alpha">Alphabet</a></li>
+        <li class="m-4 inline"><a class="text-xl" href="/history">History</a></li>
         <li class="m-4 inline"><a class="text-xl" href="/export">Export</a></li>
         <li class="m-4 inline"><a class="text-xl" href="/about">About</a></li>
     </ul>

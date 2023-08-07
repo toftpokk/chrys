@@ -3,7 +3,7 @@
         {icon:"/icons/index.svg",url:"/",name:"Index"},
         {icon:"/icons/authors.svg",url:"/author",name:"Authors"},
         {icon:"/icons/tags.svg",url:"/tag",name:"Tags"},
-        {icon:"/icons/alphabet.svg",url:"/alphabet",name:"Alphabet"},
+        {icon:"/icons/alphabet.svg",url:"/alpha",name:"Alphabet"},
         {icon:"/icons/history.svg",url:"/history",name:"History"},
         {icon:"/icons/export.svg",url:"/export",name:"Export"},
         {icon:"/icons/about.svg",url:"/about",name:"About"},

@@ -1,7 +1,6 @@
 import { sort_type } from "$lib/consts.js";
 import { get_page } from "$lib/helper.js"
 import { list_works } from "$lib/server/db";
-import { list_alpha } from "$lib/server/db";
 
 export function load({url}){
     let page = get_page(url.searchParams)
@@ -12,6 +11,5 @@ export function load({url}){
     }
     return {
         work: list_works(page,sort),
-        alpha: list_alpha()
     }
 }

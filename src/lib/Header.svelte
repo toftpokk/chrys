@@ -23,7 +23,7 @@
             <li class="m-4 inline-block">
                 <a class="text-xl inline" href={link.url}>
                     <img class="w-5 icon inline" src={link.icon} alt={link.name}>
-                    <span class="text-md">{link.name}</span>
+                    <span class="text-md hidden sm:inline">{link.name}</span>
                 </a>
             </li>
         {/each}

@@ -17,7 +17,7 @@
         filter: invert(50%);
     }
 </style>
-<div class="bg-main overflow-scroll">
+<div class="bg-main mb-5 overflow-scroll">
     <ul class="block max-w-7xl w-max mx-auto">
         {#each links as link}
             <li class="m-4 inline-block">

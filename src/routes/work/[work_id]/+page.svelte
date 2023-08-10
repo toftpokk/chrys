@@ -138,9 +138,9 @@
             <div class="absolute text-white text-right right-0 top-0 z-10">
                 <button class="touch-none select-none text-left text-xl px-4 py-2 bg-light">{(index+1)+"/"+work.images.length}</button>
             </div>
-            <div role="button" on:keydown={prevIndex} tabindex="0" on:click={prevIndex} class="touch-none min-w-[20%] fixed  h-screen bottom-0">
+            <div role="button" on:keydown={prevIndex} tabindex="0" on:click={prevIndex} class="touch-none w-[45%] fixed  h-screen bottom-0">
             </div>
-            <div role="button" on:keydown={nextIndex} tabindex="0" on:click={nextIndex} class="touch-none min-w-[20%] fixed  h-screen bottom-0 right-0">
+            <div role="button" on:keydown={nextIndex} tabindex="0" on:click={nextIndex} class="touch-none w-[45%] fixed  h-screen bottom-0 right-0">
             </div>
         </div>
     </main>

@@ -3,10 +3,19 @@
 	import { get_tag_suggestions } from '$lib/helper';
 	import type { work } from '$lib/types';
 	import { onMount } from 'svelte';
-    export let data : { work : work}
+    export let data : { work : work, all_work_tags: string[]}
     const work = data.work
 
     const tag_suggestions = get_tag_suggestions()
+    const all_work_tags = data.all_work_tags;
+    const misc_tags = all_work_tags.filter((tag_name)=>{
+        for(let group_idx in tag_suggestions){
+            if(tag_suggestions[group_idx].includes(tag_name)){
+                return false
+            }
+        }
+        return true
+    })
 
     let included_tags = [...work.tags]
     let current_tags = [...work.tags]
@@ -105,6 +114,14 @@
                 {/each}
                 <hr class="my-3"/>
             {/each}
+            {#each misc_tags as tag_name}
+            <li class="inline-block">
+                <button 
+                on:click={()=>{toggle_tag_inclusion(tag_name)}} 
+                class="mb-2 text-xl bg-light px-2 py-1 rounded-lg mx-1" 
+                class:bg-warn={current_tags.includes(tag_name)}>{tag_name}</button>
+            </li>
+        {/each}
         </ul>
     </div>
 </main>

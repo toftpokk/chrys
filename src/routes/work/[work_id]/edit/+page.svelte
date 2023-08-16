@@ -1,100 +1,106 @@
 <script lang="ts">
-	import type { work } from '$lib/types';
     import Header from '$lib/Header.svelte'
-	import { PUBLIC_TAG_SUGGESTIONS } from '$env/static/public';
+	import { get_tag_suggestions } from '$lib/helper';
+	import type { work } from '$lib/types';
 	import { onMount } from 'svelte';
     export let data : { work : work}
     const work = data.work
-    const tag_subsets = PUBLIC_TAG_SUGGESTIONS.split("\n")
-    const tags = tag_subsets.map((tag_subset)=>(tag_subset.split(" ")))
-    let taglist : string[] = work.tags.slice(0)
-    let taglist_element : HTMLElement;
-    let tag_included : Record<string,boolean> = {}
-    let custom_tag : string = ""
 
-    function handleSubmit(this: HTMLFormElement){
-        fetch(`/api/${work.work_id}/tag`,{
+    const tag_suggestions = get_tag_suggestions()
+
+    let included_tags = [...work.tags]
+    let current_tags = [...work.tags]
+    let current_tags_element : HTMLElement;
+
+    let custom_tag = ""
+    
+    // let tag_included : Record<string,boolean> = {}
+
+    async function submit_tags(this: HTMLFormElement){
+        const res = await fetch(`/api/${work.work_id}/tag`,{
             method: 'POST',
-            body: JSON.stringify(taglist),
+            body: JSON.stringify(current_tags),
             headers: {
                 'Content-Type' : 'application/json'
             }
         })
+        if(!res.ok){
+            return // TODO error handling
+        }
+        included_tags = [...current_tags]
+        render_tags()
     }
-    function rerender_el(){
-        // Refresh taglist element
-        taglist_element.innerHTML = ""
-        for(let t in taglist){
-            const child = document.createElement("button")
-            if(work.tags.includes(taglist[t])){
-                child.classList.add("bg-light")
+
+    const render_tags = ()=>{
+        current_tags_element.innerHTML = ""
+        for(let index in current_tags){
+            const tag_name = current_tags[index]
+            // Create tag element
+            let template : HTMLTemplateElement
+            if(included_tags.includes(tag_name)){
+                template = document.getElementById("template-tag") as HTMLTemplateElement;
             }
             else{
-                child.classList.add("bg-warn")
+                template = document.getElementById("template-tag-include") as HTMLTemplateElement;
             }
-            child.classList.add("mx-1")
-            child.classList.add("text-xl")
-            child.classList.add("rounded-lg")
-            child.classList.add("px-2")
-            child.classList.add("py-1")
-            child.classList.add("select-none")
-            child.onclick = ()=>tag_click(taglist[t])
-            child.innerHTML = taglist[t]
-            taglist_element.appendChild(child)
+            const tag_element = template.content.children[0].cloneNode() as HTMLButtonElement;
+            
+            // Data
+            tag_element.onclick = ()=>toggle_tag_inclusion(tag_name)
+            tag_element.innerHTML = tag_name
+            current_tags_element.appendChild(tag_element)
         }
-        // refresh suggestions
-        tag_included = {}
-        taglist.forEach(tag => {
-            tag_included[tag] = true
-        });
     }
-    function tag_click(tag: string){
-        if(taglist.includes(tag)){
-            taglist = taglist.filter(t=>t!=tag)
-        } 
-        else{
-            taglist.push(tag)
+    
+    const toggle_tag_inclusion = (tag_name:string) =>{
+        if(current_tags.includes(tag_name)){
+            current_tags = current_tags.filter(name=>name!=tag_name)
         }
-        rerender_el()
+        else{
+            current_tags = [...current_tags, tag_name]
+        }
+        render_tags()
     }
     onMount(()=>{
-        rerender_el()
+        render_tags()
     })
-    function addCustom(){
-        custom_tag = custom_tag.trim()
-        if(custom_tag == ""){
-            return
-        }
-        if(!(taglist.includes(custom_tag))){
-            taglist.push(custom_tag)
-            rerender_el()   
-        }
-    }
 </script>
 <main class="w-full my-6" >
     <Header/>
-    <template>
-        <div class="mb-2 text-xl bg-warn px-2 py-1 rounded-lg mx-1"></div>
-        <div class="mb-2 text-xl bg-light px-2 py-1 rounded-lg mx-1"></div>
+    <template id="template-tag-include">
+        <button class="mx-1 text-xl rounded-lg px-2 py-1 select-none bg-warn"></button>
+    </template>
+    <template id="template-tag">
+        <button class="mx-1 text-xl rounded-lg px-2 py-1 select-none bg-light"></button>
     </template>
     <div class="max-w-4xl block mx-auto my-8 text-xl">
-        <a class="text-xl font-bold bg-light px-2 py-2 my-3 inline-block" href={`/work/${work.work_id}`}>&larr; Return</a>
+        <button class="text-xl font-bold bg-light px-2 py-2 my-3 inline-block"
+           on:click={()=>history.back()}>&larr; Return</button>
         <h1 class="text-2xl font-bold mb-4">{work.name}</h1>
         <h2 class="mb-3 font-semibold">by {work.author_name}</h2>
-        <div bind:this={taglist_element} class="bg-mid rounded-md h-32 leading-10 overflow-scroll"></div>
-        <button class="bg-light font-bold my-3 px-2 py-2 rounded-sm" on:click={handleSubmit}>Submit &rarr;</button>
+
+        <!-- Current Tags-->
+        <div class="bg-mid rounded-md h-32 leading-10 overflow-scroll"
+             bind:this={current_tags_element} ></div>
+        <button class="bg-light font-bold my-3 px-2 py-2 rounded-sm" 
+                on:click={submit_tags}>Submit &rarr;</button>
+        
+        <!-- Custom Tags -->
         <h2 class="text-2xl mt-3 ms-2 mb-3">Add Tag:</h2>
         <input bind:value={custom_tag} class="bg-light rounded-md leading-10"/>
-        <button class="bg-light font-bold my-3 px-2 py-2 rounded-sm" on:click={addCustom}>Add</button>
+        <button class="bg-light font-bold my-3 px-2 py-2 rounded-sm" 
+                on:click={()=>toggle_tag_inclusion(custom_tag)}>Add</button>
+        
+        <!-- Suggestions -->
         <h2 class="text-2xl mt-3 ms-2">Suggestions:</h2>
         <ul class="my-3 block">
-            {#each tags as tag_subset}
-                {#each tag_subset as tag}
+            {#each tag_suggestions as suggestion_group}
+                {#each suggestion_group as tag_name}
                     <li class="inline-block">
                         <button 
-                        on:click={()=>{tag_click(tag)}} 
+                        on:click={()=>{toggle_tag_inclusion(tag_name)}} 
                         class="mb-2 text-xl bg-light px-2 py-1 rounded-lg mx-1" 
-                        class:bg-warn={tag_included[tag]}>{tag}</button>
+                        class:bg-warn={current_tags.includes(tag_name)}>{tag_name}</button>
                     </li>
                 {/each}
                 <hr class="my-3"/>

@@ -18,7 +18,10 @@ Then build the project
 
     npm run build
 
-Finally, run the projct
+Before running the application, make sure to start the
+image server from the `PUBLIC_IMAGE_SERVER` variable
+
+Finally, run the application
 
     node ./build/index.js
 
@@ -30,6 +33,22 @@ In a development environment
 
 ## Docker
 
-First build the project, then run
+First build the project
 
-    docker build -t toftpokk/chrys .
+    npm run build
+
+Then run
+
+    npm run docker-build
+
+## Sync
+
+There's an npm script to sync the project with a server
+
+First create a `sync_server` file and change permissions to be executable
+
+Then add commands to sync with a server for example, shell scripts
+
+Finally, run
+
+    npm run sync_server

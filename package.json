@@ -5,6 +5,8 @@
 	"scripts": {
 		"dev": "vite dev --host",
 		"build": "vite build && cp package.json build && cp .env build",
+		"docker-build": "sudo docker build -t toftpokk/chrys .",
+		"sync": "./sync_server",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",

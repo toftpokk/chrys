@@ -6,7 +6,7 @@ export const load = async ({params,url})=>{
         page = 1
     }
     const author_id = Number(params.author_id)
-    const work = await list_works(page, "default", author_id)
+    const work = await list_works({page,author_id})
     const author = await get_author(author_id)
     const author_name = author? author.name : "Unnamed Author"
 

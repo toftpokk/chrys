@@ -7,5 +7,5 @@
 </script>
 <main class="w-full" >
     <Header/>
-    <CardList data={data} frameLoad={true}/>
+    <CardList data={data} frameLoad={true} filterView={true}/>
 </main>

@@ -155,43 +155,60 @@ export const list_work_with_tags = async (tag_name: string, page: number)=>{
 }
 
 // TODO: fix optional, mandatory inputs
-export const list_works = async (page: number|null, sort: string, author_id : null|number = null, needs_active=true) : Promise<work[]>=>{
+export const list_works = async (options: {
+            page?: number, 
+            sort?: string, 
+            author_id?: number, 
+            needs_active?: boolean, 
+            has_viewed?: boolean
+        }) : Promise<work[]>=>{
+
+    let needs_active = options.needs_active || false;
     let partial_works
 
-    if(typeof author_id === "number"){
-        partial_works = select_work_authors_with_id(author_id,needs_active)
+    // Filter Author
+    if(typeof options.author_id === "number"){
+        partial_works = select_work_authors_with_id(
+            options.author_id,
+            needs_active)
     }
     else{
         partial_works = select_work_authors()
     }
 
-    if(sort === "name"){
+    // Filter out Viewed
+    if(options.has_viewed === false){
+        partial_works = partial_works.filter((w)=>(!w.viewed))
+    }
+
+    // Sorting
+    if(options.sort === "name"){
         partial_works.sort(sort_name)
     }
-    else if(sort === "favorite"){
+    else if(options.sort === "favorite"){
         partial_works.sort(sort_fav)
     }
-    else if(sort === "viewed"){
+    else if(options.sort === "viewed"){
         partial_works.sort(sort_view)
     }
-    else if(sort === "author"){
+    else if(options.sort === "auth1or"){
         partial_works.sort(sort_author)
     }
-    else if(sort === "random"){
+    else if(options.sort === "random"){
         partial_works.sort(sort_random)
     }
 
+    // Paging 
     let works : typeof partial_works = []
-
-    if(typeof page === "number"){
-        const {start,end} = paginate(page)
+    if(typeof options.page === "number"){
+        const {start,end} = paginate(options.page)
         works = partial_works.slice(start,end)
     }
     else{
         works = partial_works
     }
-    
-    
+
+    // Images
     return Promise.all(works.map(async (w: db_work & {author_name: string})=>{
         const images = await get_images(w.author_name,w.name)
         return {

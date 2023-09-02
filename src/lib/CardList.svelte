@@ -9,6 +9,7 @@
     export let frameLoad = false; // show empty frames when load
     export let data: {work: work[]}
     export let hasNav = true;
+    export let filterView = false;
 
     let work : work[]= []
     $: {
@@ -18,7 +19,7 @@
 <div class="max-w-7xl mx-auto">
     {#if hasNav}
         <PageNav max={-1}/>
-        <Sorting />
+        <Sorting filterView={filterView}/>
     {/if}
     
     <ul class="flex flex-wrap justify-center">

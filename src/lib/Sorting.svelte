@@ -16,11 +16,11 @@
         goto("?"+u.toString())
     }
 </script>
-<div class="max-w-7xl mx-auto flex justify-start py-3">
-    <label class="text-xl mx-2" for="sort">Sort:</label>
-    <select name="sort" id="sort" class="bg-main px-3 py-2" bind:value={current_sort} on:change={change_sort}>
+<form class="max-w-xs mx-12 px-4 py-3">
+    <label class="block mb-2 font-bold" for="sort">Sorting</label>
+    <select class="bg-main py-2 px-3 block w-full mb-3" id="sort" bind:value={current_sort} on:change={change_sort}>
         {#each sort_type as t }
             <option value={t}>{t}</option>
         {/each}
     </select>
-</div>
+</form>

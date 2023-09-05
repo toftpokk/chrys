@@ -1,7 +1,7 @@
 <script lang="ts">
     import Header from "$lib/Header.svelte";
 </script>
-<main class="w-full my-6" >
+<main class="w-full">
     <Header/>
     <div class="max-w-4xl block mx-auto my-8 text-xl">
         <h1 class="text-2xl font-bold mb-4">Export</h1>

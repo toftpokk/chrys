@@ -2,6 +2,8 @@
 	import { page } from '$app/stores';
     import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER } from '$env/static/public';
     import Reactions from '$lib/Reactions.svelte'
+	import Button from '$lib/atom/Button.svelte';
+	import Tag from '$lib/atom/Tag.svelte';
     import type { work } from '$lib/types'
     export let data : {work:work|null};
 
@@ -123,11 +125,11 @@
                     <!-- Tags -->
                     <div class="block mb-4">
                         {#each work.tags as tag}
-                            <a href={"/tag/"+tag} class="mb-2 text-sm inline-block bg-light px-2 py-1 rounded-lg mx-1">{tag}</a>
+                            <Tag href={"/tag/"+tag}>{tag}</Tag>
                         {/each}
                     </div>
 
-                    <a class="inline-block text-xl font-bold bg-light px-2 py-1 mx-1" href={`/work/${work_id}/edit`}>Edit Tags &rarr;</a>
+                    <Button href={`/work/${work_id}/edit`}>Edit Tags &rarr;</Button>
                 </div>
             </div>
         </aside>

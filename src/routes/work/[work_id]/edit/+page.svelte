@@ -1,5 +1,7 @@
 <script lang="ts">
     import Header from '$lib/Header.svelte'
+	import Button from '$lib/atom/Button.svelte';
+	import Tag from '$lib/atom/Tag.svelte';
 	import { get_tag_suggestions } from '$lib/helper';
 	import type { work } from '$lib/types';
 	import { onMount } from 'svelte';
@@ -77,28 +79,25 @@
 <main class="w-full my-6" >
     <Header/>
     <template id="template-tag-include">
-        <button class="mx-1 text-xl rounded-lg px-2 py-1 select-none bg-warn"></button>
+        <Tag variant={1} size="lg"></Tag>
     </template>
     <template id="template-tag">
-        <button class="mx-1 text-xl rounded-lg px-2 py-1 select-none bg-light"></button>
+        <Tag variant={0} size="lg"></Tag>
     </template>
     <div class="max-w-4xl block mx-auto my-8 text-xl">
-        <button class="text-xl font-bold bg-light px-2 py-2 my-3 inline-block"
-           on:click={()=>history.back()}>&larr; Return</button>
+        <Button onclick={()=>history.back()}>&larr; Return</Button>
         <h1 class="text-2xl font-bold mb-4">{work.name}</h1>
         <h2 class="mb-3 font-semibold">by {work.author_name}</h2>
 
         <!-- Current Tags-->
         <div class="bg-mid rounded-md h-32 leading-10 overflow-scroll"
              bind:this={current_tags_element} ></div>
-        <button class="bg-light font-bold my-3 px-2 py-2 rounded-sm" 
-                on:click={submit_tags}>Submit &rarr;</button>
+        <Button onclick={submit_tags}>Submit &rarr;</Button>
         
         <!-- Custom Tags -->
         <h2 class="text-2xl mt-3 ms-2 mb-3">Add Tag:</h2>
         <input bind:value={custom_tag} class="bg-light rounded-md leading-10"/>
-        <button class="bg-light font-bold my-3 px-2 py-2 rounded-sm" 
-                on:click={()=>toggle_tag_inclusion(custom_tag)}>Add</button>
+        <Button onclick={()=>toggle_tag_inclusion(custom_tag)}>Add</Button>
         
         <!-- Suggestions -->
         <h2 class="text-2xl mt-3 ms-2">Suggestions:</h2>
@@ -106,20 +105,21 @@
             {#each tag_suggestions as suggestion_group}
                 {#each suggestion_group as tag_name}
                     <li class="inline-block">
-                        <button 
-                        on:click={()=>{toggle_tag_inclusion(tag_name)}} 
-                        class="mb-2 text-xl bg-light px-2 py-1 rounded-lg mx-1" 
-                        class:bg-warn={current_tags.includes(tag_name)}>{tag_name}</button>
+                        <Tag onclick={()=>{toggle_tag_inclusion(tag_name)}}
+                            size="lg"
+                            variant={current_tags.includes(tag_name)?1:0}>
+                            {tag_name}
+                        </Tag>
                     </li>
                 {/each}
                 <hr class="my-3"/>
             {/each}
             {#each misc_tags as tag_name}
             <li class="inline-block">
-                <button 
-                on:click={()=>{toggle_tag_inclusion(tag_name)}} 
-                class="mb-2 text-xl bg-light px-2 py-1 rounded-lg mx-1" 
-                class:bg-warn={current_tags.includes(tag_name)}>{tag_name}</button>
+                <Tag onclick={()=>{toggle_tag_inclusion(tag_name)}}
+                    variant={current_tags.includes(tag_name)?1:0}>
+                    {tag_name}
+                </Tag>
             </li>
         {/each}
         </ul>

@@ -1,5 +1,6 @@
 <script lang="ts">
     import Header from '$lib/Header.svelte'
+	import Tag from '$lib/atom/Tag.svelte';
     export let data : {tags: string[]}
 </script>
 <main class="w-full" >
@@ -8,7 +9,7 @@
     <div class="max-w-7xl flex flex-wrap justify-center mx-auto">
         <div class="block mb-4">
             {#each data.tags as tag}
-                <a href={"/tag/"+tag} class="mb-2 text-xl inline-block bg-light px-2 py-1 rounded-lg mx-1">{tag}</a>
+                <Tag href={"/tag/"+tag} size="lg">{tag}</Tag>
             {/each}
         </div>
     </div>

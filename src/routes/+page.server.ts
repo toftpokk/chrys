@@ -5,7 +5,7 @@ import { list_works } from "$lib/server/db";
 export function load({url}){
     let page = get_page(url.searchParams)
     let sort = url.searchParams.get("sort")
-    let has_viewed = url.searchParams.get("has-viewed")==="false" ? false : true;
+    let has_viewed = url.searchParams.get("has-viewed")==="true" ? true : false;
 
     if(!sort){
         sort = sort_type[0]

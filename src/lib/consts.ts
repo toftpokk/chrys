@@ -1,9 +1,8 @@
 export const page_size = 30
 export const sort_type = [
-    "default",
+    "random",
     "name",
     "favorite",
     "viewed",
     "author",
-    "random"
 ]

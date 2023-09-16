@@ -6,10 +6,10 @@
     const searchParams = $page.url.searchParams
     
     let current_sort : string;
-    let hasViewed = true;
+    let hasViewed = false;
     $:{
-        current_sort  = searchParams.get("sort") || "default";
-        hasViewed = searchParams.get("has-viewed")==="false" ? false : true;
+        current_sort  = searchParams.get("sort") || "random";
+        hasViewed = searchParams.get("has-viewed")==="true" ? true : false;
     }
     
     function change_sort(){

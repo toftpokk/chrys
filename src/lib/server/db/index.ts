@@ -2,7 +2,7 @@
 import type { author, db_work, work } from '$lib/types'
 import { page_size } from '$lib/consts'
 import { select_author_with_id, select_authors, select_work_author_with_id, select_work_authors, select_work_authors_with_id, select_works, update_favorite, update_tag, update_view } from './database'
-import { sort_author, sort_fav, sort_name, sort_random, sort_view } from './sort'
+import { random_shuffle, sort_author, sort_fav, sort_name, sort_view } from './sort'
 import { tag_deserialize } from '$lib/helper'
 import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER } from '$env/static/public'
 
@@ -176,11 +176,6 @@ export const list_works = async (options: {
         partial_works = select_work_authors()
     }
 
-    // Filter out Viewed
-    if(options.has_viewed === false){
-        partial_works = partial_works.filter((w)=>(!w.viewed))
-    }
-
     // Sorting
     if(options.sort === "name"){
         partial_works.sort(sort_name)
@@ -191,11 +186,16 @@ export const list_works = async (options: {
     else if(options.sort === "viewed"){
         partial_works.sort(sort_view)
     }
-    else if(options.sort === "auth1or"){
+    else if(options.sort === "author"){
         partial_works.sort(sort_author)
     }
     else if(options.sort === "random"){
-        partial_works.sort(sort_random)
+        random_shuffle(partial_works, 0)
+    }
+
+    // Filter out Viewed
+    if(options.has_viewed === false){
+        partial_works = partial_works.filter((w)=>(!w.viewed))
     }
 
     // Paging 

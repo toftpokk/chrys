@@ -48,6 +48,20 @@ export const sort_author = (a: {author_id:number}, b:{author_id:number})=>{
     return -1
 }
 
-export const sort_random = (a:any,b:any)=>{
-    return 0.5-Math.random()
+export const random_shuffle = (array : any[], seed: number):any[]=>{
+    let m = array.length;
+    let t, i;
+    while(m){
+        i = Math.floor(random(seed)*m--);
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
+        ++seed
+    }
+    return array
+}
+
+const random = (seed:number):number =>{
+    let x = Math.sin(seed++)*10000;
+    return x - Math.floor(x);
 }

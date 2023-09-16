@@ -82,7 +82,7 @@ export const list_alpha = () =>{
     const alphabets : string[] = []
     
     works.forEach((w)=>{
-        const char = w.name[0]
+        const char = w.name[0].toUpperCase()
         if(!alphabets.includes(char)){
             alphabets.push(char)
         }
@@ -93,7 +93,7 @@ export const list_alpha = () =>{
 
 export const list_work_with_alpha = (alpha : string)=>{
     const works = select_work_authors()
-    const alpha_works = works.filter((w)=>(w.name[0] == alpha))
+    const alpha_works = works.filter((w)=>(w.name[0].toUpperCase() == alpha))
 
     return Promise.all(alpha_works.map(async (w: db_work & {author_name: string})=>{
         const images = await get_images(w.author_name,w.name)

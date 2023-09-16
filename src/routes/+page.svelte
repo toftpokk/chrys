@@ -3,7 +3,7 @@
     import type { work } from '$lib/types'
 	import CardList from '$lib/CardList.svelte';
     
-	export let data : {work: work[]};
+	export let data : {work: work[], num_pages: number};
 </script>
 <main class="w-full" >
     <Header/>

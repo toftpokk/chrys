@@ -6,12 +6,13 @@ export const load = async ({params,url})=>{
         page = 1
     }
     const author_id = Number(params.author_id)
-    const work = await list_works({page,author_id})
+    const data = await list_works({page,author_id})
     const author = await get_author(author_id)
     const author_name = author? author.name : "Unnamed Author"
 
     return {
         author_name,
-        work,
+        work: data.work,
+        num_pages: data.num_pages
     }
 }

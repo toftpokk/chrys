@@ -161,7 +161,7 @@ export const list_works = async (options: {
             author_id?: number, 
             needs_active?: boolean, 
             has_viewed?: boolean
-        }) : Promise<work[]>=>{
+        }) : Promise<{work:work[],num_pages:number}>=>{
 
     let needs_active = options.needs_active || false;
     let partial_works
@@ -200,16 +200,18 @@ export const list_works = async (options: {
 
     // Paging 
     let works : typeof partial_works = []
+    let num_pages = -1;
     if(typeof options.page === "number"){
         const {start,end} = paginate(options.page)
         works = partial_works.slice(start,end)
+        num_pages = Math.ceil(partial_works.length/page_size)
     }
     else{
         works = partial_works
     }
 
     // Images
-    return Promise.all(works.map(async (w: db_work & {author_name: string})=>{
+    const result = await Promise.all(works.map(async (w: db_work & {author_name: string})=>{
         const images = await get_images(w.author_name,w.name)
         return {
             ...w,
@@ -217,6 +219,10 @@ export const list_works = async (options: {
             tags: tag_deserialize(w.tags)
         }
     }))
+    return {
+        num_pages,
+        work: result
+    }
 }
 
 // -------------------------------

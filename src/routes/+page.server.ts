@@ -2,7 +2,7 @@ import { sort_type } from "$lib/consts.js";
 import { get_page } from "$lib/helper.js"
 import { list_works } from "$lib/server/db";
 
-export function load({url}){
+export async function load({url}){
     let page = get_page(url.searchParams)
     let sort = url.searchParams.get("sort")
     let has_viewed = url.searchParams.get("has-viewed")==="true" ? true : false;
@@ -10,7 +10,9 @@ export function load({url}){
     if(!sort){
         sort = sort_type[0]
     }
+    let data = await list_works({page,sort,has_viewed})
     return {
-        work: list_works({page,sort,has_viewed})
+        work: data.work,
+        num_pages: data.num_pages
     }
 }

@@ -7,18 +7,20 @@
     import { navigating, page } from '$app/stores';
 
     export let frameLoad = false; // show empty frames when load
-    export let data: {work: work[]}
+    export let data: {work: work[], num_pages?: number}
     export let hasNav = true;
     export let filterView = false;
 
+    let page_max = -1;
     let work : work[]= []
     $: {
         work = data.work
+        if(data.num_pages) page_max = data.num_pages
     }
 </script>
 <div class="max-w-7xl mx-auto">
     {#if hasNav}
-        <PageNav max={-1}/>
+        <PageNav max={page_max}/>
         <Sorting filterView={filterView}/>
     {/if}
     
@@ -50,6 +52,6 @@
         {/if}
     </ul>
     {#if hasNav}
-        <PageNav max={-1}/>
+        <PageNav max={page_max}/>
     {/if}   
 </div>

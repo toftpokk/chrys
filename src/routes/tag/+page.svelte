@@ -1,14 +1,32 @@
 <script lang="ts">
     import Header from '$lib/Header.svelte'
 	import Tag from '$lib/atom/Tag.svelte';
+	import { get_tag_suggestions } from '$lib/helper';
     export let data : {tags: string[]}
+    const tag_suggestions = get_tag_suggestions();
+    const misc_tags = data.tags.filter((tag_name)=>{
+        for(let group_idx in tag_suggestions){
+            if(tag_suggestions[group_idx].includes(tag_name)){
+                return false
+            }
+        }
+        return true
+    })
 </script>
 <main class="w-full" >
     <Header/>
     <h1 class="text-4xl flex justify-center my-8">Tags</h1>
-    <div class="max-w-7xl flex flex-wrap justify-center mx-auto">
+    <div class="max-w-7xl flex-wrap justify-center mx-auto">
         <div class="block mb-4">
-            {#each data.tags as tag}
+            {#each tag_suggestions as suggestion_group}
+                {#each suggestion_group as tag}
+                    {#if data.tags.indexOf(tag) > -1}
+                        <Tag href={"/tag/"+tag} size="lg">{tag}</Tag>
+                    {/if}
+                {/each}
+                <hr class="my-3"/>
+            {/each}
+            {#each misc_tags as tag}
                 <Tag href={"/tag/"+tag} size="lg">{tag}</Tag>
             {/each}
         </div>

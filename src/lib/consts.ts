@@ -5,4 +5,5 @@ export const sort_type = [
     "favorite",
     "viewed",
     "author",
+    "id"
 ]

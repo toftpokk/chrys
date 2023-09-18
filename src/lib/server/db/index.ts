@@ -192,6 +192,9 @@ export const list_works = async (options: {
     else if(options.sort === "random"){
         random_shuffle(partial_works, 0)
     }
+    else if(options.sort === "id"){
+        partial_works.reverse()
+    }
 
     // Filter out Viewed
     if(options.has_viewed === false){

@@ -190,7 +190,8 @@ export const list_works = async (options: {
         partial_works.sort(sort_author)
     }
     else if(options.sort === "random"){
-        random_shuffle(partial_works, Number(PUBLIC_RANDOM_SEED))
+        let seed = PUBLIC_RANDOM_SEED === undefined? 0 : Number(PUBLIC_RANDOM_SEED)
+        random_shuffle(partial_works, seed)
     }
     else if(options.sort === "id"){
         partial_works.reverse()

@@ -4,7 +4,7 @@ import { page_size } from '$lib/consts'
 import { select_author_with_id, select_authors, select_work_author_with_id, select_work_authors, select_work_authors_with_id, select_works, update_favorite, update_tag, update_view } from './database'
 import { random_shuffle, sort_author, sort_fav, sort_name, sort_view } from './sort'
 import { tag_deserialize } from '$lib/helper'
-import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER } from '$env/static/public'
+import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER, PUBLIC_RANDOM_SEED } from '$env/static/public'
 
 const paginate = (page: number)=>{
     const start = (page-1)*page_size
@@ -190,7 +190,7 @@ export const list_works = async (options: {
         partial_works.sort(sort_author)
     }
     else if(options.sort === "random"){
-        random_shuffle(partial_works, 0)
+        random_shuffle(partial_works, Number(PUBLIC_RANDOM_SEED))
     }
     else if(options.sort === "id"){
         partial_works.reverse()

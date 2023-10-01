@@ -20,8 +20,11 @@ export const tag_deserialize = (tag_string : string)=>{
 }
 
 export const get_tag_suggestions = ()=>{
-    const suggestion_subset = PUBLIC_TAG_SUGGESTIONS.split('\n')
-    const tag_suggestions = suggestion_subset.map((tag_subset)=>(
+    const suggestion_subset = PUBLIC_TAG_SUGGESTIONS
+        .split('\n')
+        .filter((line)=>line != "")
+
+    const tag_split = suggestion_subset.map((tag_subset)=>(
         tag_subset.split(" ")
     ))
     return tag_suggestions

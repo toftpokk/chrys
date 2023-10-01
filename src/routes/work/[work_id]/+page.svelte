@@ -16,6 +16,7 @@
         favorite: false,
         viewed: false,
         tags: [],
+        active: true,
         author_name: "Unnamed Author",
         images: []
     }
@@ -82,14 +83,13 @@
     // Frontend
     
     let leftClose = true
+    let rightClose = true
 
     const toggleLeftPane = ()=>{
         leftClose = !leftClose
     }
-
-    const handleClose = ()=>{
-        asideClass = "collapse"
-        buttonClass = ""
+    const toggleRightPane = ()=>{
+        rightClose = !rightClose
     }
 </script>
 
@@ -103,26 +103,30 @@
 <div>
     <main>
         <!-- Sidebar -->
-        <aside class:collapse={leftClose} class="absolute bg-mid h-screen z-10 w-72">
-            <div class="px-6 mt-14">
-                <!-- Details -->
-                <div>
-                    <h1 class="text-2xl font-bold my-2 overflow-clip">{work.name}</h1>
-                    <p>Author: <a class="text-lg" href={author_url}>{work.author_name}</a></p>
-                    <p>Pages: <span class="text-lg">{work.images.length}</span></p>
+        <aside class:collapse={rightClose} class="absolute bg-mid h-screen z-10 w-72 right-0 px-8 pt-14 overflow-scroll">
+            {#each work.images as image, idx}
+                <button class="mb-1" on:click={()=>index=idx}>
+                    <img alt={image} src={`${image_prefix}/${image}`}>
+                </button>
+            {/each}
+        </aside>
+        <aside class:collapse={leftClose} class="absolute bg-mid h-screen z-10 w-72 px-6 pt-14 overflow-scroll">
+            <!-- Details -->
+            <div>
+                <h1 class="text-2xl font-bold my-2 overflow-clip">{work.name}</h1>
+                <p>Author: <a class="text-lg" href={author_url}>{work.author_name}</a></p>
+                <p>Pages: <span class="text-lg">{work.images.length}</span></p>
+            </div>
+            <div>
+                <Reactions favorite={work.favorite} viewed={work.viewed} on:toggleView={toggleView} on:toggleFav={toggleFav}/>
+                <h2 class="font-bold text-lg mb-3">Tags</h2>
+                <!-- Tags -->
+                <div class="block mb-4">
+                    {#each work.tags as tag}
+                        <Tag href={"/tag/"+tag}>{tag}</Tag>
+                    {/each}
                 </div>
-                <div>
-                    <Reactions favorite={work.favorite} viewed={work.viewed} on:toggleView={toggleView} on:toggleFav={toggleFav}/>
-                    <h2 class="font-bold text-lg mb-3">Tags</h2>
-                    <!-- Tags -->
-                    <div class="block mb-4">
-                        {#each work.tags as tag}
-                            <Tag href={"/tag/"+tag}>{tag}</Tag>
-                        {/each}
-                    </div>
-
-                    <Button href={`/work/${work_id}/edit`}>Edit Tags &rarr;</Button>
-                </div>
+                <Button href={`/work/${work_id}/edit`}>Edit Tags &rarr;</Button>
             </div>
         </aside>
         <div class="grow text-light overflow-scroll h-screen">
@@ -133,7 +137,7 @@
                 <button on:click={toggleLeftPane} class="touch-none select-none text-right text-xl px-4 py-2 bg-light">&rarr;</button>
             </div>
             <div class="absolute text-white text-right right-0 top-0 z-10">
-                <button class="touch-none select-none text-left text-xl px-4 py-2 bg-light">{(index+1)+"/"+work.images.length}</button>
+                <button on:click={toggleRightPane} class="touch-none select-none text-left text-xl px-4 py-2 bg-light">{(index+1)+"/"+work.images.length}</button>
             </div>
             <div role="button" on:keydown={prevIndex} tabindex="0" on:click={prevIndex} class="touch-none w-[45%] fixed  h-screen bottom-0">
             </div>

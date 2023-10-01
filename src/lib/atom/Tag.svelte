@@ -7,6 +7,7 @@ export let size = "sm";
 
 // variant 0 default
 // variant 1, bg-warn
+// variant 2, bg-ligt
 
 // If href, override onclick
 if(typeof href === "string"){
@@ -16,7 +17,8 @@ if(typeof href === "string"){
 </script>
 <button on:click={()=>{onclick()}} {...$$restProps}
     class="mb-2 inline-block px-2 py-1 rounded-lg mx-1 select-none touch-none"
-    class:bg-light={variant == 0}
+    class:bg-light={variant == 0 || variant == 2}
+    class:text-mid={variant == 2}
     class:bg-warn={variant == 1}
     class:text-sm={size == "sm"}
     class:text-lg={size == "lg"}

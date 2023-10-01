@@ -25,7 +25,15 @@ export const get_tag_suggestions = ()=>{
         .filter((line)=>line != "")
 
     const tag_split = suggestion_subset.map((tag_subset)=>(
-        tag_subset.split(" ")
+        tag_subset.split(" ").filter((t)=>t != "")
     ))
+    const tag_suggestions = tag_split.map((group)=>{
+        const name = group[0]
+        const tags = group.slice(1)
+        return {
+            name,
+            tags
+        }
+    })
     return tag_suggestions
 }

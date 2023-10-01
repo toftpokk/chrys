@@ -12,7 +12,7 @@
     const all_work_tags = data.all_work_tags;
     const misc_tags = all_work_tags.filter((tag_name)=>{
         for(let group_idx in tag_suggestions){
-            if(tag_suggestions[group_idx].includes(tag_name)){
+            if(tag_suggestions[group_idx].tags.includes(tag_name)){
                 return false
             }
         }
@@ -103,7 +103,8 @@
         <h2 class="text-2xl mt-3 ms-2">Suggestions:</h2>
         <ul class="my-3 block">
             {#each tag_suggestions as suggestion_group}
-                {#each suggestion_group as tag_name}
+                <p class="text-lg">{suggestion_group.name}</p>
+                {#each suggestion_group.tags as tag_name}
                     <li class="inline-block">
                         <Tag onclick={()=>{toggle_tag_inclusion(tag_name)}}
                             size="lg"

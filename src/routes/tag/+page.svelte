@@ -6,7 +6,7 @@
     const tag_suggestions = get_tag_suggestions();
     const misc_tags = data.tags.filter((tag_name)=>{
         for(let group_idx in tag_suggestions){
-            if(tag_suggestions[group_idx].includes(tag_name)){
+            if(tag_suggestions[group_idx].tags.includes(tag_name)){
                 return false
             }
         }
@@ -19,9 +19,12 @@
     <div class="max-w-7xl flex-wrap justify-center mx-auto">
         <div class="block mb-4">
             {#each tag_suggestions as suggestion_group}
-                {#each suggestion_group as tag}
+                <p>{suggestion_group.name}</p>
+                {#each suggestion_group.tags as tag}
                     {#if data.tags.indexOf(tag) > -1}
                         <Tag href={"/tag/"+tag} size="lg">{tag}</Tag>
+                    {:else}
+                        <Tag href={"/tag/"+tag} variant={2} size="lg">{tag}</Tag>
                     {/if}
                 {/each}
                 <hr class="my-3"/>

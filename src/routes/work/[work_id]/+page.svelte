@@ -81,12 +81,10 @@
     }
     // Frontend
     
-    let buttonClass = ""
-    let asideClass = "collapse"
+    let leftClose = true
 
-    const handleOpen = ()=>{
-        asideClass = ""
-        buttonClass = "collapse"
+    const toggleLeftPane = ()=>{
+        leftClose = !leftClose
     }
 
     const handleClose = ()=>{
@@ -105,14 +103,8 @@
 <div>
     <main>
         <!-- Sidebar -->
-        <div class="{buttonClass} absolute left-0 top-0 z-10">
-            <button on:click={handleOpen} class="touch-none select-none text-right text-xl px-4 py-2 bg-light">&rarr;</button>
-        </div>
-        <aside class="{asideClass} absolute bg-mid h-screen z-10 w-72">
-            <div class="text-left left-0 top-0 relative">
-                <button on:click={handleClose} class="touch-none select-none text-right text-xl px-4 py-2 bg-light">&larr;</button>
-            </div>
-            <div class="px-6">
+        <aside class:collapse={leftClose} class="absolute bg-mid h-screen z-10 w-72">
+            <div class="px-6 mt-14">
                 <!-- Details -->
                 <div>
                     <h1 class="text-2xl font-bold my-2 overflow-clip">{work.name}</h1>
@@ -136,6 +128,9 @@
         <div class="grow text-light overflow-scroll h-screen">
             <div class="grow flex justify-center h-screen">
                 <img class="object-contain" src={ `${image_prefix}/${work.images[index]}` } alt="page"/>
+            </div>
+            <div class="absolute text-white left-0 top-0 z-10">
+                <button on:click={toggleLeftPane} class="touch-none select-none text-right text-xl px-4 py-2 bg-light">&rarr;</button>
             </div>
             <div class="absolute text-white text-right right-0 top-0 z-10">
                 <button class="touch-none select-none text-left text-xl px-4 py-2 bg-light">{(index+1)+"/"+work.images.length}</button>

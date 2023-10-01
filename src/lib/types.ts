@@ -22,6 +22,7 @@ export interface author{
     author_id: number;
     name: string;
     path: string;
+    favorite: boolean;
 }
 
 export interface db_history{

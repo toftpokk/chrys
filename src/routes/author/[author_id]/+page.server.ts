@@ -9,10 +9,12 @@ export const load = async ({params,url})=>{
     const data = await list_works({page,author_id})
     const author = await get_author(author_id)
     const author_name = author? author.name : "Unnamed Author"
+    const author_fav = author? author.favorite : 0
 
     return {
         author_name,
         work: data.work,
-        num_pages: data.num_pages
+        num_pages: data.num_pages,
+        favorite: author_fav
     }
 }

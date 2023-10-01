@@ -12,7 +12,7 @@ export const init_table = async ()=>{
     create_author()
     create_work()
     create_history()
-    add_active_if_not_exist()
+    add_fav_if_not_exist()
     console.log("Syncing Tables...")
     const work_list = await scan()
     await sync(work_list)
@@ -27,6 +27,7 @@ const create_author = ()=>{
     CREATE TABLE IF NOT EXISTS author (
         author_id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT VARCHAR(50),
+        favorite INTEGER(1),
         path VARCHAR(50)
     )`).run()
 }
@@ -47,13 +48,13 @@ const create_work = ()=>{
     )`).run()
 }
 
-const add_active_if_not_exist = ()=>{
+const add_fav_if_not_exist = ()=>{
     // Add active column if does not exist
-    const table_info : any = db.prepare("PRAGMA table_info(work)").all()
+    const table_info : any = db.prepare("PRAGMA table_info(author)").all()
     const col_names = table_info.map((c: any)=>(c.name))
-    if(!col_names.includes("active")){
-        db.prepare("ALTER TABLE work ADD active INTEGER(1)").run()
-        console.log("Warning: no column active")
+    if(!col_names.includes("favorite")){
+        db.prepare("ALTER TABLE author ADD favorite INTEGER(1)").run()
+        console.log("Warning: no column favorite")
     }
 }
 
@@ -288,4 +289,12 @@ export const update_tag = async (work_id: number, tag_string: string)=>{
     UPDATE work SET tags = ?
     WHERE work_id = ?
     `).run([tag_string,work_id])
+}
+
+export const update_author_favorite = async (author_id: number, state: boolean)=>{
+    db.prepare(`
+    UPDATE author SET favorite = ?
+    WHERE author_id = ?
+    `).run([Number(state),author_id])
+    return state
 }

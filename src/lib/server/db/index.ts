@@ -1,7 +1,7 @@
 
 import type { author, db_work, work } from '$lib/types'
 import { page_size } from '$lib/consts'
-import { select_author_with_id, select_authors, select_work_author_with_id, select_work_authors, select_work_authors_with_id, select_works, update_favorite, update_tag, update_view } from './database'
+import { select_author_with_id, select_authors, select_work_author_with_id, select_work_authors, select_work_authors_with_id, select_works, update_favorite, update_tag, update_view, update_author_favorite } from './database'
 import { random_shuffle, sort_author, sort_fav, sort_name, sort_view } from './sort'
 import { tag_deserialize } from '$lib/helper'
 import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER, PUBLIC_RANDOM_SEED } from '$env/static/public'
@@ -15,6 +15,10 @@ const paginate = (page: number)=>{
 // // DATABASE OPERATIONS
 
 // set
+
+export const setAuthorFav = async (author_id: number, state: boolean)=>{
+    return update_author_favorite(author_id, state)
+}
 
 export const setFav = async (work_id: number, state: boolean)=>{
     return update_favorite(work_id, state)

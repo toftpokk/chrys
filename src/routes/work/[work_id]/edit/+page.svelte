@@ -117,6 +117,7 @@
             {#each misc_tags as tag_name}
                 <li class="inline-block">
                     <Tag onclick={()=>{toggle_tag_inclusion(tag_name)}}
+                        size="lg"
                         variant={current_tags.includes(tag_name)?1:0}>
                         {tag_name}
                     </Tag>

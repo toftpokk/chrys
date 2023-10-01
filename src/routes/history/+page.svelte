@@ -3,6 +3,9 @@
 	import type { db_history } from '$lib/types';
     
 	export let data : {history:db_history[]};
+
+    const history = data.history.map(
+        (histitem)=>({...histitem, datestring: new Date(histitem.datetime).toLocaleDateString('en-UK')}))
 </script>
 <main>
     <Header/>
@@ -11,23 +14,22 @@
         <thead class="font-bold text-xl">
             <tr>
                 <td></td>
+                <td class="w-32">Date</td>
                 <td>Name</td>
-                <td>Date</td>
             </tr>
         </thead>
         <tbody class="text-xl">
-        {#each data.history as histitem}
+        {#each history as histitem}
             <tr>
-                <!-- <td>{histitem.history_id}</td> -->
                 <td 
                 class:bg-green-500={histitem.viewed} 
                 class:bg-red-500={histitem.viewed?false:true}
                 class="text-center">{histitem.viewed?"O":" "}
                 </td>
+                <td>{histitem.datestring}</td>
                 <td>
                     <a class="underline hover:text-gray-400" href={"/work/"+histitem.work_id}>{histitem.name}</a>
                 </td>
-                <td>{new Date(histitem.datetime).toLocaleDateString('en-UK')}</td>
             </tr>
         {/each}
         </tbody>

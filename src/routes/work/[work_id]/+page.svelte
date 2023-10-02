@@ -27,6 +27,7 @@
     let image_prefix = ""
     let author_comp = ""
     let work_comp = ""
+    let previewImage : string[] = []
 
     if(data.work){
         author_url = `/author/${data.work.author_id}`
@@ -90,6 +91,9 @@
     }
     const toggleRightPane = ()=>{
         rightClose = !rightClose
+        if(!rightClose){
+            previewImage = work.images
+        }
     }
 </script>
 
@@ -103,8 +107,8 @@
 <div>
     <main>
         <!-- Sidebar -->
-        <aside class:collapse={rightClose} class="absolute bg-mid h-screen z-10 w-72 right-0 px-8 pt-14 overflow-scroll">
-            {#each work.images as image, idx}
+        <aside class:hidden={rightClose} class="absolute bg-mid h-screen z-10 w-72 right-0 px-8 pt-14 overflow-scroll">
+            {#each previewImage as image, idx}
                 <button class="mb-1" on:click={()=>index=idx}>
                     <img alt={image} src={`${image_prefix}/${image}`}>
                 </button>

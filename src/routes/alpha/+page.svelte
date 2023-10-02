@@ -1,7 +1,15 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
     import Header from '$lib/Header.svelte'
-	import type { author } from '$lib/types';
+	import Button from '$lib/atom/Button.svelte';
     export let data : {alpha: string[]}
+    const handleSubmit = ()=>{
+        const input = document.getElementById("search") as HTMLInputElement | null
+        if(input){
+            const encoded = encodeURIComponent(input.value)
+            goto("/alpha/"+encoded)
+        }
+    }
 </script>
 <main class="w-full" >
     <Header/>
@@ -12,5 +20,7 @@
                 <a href={"/alpha/"+encodeURIComponent(char)} class="mb-2 text-xl inline-block bg-light px-2 py-1 rounded-lg mx-1">{char}</a>
             {/each}
         </div>
+        <input id="search" class="text-black"/>
+        <Button onclick={handleSubmit}>Search</Button>
     </div>
 </main>

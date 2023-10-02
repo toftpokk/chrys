@@ -1,7 +1,7 @@
 
 import type { author, db_work, work } from '$lib/types'
 import { page_size } from '$lib/consts'
-import { select_author_with_id, select_authors, select_work_author_with_id, select_work_authors, select_work_authors_with_id, select_works, update_favorite, update_tag, update_view, update_author_favorite } from './database'
+import { select_author_with_id, select_authors, select_work_author_with_id, select_work_authors, select_work_authors_with_id, select_works, update_favorite, update_tag, update_view, update_author_favorite, fuse } from './database'
 import { random_shuffle, sort_author, sort_fav, sort_name, sort_view } from './sort'
 import { tag_deserialize } from '$lib/helper'
 import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER, PUBLIC_RANDOM_SEED } from '$env/static/public'
@@ -95,11 +95,16 @@ export const list_alpha = () =>{
     return alphabets
 }
 
-export const list_work_with_alpha = (alpha : string)=>{
-    const works = select_work_authors()
-    const alpha_works = works.filter((w)=>(w.name[0].toUpperCase() == alpha))
-
-    return Promise.all(alpha_works.map(async (w: db_work & {author_name: string})=>{
+export const list_work_with_alpha = (alpha : string, page: number)=>{
+    const fs = fuse?.search(alpha).map((fuseitem)=>{
+        return fuseitem.item
+    });
+    const alpha_works = fs ? fs : [];
+    const {start,end} = paginate(page)
+    const num_pages = Math.ceil(alpha_works.length/page_size);
+    
+    const work_list = alpha_works.slice(start,end)
+    const work = Promise.all(work_list.map(async (w: db_work & {author_name: string})=>{
         const images = await get_images(w.author_name,w.name)
         return {
             ...w,
@@ -107,6 +112,10 @@ export const list_work_with_alpha = (alpha : string)=>{
             tags: tag_deserialize(w.tags)
         }
     }))
+    return {
+        work,
+        num_pages: num_pages
+    }
 }
 
 export const list_tags = () : string[]=>{

@@ -3,8 +3,10 @@ import {DB_FILE } from '$env/static/private'
 import { PUBLIC_IMAGE_SERVER, PUBLIC_IMAGE_REPO } from '$env/static/public'
 import { tag_serialize } from '$lib/helper'
 import type { author, db_history, db_work, work } from '$lib/types'
+import Fuse from 'fuse.js'
 
 export const db = new Database(DB_FILE)
+export let fuse : Fuse<ReturnType<typeof select_work_authors>[0]>;
 
 export const init_table = async ()=>{
     // Initializes all tables and syncs data
@@ -17,6 +19,9 @@ export const init_table = async ()=>{
     const work_list = await scan()
     await sync(work_list)
     console.log("Syncing Tables Done!")
+    fuse = new Fuse(select_work_authors(),{
+        keys: ['name','tags']
+    })
 }
 
 // // Table & Syncing

@@ -5,9 +5,10 @@ export const load = async ({params,url})=>{
     if(page == 0){
         page = 1
     }
-    const work = await list_work_with_alpha(params.alpha)
+    const data = list_work_with_alpha(params.alpha,page)
 
     return {
-        work,
+        work: await data.work,
+        num_pages: data.num_pages
     }
 }

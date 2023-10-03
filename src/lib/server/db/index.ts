@@ -132,8 +132,16 @@ export const list_tags = () : string[]=>{
     return all_tags
 }
 
-export const list_authors = async () : Promise<author[]>=>{
-    return select_authors()
+export const list_authors = async ()=>{
+    const work_authors = select_work_authors()
+    const authors = select_authors()
+    const author_num = authors.map((a)=>{
+        return {
+            ...a,
+            work_count: work_authors.filter((w)=>w.author_id == a.author_id).length
+        }
+    })
+    return author_num
 }
 
 // TODO: use list_work

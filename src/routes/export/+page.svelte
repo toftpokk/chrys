@@ -1,6 +1,10 @@
 <script lang="ts">
     import Header from "$lib/Header.svelte";
 	import Button from "$lib/atom/Button.svelte";
+
+    const refresh = async()=>{
+        const res = await fetch(`/api/refresh`)
+    }
 </script>
 <main class="w-full">
     <Header/>
@@ -9,6 +13,7 @@
         <div class="inline">
             <Button href="/export/favorite" download>Export Favorites &DoubleRightArrow;</Button>
             <Button href="/export/viewed" download>Export Viewed &DoubleRightArrow;</Button>
+            <Button onclick={()=>refresh()} download>Refresh</Button>
         </div>
     </div>
 </main>

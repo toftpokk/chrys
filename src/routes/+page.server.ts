@@ -10,7 +10,7 @@ export async function load({url}){
     if(!sort){
         sort = sort_type[0]
     }
-    let data = await list_works({page,sort,has_viewed})
+    let data = await list_works({page,sort,has_viewed,needs_active:true})
     return {
         work: data.work,
         num_pages: data.num_pages

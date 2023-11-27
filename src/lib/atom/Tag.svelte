@@ -16,7 +16,7 @@ if(typeof href === "string"){
 }
 </script>
 <button on:click={()=>{onclick()}} {...$$restProps}
-    class="mb-2 inline-block px-2 py-1 rounded-lg mx-1 select-none touch-none"
+    class="mb-2 inline-block px-2 py-1 rounded-lg mx-1 select-none"
     class:bg-light={variant == 0 || variant == 2}
     class:text-mid={variant == 2}
     class:bg-warn={variant == 1}

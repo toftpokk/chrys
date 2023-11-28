@@ -1,8 +1,10 @@
 # Chrys
 
-Image-set viewer for viewing manga, comics, and doujinshi
+Image-set viewer for viewing manga, comics, and more
 
-## Installing
+![sample](./art/chrys.png)
+
+## Installation
 
 First install npm packages
 

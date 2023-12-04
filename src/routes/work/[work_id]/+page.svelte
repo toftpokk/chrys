@@ -145,9 +145,9 @@
             </div>
         </aside>
         <div class="grow text-light overflow-scroll h-screen">
-            <div class="grow flex justify-center h-screen">
-                <button on:click={handleClick} class="h-full">
-                    <img class="h-full" draggable="false" src={ `${image_prefix}/${work.images[index]}` } alt="page"/>
+            <div class="flex justify-center h-screen">
+                <button on:click={handleClick} class="object-fit h-full">
+                    <img class="object-fit max-h-full" draggable="false" src={ `${image_prefix}/${work.images[index]}` } alt="page"/>
                 </button>
             </div>
             <div class="absolute text-white left-0 top-0 z-10">

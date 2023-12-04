@@ -95,6 +95,17 @@
             previewImage = work.images
         }
     }
+    const handleClick = (e: MouseEvent) => {
+        const image = e.target as EventTarget & {width:number}
+        const imageWidth = image.width
+        const clickXPercent = (e.offsetX / imageWidth);
+        if(clickXPercent > 0.5){
+            nextIndex()
+        }
+        else{
+            prevIndex()
+        }
+    };
 </script>
 
 <svelte:window on:keydown={handleKeyDown}/>
@@ -135,7 +146,9 @@
         </aside>
         <div class="grow text-light overflow-scroll h-screen">
             <div class="grow flex justify-center h-screen">
-                <img class="object-contain" src={ `${image_prefix}/${work.images[index]}` } alt="page"/>
+                <button on:click={handleClick} class="h-full">
+                    <img class="h-full" draggable="false" src={ `${image_prefix}/${work.images[index]}` } alt="page"/>
+                </button>
             </div>
             <div class="absolute text-white left-0 top-0 z-10">
                 <button on:click={toggleLeftPane} class="touch-none select-none text-right text-xl px-4 py-2 bg-light">&rarr;</button>

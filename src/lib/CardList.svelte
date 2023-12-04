@@ -25,7 +25,11 @@
     <ul class="flex flex-wrap justify-center">
         {#each work as w}
             <Card
-                image={`${PUBLIC_IMAGE_SERVER}/images/${PUBLIC_IMAGE_REPO}/${encodeURIComponent(w.author_name)}/${encodeURIComponent(w.name)}/${w.images[0]}`}
+                image={
+                    w.images[0]
+                    ?`${PUBLIC_IMAGE_SERVER}/images/${PUBLIC_IMAGE_REPO}/${encodeURIComponent(w.author_name)}/${encodeURIComponent(w.name)}/${w.images[0]}`
+                    : '/image-not-found.jpg'
+                }
                 url={`/work/${w.work_id}`}
                 author={w.author_name}
                 title={w.name}

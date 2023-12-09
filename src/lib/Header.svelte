@@ -7,7 +7,7 @@
         {icon:"/icons/tags.svg",url:"/tag",name:"Tags"},
         {icon:"/icons/alphabet.svg",url:"/alpha",name:"Search"},
         {icon:"/icons/history.svg",url:"/history",name:"History"},
-        {icon:"/icons/export.svg",url:"/export",name:"Export"},
+        {icon:"/icons/settings.svg",url:"/settings",name:"Settings"},
         {icon:"/icons/about.svg",url:"/about",name:"About"},
     ]
     const current_page = $page.url.pathname;

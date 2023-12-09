@@ -28,6 +28,14 @@
     let author_comp = ""
     let work_comp = ""
     let previewImage : string[] = []
+    // Check page
+    // const paramPage = $page.url.searchParams.get('page')
+    // if(paramPage){
+    //     const paramPageNum = Number(paramPage)
+    //     if(!isNaN(paramPageNum)){
+    //         index = paramPageNum-1
+    //     }  
+    // }
 
     if(data.work){
         author_url = `/author/${data.work.author_id}`
@@ -42,11 +50,13 @@
         if(index > 0){
             index-=1
         }
+        // history.replaceState(null,"","?page="+(index+1))
     }
     const nextIndex = ()=>{
         if(index< work.images.length-1){
             index+=1
         }
+        // history.replaceState(null,"","?page="+(index+1))
     }
 
     const handleKeyDown = (event:KeyboardEvent)=>{

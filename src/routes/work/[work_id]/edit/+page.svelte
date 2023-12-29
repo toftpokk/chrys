@@ -25,7 +25,7 @@
     let current_tags_element : HTMLElement;
     let current_series = work.series
     let paste_text = ""
-
+    let series_list : string[] = data.series.filter(s=>!["",null].includes(s))
     let custom_tag = ""
     
     // let tag_included : Record<string,boolean> = {}
@@ -56,6 +56,11 @@
         }
         included_tags = [...current_tags]
         render_tags()
+    }
+    const set_series = (s : string)=>{
+        return ()=>{
+            current_series = s
+        }
     }
 
     const copy_tags = ()=>{
@@ -117,6 +122,17 @@
         <!-- Series -->
         <!-- <div class="bg-mid rounded-md h-32 leading-10 overflow-scroll"
         bind:this={current_series} ></div> -->
+        <p>Series</p>
+        <ul class="my-3 block">
+            {#each series_list as s}
+                <li class="inline-block">
+                    <Tag onclick={set_series(s)}
+                        size="lg"
+                        >{s}
+                    </Tag>
+                </li>
+            {/each}
+        </ul>
         <input class="bg-mid block leading-10 mb-2" bind:value={current_series}/>
         <button class="btn" on:click={submit_series}>Submit Series &rarr;</button>
 

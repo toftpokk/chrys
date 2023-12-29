@@ -1,5 +1,6 @@
 <script lang="ts">
     import Header from "$lib/Header.svelte";
+	import ButtonLoad from "$lib/atom/ButtonLoad.svelte";
 
     let hidden = true
 
@@ -20,9 +21,9 @@
         <div class="inline">
             <a class="btn" href="/export/favorite" download>Export Favorites &DoubleRightArrow;</a>
             <a class="btn" href="/export/viewed" download>Export Viewed &DoubleRightArrow;</a>
-            <button class="btn" on:click={()=>refresh()}>
-                Refresh <img class="icon inline w-5 -mt-1" class:hidden={hidden} src="/refresh.svg"/>
-            </button>
+            <ButtonLoad refresh={refresh} hidden={hidden}>
+                Refresh
+            </ButtonLoad>
         </div>
     </div>
 </main>

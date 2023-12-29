@@ -10,6 +10,7 @@ const config = {
 				'main': '#393E46',
 				'light': '#535A65',
 				'accent': '#00ADB5',
+				'accent-dark': '#008D95',
 				'accent-light': '#55BDD5',
 				'warn':'#D96C28',
 				'white': '#EEEEEE'

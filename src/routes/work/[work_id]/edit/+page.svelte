@@ -1,5 +1,6 @@
 <script lang="ts">
     import Header from '$lib/Header.svelte'
+	import ButtonLoad from '$lib/atom/ButtonLoad.svelte';
 	import Tag from '$lib/atom/Tag.svelte';
 	import { get_tag_suggestions } from '$lib/helper';
 	import type { work } from '$lib/types';
@@ -29,8 +30,9 @@
     let custom_tag = ""
     
     // let tag_included : Record<string,boolean> = {}
-
+    let submit_series_hidden = true
     async function submit_series(this: HTMLFormElement){
+        submit_series_hidden = false
         const res = await fetch(`/api/${work.work_id}/series`,{
             method: 'POST',
             body: JSON.stringify(current_series),
@@ -38,12 +40,15 @@
                 'Content-Type' : 'application/json'
             }
         })
-        if(!res.ok){
-            return // TODO error handling
+        if(res.ok){
+            submit_series_hidden = true
         }
+        return // TODO error handling
     }
 
+    let submit_tags_hidden = true
     async function submit_tags(this: HTMLFormElement){
+        submit_tags_hidden = false
         const res = await fetch(`/api/${work.work_id}/tag`,{
             method: 'POST',
             body: JSON.stringify(current_tags),
@@ -54,6 +59,7 @@
         if(!res.ok){
             return // TODO error handling
         }
+        submit_tags_hidden = true
         included_tags = [...current_tags]
         render_tags()
     }
@@ -144,7 +150,9 @@
                 {/each}
             </ul>
             <input class="bg-mid block leading-10 mb-2 py-1" bind:value={current_series}/>
-            <button class="btn mx-auto" on:click={submit_series}>Submit Series &rarr;</button>
+            <ButtonLoad refresh={submit_series} hidden={submit_series_hidden}>
+                Submit Series
+            </ButtonLoad>
         </div>
 
         <!-- Current Tags-->
@@ -152,9 +160,12 @@
         <div class="flex flex-col mx-8">
             <div class="bg-mid rounded-md h-44 leading-10 overflow-scroll my-4 p-3 py-4"
                 bind:this={current_tags_element} ></div>
-            <div class="mx-auto">
+            <ButtonLoad refresh={submit_tags} hidden={submit_tags_hidden}>
+                Submit Tags
+            </ButtonLoad>
+            <!-- <div class="mx-auto">
                 <button class="btn" on:click={submit_tags}>Submit Tags &rarr;</button>
-            </div>
+            </div> -->
         </div>
 
         <div class="block mt-4">

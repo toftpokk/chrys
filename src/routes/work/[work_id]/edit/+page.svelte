@@ -135,26 +135,6 @@
             <p>by <span class=" bg-slate-600 px-2 p-1 rounded-xl">{work.author_name}</span></p>
         </div>
 
-
-        <!-- Series -->
-        <h2 class="head">Series:</h2>
-        <div class="flex flex-col mx-8">
-            <ul class="block mx-8 my-4">
-                {#each series_list as s}
-                    <li class="inline-block">
-                        <Tag onclick={set_series(s)}
-                            size="lg"
-                            >{s}
-                        </Tag>
-                    </li>
-                {/each}
-            </ul>
-            <input class="bg-mid block leading-10 mb-2 py-1" bind:value={current_series}/>
-            <ButtonLoad refresh={submit_series} hidden={submit_series_hidden}>
-                Submit Series
-            </ButtonLoad>
-        </div>
-
         <!-- Current Tags-->
         <h2 class="head">Tags:</h2>
         <div class="flex flex-col mx-8">
@@ -208,5 +188,23 @@
                 </li>
             {/each}
         </ul>
+        <!-- Series -->
+        <h2 class="head">Series:</h2>
+        <div class="flex flex-col mx-8">
+            <ul class="block my-4">
+                {#each series_list as s}
+                    <li class="inline-block">
+                        <Tag onclick={set_series(s)}
+                            size="lg"
+                            >{s}
+                        </Tag>
+                    </li>
+                {/each}
+            </ul>
+            <input class="bg-mid block leading-10 mb-2 py-1" bind:value={current_series}/>
+            <ButtonLoad refresh={submit_series} hidden={submit_series_hidden}>
+                Submit Series
+            </ButtonLoad>
+        </div>
     </div>
 </main>

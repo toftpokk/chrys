@@ -1,9 +1,10 @@
 <script lang="ts">
     import Header from '$lib/Header.svelte'
 	import Tag from '$lib/atom/Tag.svelte';
+	import { IsEmptySeries } from '$lib/helper';
     export let data : import("./$types").PageData
     let series = data.series.filter((s)=>{
-        return ![null, ""].includes(s)
+        return !IsEmptySeries(s)
     })
 </script>
 <main class="w-full" >

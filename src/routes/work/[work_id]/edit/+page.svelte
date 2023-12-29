@@ -2,7 +2,7 @@
     import Header from '$lib/Header.svelte'
 	import ButtonLoad from '$lib/atom/ButtonLoad.svelte';
 	import Tag from '$lib/atom/Tag.svelte';
-	import { emptyWork, get_tag_suggestions } from '$lib/helper';
+	import { IsEmptySeries, emptyWork, get_tag_suggestions } from '$lib/helper';
 	import { onMount } from 'svelte';
     export let data : import("./$types").PageData
     const work = data.work? data.work : emptyWork
@@ -25,7 +25,7 @@
     let current_tags_element : HTMLElement;
     let current_series = work.series
     let paste_text = ""
-    let series_list : string[] = data.series.filter(s=>!["",null].includes(s))
+    let series_list : string[] = data.series.filter(s=>!IsEmptySeries(s))
     let custom_tag = ""
     
     // let tag_included : Record<string,boolean> = {}

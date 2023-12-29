@@ -20,6 +20,14 @@ export const emptyWork : work = {
     images: []
 }
 
+export const IsEmptySeries = (seriesString : string | null)=>{
+    if(seriesString == ""){
+        return false
+    } else if(seriesString == null){
+        return false
+    }
+}
+
 export const tag_serialize = (tags : string[]) =>{
     return tags.join(" ")
 }

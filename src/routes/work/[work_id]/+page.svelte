@@ -2,7 +2,6 @@
 	import { page } from '$app/stores';
     import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER } from '$env/static/public';
     import Reactions from '$lib/Reactions.svelte'
-	import Button from '$lib/atom/Button.svelte';
 	import Tag from '$lib/atom/Tag.svelte';
     import type { work } from '$lib/types'
     export let data : {work:work|null};
@@ -167,7 +166,7 @@
                         <Tag href={"/tag/"+tag}>{tag}</Tag>
                     {/each}
                 </div>
-                <Button href={`/work/${work_id}/edit`}>Edit Tags &rarr;</Button>
+                <a class="btn" href={`/work/${work_id}/edit`}>Edit Tags &rarr;</a>
             </div>
         </aside>
         <div class="grow text-light overflow-scroll h-screen">

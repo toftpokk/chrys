@@ -1,6 +1,5 @@
 <script lang="ts">
     import Header from '$lib/Header.svelte'
-	import Button from '$lib/atom/Button.svelte';
 	import Tag from '$lib/atom/Tag.svelte';
 	import { get_tag_suggestions } from '$lib/helper';
 	import type { work } from '$lib/types';
@@ -111,7 +110,7 @@
         <Tag variant={0} size="lg"></Tag>
     </template>
     <div class="max-w-4xl block mx-auto my-8 text-xl">
-        <Button onclick={()=>history.back()}>&larr; Return</Button>
+        <button class="btn" on:click={()=>history.back()}>&larr; Return</button>
         <h1 class="text-2xl font-bold mb-4">{work.name}</h1>
         <h2 class="mb-3 font-semibold">by {work.author_name}</h2>
 
@@ -119,21 +118,21 @@
         <!-- <div class="bg-mid rounded-md h-32 leading-10 overflow-scroll"
         bind:this={current_series} ></div> -->
         <input class="bg-mid block leading-10 mb-2" bind:value={current_series}/>
-        <Button onclick={submit_series}>Submit Series &rarr;</Button>
+        <button class="btn" on:click={submit_series}>Submit Series &rarr;</button>
 
         <!-- Current Tags-->
         <div class="bg-mid rounded-md h-32 leading-10 overflow-scroll"
              bind:this={current_tags_element} ></div>
-        <Button onclick={submit_tags}>Submit Tags &rarr;</Button>
-        <Button onclick={copy_tags}>Copy Tags</Button>
+        <button class="btn" on:click={submit_tags}>Submit Tags &rarr;</button>
+        <button class="btn" on:click={copy_tags}>Copy Tags</button>
 
         <input class="bg-mid block leading-10 mb-2" bind:value={paste_text}/>
-        <Button onclick={paste_tags}>Paste Tags</Button>
+        <button class="btn" on:click={paste_tags}>Paste Tags</button>
         
         <!-- Custom Tags -->
         <h2 class="text-2xl mt-3 ms-2 mb-3">Add Tag:</h2>
         <input bind:value={custom_tag} class="bg-light rounded-md leading-10"/>
-        <Button onclick={()=>toggle_tag_inclusion(custom_tag)}>Add</Button>
+        <button class="btn" on:click={()=>toggle_tag_inclusion(custom_tag)}>Add</button>
         
         <!-- Suggestions -->
         <h2 class="text-2xl mt-3 ms-2">Suggestions:</h2>

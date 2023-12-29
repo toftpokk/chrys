@@ -1,6 +1,5 @@
 <script lang="ts">
     import Header from '$lib/Header.svelte'
-	import Button from '$lib/atom/Button.svelte';
 	import type { author } from '$lib/types';
 	import { onMount } from 'svelte';
     export let data : { authors: (author & {work_count:number})[]};
@@ -32,7 +31,7 @@
             {/each}
         </div>
         <div class="flex flex-wrap justify-center mb-4">
-            <Button onclick={toggleSort}>Sort: {sort}</Button>
+            <button class="btn" on:click={toggleSort}>Sort: {sort}</button>
         </div>
         <div class="flex flex-wrap justify-center mb-4">
             {#each authors as author}

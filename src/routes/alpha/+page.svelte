@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
     import Header from '$lib/Header.svelte'
-	import Button from '$lib/atom/Button.svelte';
     export let data : {alpha: string[]}
-    const handleSubmit = ()=>{
+    const handleSubmit = (e: Event)=>{
         const input = document.getElementById("search") as HTMLInputElement | null
         if(input){
             const encoded = encodeURIComponent(input.value)
-            goto("/alpha/"+encoded)
+            // goto("/alpha/"+encoded)
+            let destination = "/alpha/"+encoded as any
+            window.location = destination
         }
     }
 </script>
@@ -20,7 +21,9 @@
                 <a href={"/alpha/"+encodeURIComponent(char)} class="mb-2 text-xl inline-block bg-light px-2 py-1 rounded-lg mx-1">{char}</a>
             {/each}
         </div>
-        <input id="search" class="text-black"/>
-        <Button onclick={handleSubmit}>Search</Button>
+        <form on:submit={handleSubmit}>
+            <input id="search" class="h-10 text-black" />
+            <input class="btn" type="submit" value="Search"/>
+        </form>
     </div>
 </main>

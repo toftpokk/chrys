@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
     import Header from '$lib/Header.svelte'
-	import Button from '$lib/atom/Button.svelte';
 	import Tag from '$lib/atom/Tag.svelte';
     export let data : {series: string[]}
     let series = data.series.filter((s)=>{

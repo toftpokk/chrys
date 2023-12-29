@@ -151,10 +151,10 @@
             <!-- Details -->
             <div>
                 <h1 class="text-2xl font-bold my-2 overflow-clip">{work.name}</h1>
-                <p>Author: <a class="text-lg" href={author_url}>{work.author_name}</a></p>
-                <p>Pages: <span class="text-lg">{work.images.length}</span></p>
+                <p class="my-1">Author: <a class="text-lg bg-slate-600 px-1.5 py-0.5 rounded-lg" href={author_url}>{work.author_name}</a></p>
+                <p class="my-1">Pages: <span class="text-lg  px-1.5 py-0.5 rounded-lg">{work.images.length}</span></p>
                 {#if work.series}
-                    <p>Series: <a class="text-lg" href={"/series/"+work.series}>{work.series}</a></p>
+                    <p>Series: <a class="text-lg bg-slate-600 px-1.5 py-0.5 rounded-lg" href={"/series/"+work.series}>{work.series}</a></p>
                 {/if}
             </div>
             <div>

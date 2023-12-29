@@ -1,8 +1,7 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
     import Header from '$lib/Header.svelte'
 	import Tag from '$lib/atom/Tag.svelte';
-    export let data : {series: string[]}
+    export let data : import("./$types").PageData
     let series = data.series.filter((s)=>{
         return ![null, ""].includes(s)
     })

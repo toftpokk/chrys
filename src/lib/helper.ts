@@ -1,7 +1,23 @@
 import { PUBLIC_TAG_SUGGESTIONS } from '$env/static/public';
+import type { work } from './types';
 export const get_page = (searchParams: URLSearchParams)=>{
     const page_str = searchParams.get("page")
     return page_str ? Number(page_str) : 1
+}
+
+export const emptyWork : work = {
+    work_id: -1,
+    name: "Unnamed Work",
+    path: "",
+    author_id: -1,
+    favorite: false,
+    viewed: false,
+    // bookmark: false,
+    series: "",
+    tags: [],
+    active: true,
+    author_name: "Unnamed Author",
+    images: []
 }
 
 export const tag_serialize = (tags : string[]) =>{

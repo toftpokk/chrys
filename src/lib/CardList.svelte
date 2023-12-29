@@ -10,11 +10,8 @@
     export let filterView = false;
 
     let page_max = -1;
-    let work : work[]= []
-    $: {
-        work = data.work
-        if(data.num_pages) page_max = data.num_pages
-    }
+    let work : work[]= data.work
+    if(data.num_pages) page_max = data.num_pages
 </script>
 <div class="max-w-7xl mx-auto">
     {#if hasNav}

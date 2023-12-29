@@ -2,7 +2,7 @@
     import Header from '$lib/Header.svelte'
 	import Tag from '$lib/atom/Tag.svelte';
 	import { get_tag_suggestions } from '$lib/helper';
-    export let data : {tags: string[]}
+    export let data : import("./$types").PageData
     const tag_suggestions = get_tag_suggestions();
     const misc_tags = data.tags.filter((tag_name)=>{
         for(let group_idx in tag_suggestions){

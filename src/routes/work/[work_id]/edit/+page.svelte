@@ -2,11 +2,10 @@
     import Header from '$lib/Header.svelte'
 	import ButtonLoad from '$lib/atom/ButtonLoad.svelte';
 	import Tag from '$lib/atom/Tag.svelte';
-	import { get_tag_suggestions } from '$lib/helper';
-	import type { work } from '$lib/types';
+	import { emptyWork, get_tag_suggestions } from '$lib/helper';
 	import { onMount } from 'svelte';
-    export let data : { work : work, all_work_tags: string[]}
-    const work = data.work
+    export let data : import("./$types").PageData
+    const work = data.work? data.work : emptyWork
 
     const tag_suggestions = get_tag_suggestions()
     const all_work_tags = data.all_work_tags;
@@ -62,11 +61,6 @@
         submit_tags_hidden = true
         included_tags = [...current_tags]
         render_tags()
-    }
-    const set_series = (s : string)=>{
-        return ()=>{
-            current_series = s
-        }
     }
 
     const copy_tags = ()=>{
@@ -138,7 +132,7 @@
         <!-- Current Tags-->
         <h2 class="head">Tags:</h2>
         <div class="flex flex-col">
-            <div class="bg-mid rounded-md h-44 leading-10 overflow-scroll my-4 p-3 py-4"
+            <div class="bg-mid rounded-md h-64 leading-10 overflow-scroll my-4 p-3 py-4"
                 bind:this={current_tags_element} ></div>
             <ButtonLoad refresh={submit_tags} hidden={submit_tags_hidden}>
                 Submit Tags
@@ -191,7 +185,7 @@
         <!-- Series -->
         <h2 class="head">Series:</h2>
         <div class="flex flex-col">
-            <ul class="block my-4">
+            <!-- <ul class="block my-4">
                 {#each series_list as s}
                     <li class="inline-block">
                         <Tag onclick={set_series(s)}
@@ -200,7 +194,12 @@
                         </Tag>
                     </li>
                 {/each}
-            </ul>
+            </ul> -->
+            <select bind:value={current_series} class="overflow-hidden mb-2 inline-block px-4 py-2 rounded-lg mx-1 select-none bg-light">
+                {#each series_list as s}
+                    <option value={s}>{s}</option>
+                {/each}
+            </select>
             <input class="bg-mid block leading-10 mb-2 py-1" bind:value={current_series}/>
             <ButtonLoad refresh={submit_series} hidden={submit_series_hidden}>
                 Submit Series

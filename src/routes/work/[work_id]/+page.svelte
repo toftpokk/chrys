@@ -3,24 +3,12 @@
     import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER } from '$env/static/public';
     import Reactions from '$lib/Reactions.svelte'
 	import Tag from '$lib/atom/Tag.svelte';
+	import { emptyWork } from '$lib/helper';
     import type { work } from '$lib/types'
-    export let data : {work:work|null};
+    export let data : import("./$types").PageData
 
     const work_id = $page.params.work_id
-    let work : work = data.work ? data.work : {
-        work_id: Number(work_id),
-        name: "Unnamed Work",
-        path: "",
-        author_id: -1,
-        favorite: false,
-        viewed: false,
-        // bookmark: false,
-        series: "",
-        tags: [],
-        active: true,
-        author_name: "Unnamed Author",
-        images: []
-    }
+    let work : work = data.work ? data.work : emptyWork
     let author_url = ""
     let images_load : string[] = []
     $: images_load = work.images.slice(index, index+3)

@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
     import Header from '$lib/Header.svelte'
-    import type { work } from '$lib/types'
 	import CardList from '$lib/CardList.svelte';
     const series = $page.params.name
     
-	export let data : {work: work[]};
+	export let data : import("./$types").PageData
 </script>
 <main class="w-full" >
     <Header/>

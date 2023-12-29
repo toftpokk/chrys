@@ -2,7 +2,7 @@
     import Header from '$lib/Header.svelte'
 	import type { author } from '$lib/types';
 	import { onMount } from 'svelte';
-    export let data : { authors: (author & {work_count:number})[]};
+    export let data : import("./$types").PageData
     let authors = data.authors;
     const favorite_authors = data.authors.filter((a)=>a.favorite == true)
     let sort = "Count";

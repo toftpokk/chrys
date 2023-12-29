@@ -5,7 +5,7 @@
 	import CardList from '$lib/CardList.svelte';
     const alpha = $page.params.alpha
     
-	export let data : {work: work[]};
+	export let data : import("./$types").PageData
 </script>
 <main class="w-full" >
     <Header/>

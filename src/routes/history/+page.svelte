@@ -2,7 +2,7 @@
     import Header from '$lib/Header.svelte'
 	import type { db_history } from '$lib/types';
     
-	export let data : {history:db_history[]};
+	export let data : import("./$types").PageData
 
     const history = data.history.map(
         (histitem)=>({...histitem, datestring: new Date(histitem.datetime).toLocaleDateString('en-UK')}))

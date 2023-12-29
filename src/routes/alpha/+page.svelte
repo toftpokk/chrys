@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
     import Header from '$lib/Header.svelte'
-    export let data : {alpha: string[]}
+    export let data : import("./$types").PageData
     const handleSubmit = (e: Event)=>{
         const input = document.getElementById("search") as HTMLInputElement | null
         if(input){

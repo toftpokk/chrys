@@ -16,6 +16,7 @@
         favorite: false,
         viewed: false,
         // bookmark: false,
+        series: "",
         tags: [],
         active: true,
         author_name: "Unnamed Author",

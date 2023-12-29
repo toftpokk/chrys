@@ -120,7 +120,7 @@
         @apply text-2xl;
     }
 </style>
-<main class="w-full my-6" >
+<main class="w-full" >
     <Header/>
     <template id="template-tag-include">
         <Tag variant={1} size="lg"></Tag>
@@ -128,7 +128,7 @@
     <template id="template-tag">
         <Tag variant={0} size="lg"></Tag>
     </template>
-    <div class="max-w-4xl flex flex-col px-8 mx-auto my-8 text-xl gap-3">
+    <div class="max-w-4xl flex flex-col px-2 mx-auto my-8 text-xl gap-3">
         <button class="text-start underline underline-offset-2 hover:text-accent-light text-accent" on:click={()=>history.back()}>&larr; Return</button>
         <div class="mb-4">
             <h1 class="text-3xl my-2">{work.name}</h1>
@@ -137,7 +137,7 @@
 
         <!-- Current Tags-->
         <h2 class="head">Tags:</h2>
-        <div class="flex flex-col mx-8">
+        <div class="flex flex-col">
             <div class="bg-mid rounded-md h-44 leading-10 overflow-scroll my-4 p-3 py-4"
                 bind:this={current_tags_element} ></div>
             <ButtonLoad refresh={submit_tags} hidden={submit_tags_hidden}>
@@ -149,7 +149,7 @@
         </div>
 
         <div class="block mt-4">
-            <h2 class="subhead inline-block w-[9rem] text-end">Paste Tags:</h2>
+            <h2 class="subhead">Paste Tags:</h2>
             <input class="bg-light leading-10 mb-2" bind:value={paste_text}/>
             <button class="btn bg-blue-400 rounded-xl" on:click={paste_tags}>Paste</button>
             <button class="btn bg-blue-400 rounded-xl ms-2" on:click={copy_tags}>Copy</button>
@@ -157,7 +157,7 @@
 
         <!-- Custom Tags -->
         <div class="block">
-            <h2 class="subhead inline-block w-[9rem] text-end">New Tag:</h2>
+            <h2 class="subhead">New Tag:</h2>
             <input bind:value={custom_tag} class="bg-light leading-10"/>
             <button class="btn bg-blue-400 rounded-xl" on:click={()=>toggle_tag_inclusion(custom_tag)}>Add</button>
         </div>
@@ -190,7 +190,7 @@
         </ul>
         <!-- Series -->
         <h2 class="head">Series:</h2>
-        <div class="flex flex-col mx-8">
+        <div class="flex flex-col">
             <ul class="block my-4">
                 {#each series_list as s}
                     <li class="inline-block">

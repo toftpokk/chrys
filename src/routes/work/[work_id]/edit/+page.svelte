@@ -106,6 +106,14 @@
         render_tags()
     })
 </script>
+<style>
+    .head {
+        @apply text-3xl leading-3 font-bold my-2;
+    }
+    .subhead{
+        @apply text-2xl;
+    }
+</style>
 <main class="w-full my-6" >
     <Header/>
     <template id="template-tag-include">
@@ -114,44 +122,57 @@
     <template id="template-tag">
         <Tag variant={0} size="lg"></Tag>
     </template>
-    <div class="max-w-4xl block mx-auto my-8 text-xl">
-        <button class="btn" on:click={()=>history.back()}>&larr; Return</button>
-        <h1 class="text-2xl font-bold mb-4">{work.name}</h1>
-        <h2 class="mb-3 font-semibold">by {work.author_name}</h2>
+    <div class="max-w-4xl flex flex-col px-8 mx-auto my-8 text-xl gap-3">
+        <button class="text-start underline underline-offset-2 hover:text-accent-light text-accent" on:click={()=>history.back()}>&larr; Return</button>
+        <div class="mb-4">
+            <h1 class="text-3xl my-2">{work.name}</h1>
+            <p>by <span class=" bg-slate-600 px-2 p-1 rounded-xl">{work.author_name}</span></p>
+        </div>
+
 
         <!-- Series -->
-        <!-- <div class="bg-mid rounded-md h-32 leading-10 overflow-scroll"
-        bind:this={current_series} ></div> -->
-        <p>Series</p>
-        <ul class="my-3 block">
-            {#each series_list as s}
-                <li class="inline-block">
-                    <Tag onclick={set_series(s)}
-                        size="lg"
-                        >{s}
-                    </Tag>
-                </li>
-            {/each}
-        </ul>
-        <input class="bg-mid block leading-10 mb-2" bind:value={current_series}/>
-        <button class="btn" on:click={submit_series}>Submit Series &rarr;</button>
+        <h2 class="head">Series:</h2>
+        <div class="flex flex-col mx-8">
+            <ul class="block mx-8 my-4">
+                {#each series_list as s}
+                    <li class="inline-block">
+                        <Tag onclick={set_series(s)}
+                            size="lg"
+                            >{s}
+                        </Tag>
+                    </li>
+                {/each}
+            </ul>
+            <input class="bg-mid block leading-10 mb-2 py-1" bind:value={current_series}/>
+            <button class="btn mx-auto" on:click={submit_series}>Submit Series &rarr;</button>
+        </div>
 
         <!-- Current Tags-->
-        <div class="bg-mid rounded-md h-32 leading-10 overflow-scroll"
-             bind:this={current_tags_element} ></div>
-        <button class="btn" on:click={submit_tags}>Submit Tags &rarr;</button>
-        <button class="btn" on:click={copy_tags}>Copy Tags</button>
+        <h2 class="head">Tags:</h2>
+        <div class="flex flex-col mx-8">
+            <div class="bg-mid rounded-md h-44 leading-10 overflow-scroll my-4 p-3 py-4"
+                bind:this={current_tags_element} ></div>
+            <div class="mx-auto">
+                <button class="btn" on:click={submit_tags}>Submit Tags &rarr;</button>
+            </div>
+        </div>
 
-        <input class="bg-mid block leading-10 mb-2" bind:value={paste_text}/>
-        <button class="btn" on:click={paste_tags}>Paste Tags</button>
-        
+        <div class="block mt-4">
+            <h2 class="subhead inline-block w-[9rem] text-end">Paste Tags:</h2>
+            <input class="bg-light leading-10 mb-2" bind:value={paste_text}/>
+            <button class="btn bg-blue-400 rounded-xl" on:click={paste_tags}>Paste</button>
+            <button class="btn bg-blue-400 rounded-xl ms-2" on:click={copy_tags}>Copy</button>
+        </div>
+
         <!-- Custom Tags -->
-        <h2 class="text-2xl mt-3 ms-2 mb-3">Add Tag:</h2>
-        <input bind:value={custom_tag} class="bg-light rounded-md leading-10"/>
-        <button class="btn" on:click={()=>toggle_tag_inclusion(custom_tag)}>Add</button>
-        
+        <div class="block">
+            <h2 class="subhead inline-block w-[9rem] text-end">New Tag:</h2>
+            <input bind:value={custom_tag} class="bg-light leading-10"/>
+            <button class="btn bg-blue-400 rounded-xl" on:click={()=>toggle_tag_inclusion(custom_tag)}>Add</button>
+        </div>
+
         <!-- Suggestions -->
-        <h2 class="text-2xl mt-3 ms-2">Suggestions:</h2>
+        <h2 class="subhead">Suggestions:</h2>
         <ul class="my-3 block">
             {#each tag_suggestions as suggestion_group}
                 <p class="text-lg">{suggestion_group.name}</p>

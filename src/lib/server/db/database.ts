@@ -14,7 +14,7 @@ export const init_table = async ()=>{
     create_author()
     create_work()
     create_history()
-    add_fav_if_not_exist()
+    add_series_if_not_exist()
     console.log("Syncing Tables...")
     const work_list = await scan()
     await sync(work_list)
@@ -47,20 +47,22 @@ const create_work = ()=>{
         author_id INTEGER,
         viewed INTEGER(1),
         favorite INTEGER(1),
+        series VARCHAR(50),
         tags VARCHAR(100),
         active INTEGER(1),
         FOREIGN KEY(author_id) REFERENCES author(author_id)
     )`).run()
 }
 
-const add_fav_if_not_exist = ()=>{
+const add_series_if_not_exist = ()=>{
     // Add active column if does not exist
-    const table_info : any = db.prepare("PRAGMA table_info(author)").all()
+    const table_info : any = db.prepare("PRAGMA table_info(work)").all()
     const col_names = table_info.map((c: any)=>(c.name))
-    if(!col_names.includes("favorite")){
-        db.prepare("ALTER TABLE author ADD favorite INTEGER(1)").run()
-        console.log("Warning: no column favorite")
+    if(!col_names.includes("series")){
+        db.prepare("ALTER TABLE work ADD series VARCHAR(50)").run()
+        console.log("Warning: no column series")
     }
+    console.log("Warning: series ok")
 }
 
 const create_history = ()=>{
@@ -160,11 +162,11 @@ const insert_author = (name: string, path: string): number =>{
     return Number(info.lastInsertRowid)
 }
 
-const insert_work = (name: string, path: string, author_id: number,tags: string[], active=true) : number =>{
+const insert_work = (name: string, path: string, author_id: number,tags: string[], active=true, series="") : number =>{
     const t = tag_serialize(tags)
     let active_val = active?1:0;
-    const info = db.prepare('INSERT INTO work (name,path,author_id,viewed,favorite,tags,active) VALUES (?,?,?,?,?,?,?)')
-                   .run([name, path, author_id, 0, 0,t,active_val])
+    const info = db.prepare('INSERT INTO work (name,path,author_id,viewed,favorite,tags,series,active) VALUES (?,?,?,?,?,?,?,?)')
+                   .run([name, path, author_id, 0, 0,t,series,active_val])
     return Number(info.lastInsertRowid)
 }
 
@@ -205,7 +207,7 @@ export const select_works = () =>{
 
 export const select_work_authors = () =>{
     return db.prepare(`
-    SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.active,a.name AS author_name
+    SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.series,w.active,a.name AS author_name
     FROM work w
     LEFT JOIN author a
     ON w.author_id = a.author_id
@@ -215,7 +217,7 @@ export const select_work_authors = () =>{
 
 export const select_work_author_with_id = (work_id: number) =>{
     return db.prepare(`
-    SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.active,a.name AS author_name
+    SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.series,w.active,a.name AS author_name
     FROM work w
     LEFT JOIN author a
     ON w.author_id = a.author_id
@@ -227,7 +229,7 @@ export const select_work_authors_with_id = (author_id: number,needs_active: bool
     let sql;
     if(needs_active){
         sql=`
-        SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.active,a.name AS author_name
+        SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.series,w.active,a.name AS author_name
         FROM work w
         LEFT JOIN author a
         ON w.author_id = a.author_id
@@ -236,7 +238,7 @@ export const select_work_authors_with_id = (author_id: number,needs_active: bool
     }
     else{
         sql=`
-        SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.active,a.name AS author_name
+        SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.series,w.active,a.name AS author_name
         FROM work w
         LEFT JOIN author a
         ON w.author_id = a.author_id
@@ -294,6 +296,13 @@ export const update_tag = async (work_id: number, tag_string: string)=>{
     UPDATE work SET tags = ?
     WHERE work_id = ?
     `).run([tag_string,work_id])
+}
+
+export const update_series = async (work_id: number, series: string)=>{
+    db.prepare(`
+    UPDATE work SET series = ?
+    WHERE work_id = ?
+    `).run([series,work_id])
 }
 
 export const update_author_favorite = async (author_id: number, state: boolean)=>{

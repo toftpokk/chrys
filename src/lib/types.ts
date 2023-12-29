@@ -9,6 +9,7 @@ export interface db_work {
     favorite: boolean;
     viewed: boolean;
     tags: string;
+    series: string;
     active: boolean;
 }
 

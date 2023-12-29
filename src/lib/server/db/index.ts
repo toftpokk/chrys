@@ -1,7 +1,7 @@
 
 import type { author, db_work, work } from '$lib/types'
 import { page_size } from '$lib/consts'
-import { select_author_with_id, select_authors, select_work_author_with_id, select_work_authors, select_work_authors_with_id, select_works, update_favorite, update_tag, update_view, update_author_favorite, fuse } from './database'
+import { select_author_with_id, select_authors, select_work_author_with_id, select_work_authors, select_work_authors_with_id, select_works, update_favorite, update_tag, update_view, update_author_favorite, fuse, update_series } from './database'
 import { random_shuffle, sort_author, sort_fav, sort_name, sort_view } from './sort'
 import { tag_deserialize } from '$lib/helper'
 import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER, PUBLIC_RANDOM_SEED } from '$env/static/public'
@@ -30,6 +30,10 @@ export const setView = async (work_id: number, state: boolean)=>{
 
 export const setTag = async (work_id: number, tag_string: string)=>{
     update_tag(work_id, tag_string)
+}
+
+export const setSeries = async (work_id: number, series: string)=>{
+    update_series(work_id, series)
 }
 
 // // GET
@@ -79,6 +83,30 @@ export const get_work = async (work_id: number) : Promise<work|null> =>{
     return null
 }
 
+// TODO: use list_work
+export const list_work_with_series = async (series_name: string, page: number)=>{
+    const partial_works = select_work_authors()
+    const tagged_works = partial_works.filter((w: any)=>{
+        if(w.series == series_name){
+            return true
+        }
+        else{
+            return false
+        }
+    })
+
+    const {start,end} = paginate(page)
+    const works = tagged_works.slice(start,end)
+
+    return Promise.all(works.map(async (w: db_work & {author_name: string})=>{
+        const images = await get_images(w.author_name,w.name)
+        return {
+            ...w,
+            images,
+            tags: tag_deserialize(w.tags)
+        }
+    }))
+}
 // Lists
 
 export const list_alpha = () =>{
@@ -130,6 +158,17 @@ export const list_tags = () : string[]=>{
         })
     })
     return all_tags
+}
+
+export const list_series = () : string[]=>{
+    const works = select_works()
+    const all_series : string[] = []
+    works.forEach((w : any)=>{
+        if(!(all_series.includes(w.series))){
+            all_series.push(w.series)
+        }
+    })
+    return all_series
 }
 
 export const list_authors = async ()=>{

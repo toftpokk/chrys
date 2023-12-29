@@ -5,8 +5,9 @@
         {icon:"/icons/index.svg",url:"/",name:"Index"},
         {icon:"/icons/authors.svg",url:"/author",name:"Authors"},
         {icon:"/icons/tags.svg",url:"/tag",name:"Tags"},
-        {icon:"/icons/alphabet.svg",url:"/alpha",name:"Search"},
+        {icon:"/icons/search.svg",url:"/alpha",name:"Search"},
         {icon:"/icons/history.svg",url:"/history",name:"History"},
+        {icon:"/icons/folder.svg",url:"/series",name:"Series"},
         {icon:"/icons/settings.svg",url:"/settings",name:"Settings"},
         {icon:"/icons/about.svg",url:"/about",name:"About"},
     ]
@@ -21,26 +22,15 @@
         filter: invert(50%);
     }
 </style>
-<div class="bg-main mb-5 overflow-scroll">
+<div class="bg-main mb-5 overflow-hidden">
     <ul class="block max-w-7xl w-max mx-auto">
         {#each links as link}
-            {#if current_page === link.url}
-                <li class="m-4 inline-block link-current">
-                    <a class="text-xl inline" href={link.url}>
-                        <img class="w-5 icon inline" src={link.icon} alt={link.name}>
-                        <span class="text-md hidden sm:inline">{link.name}</span>
-                    </a>
-                </li>
-            {:else}
-                <li class="m-4 inline-block link">
-                    <a class="text-xl inline" href={link.url}>
-                        <img class="w-5 icon inline" src={link.icon} alt={link.name}>
-                        <span class="text-md hidden sm:inline">{link.name}</span>
-                    </a>
-                </li>
-            {/if}
-                
+            <li class="m-4 inline-block link" class:link-current={current_page == link.url}>
+                <a class="text-lg inline" href={link.url}>
+                    <img class="w-4 icon inline" src={link.icon} alt={link.name}>
+                    <span class="text-md hidden sm:inline">{link.name}</span>
+                </a>
+            </li>
         {/each}
-    
     </ul>
 </div>

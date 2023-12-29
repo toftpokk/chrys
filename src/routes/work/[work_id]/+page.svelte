@@ -15,7 +15,7 @@
         author_id: -1,
         favorite: false,
         viewed: false,
-        bookmark: false,
+        // bookmark: false,
         tags: [],
         active: true,
         author_name: "Unnamed Author",
@@ -92,17 +92,17 @@
         const results = await res.json()
         work.favorite = results.state
     }
-    const toggleBookmark = async()=>{
-        const res = await fetch(`/api/${work_id}/favorite`,{
-            method: 'POST',
-            body: JSON.stringify({state: !work.bookmark}),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        const results = await res.json()
-        work.favorite = results.state
-    }
+    // const toggleBookmark = async()=>{
+    //     const res = await fetch(`/api/${work_id}/favorite`,{
+    //         method: 'POST',
+    //         body: JSON.stringify({state: !work.bookmark}),
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         }
+    //     })
+    //     const results = await res.json()
+    //     work.favorite = results.state
+    // }
     // Frontend
     
     let leftClose = true
@@ -153,9 +153,12 @@
                 <h1 class="text-2xl font-bold my-2 overflow-clip">{work.name}</h1>
                 <p>Author: <a class="text-lg" href={author_url}>{work.author_name}</a></p>
                 <p>Pages: <span class="text-lg">{work.images.length}</span></p>
+                {#if work.series}
+                    <p>Series: <a class="text-lg" href={"/series/"+work.series}>{work.series}</a></p>
+                {/if}
             </div>
             <div>
-                <Reactions favorite={work.favorite} viewed={work.viewed} on:toggleView={toggleView} on:toggleFav={toggleFav} on:toggleBookmark={toggleBookmark}/>
+                <Reactions favorite={work.favorite} viewed={work.viewed} on:toggleView={toggleView} on:toggleFav={toggleFav}/>
                 <h2 class="font-bold text-lg mb-3">Tags</h2>
                 <!-- Tags -->
                 <div class="block mb-4">

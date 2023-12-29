@@ -10,22 +10,38 @@
 
     const tag_suggestions = get_tag_suggestions()
     const all_work_tags = data.all_work_tags;
-    const misc_tags = all_work_tags.filter((tag_name)=>{
+    const unsorted_misc_tags = all_work_tags.filter((tag_name)=>{
         for(let group_idx in tag_suggestions){
             if(tag_suggestions[group_idx].tags.includes(tag_name)){
                 return false
             }
         }
         return true
-    }).toSorted()
+    })
+
+    const misc_tags = unsorted_misc_tags.sort()
 
     let included_tags = [...work.tags]
     let current_tags = [...work.tags]
     let current_tags_element : HTMLElement;
+    let current_series = work.series
 
     let custom_tag = ""
     
     // let tag_included : Record<string,boolean> = {}
+
+    async function submit_series(this: HTMLFormElement){
+        const res = await fetch(`/api/${work.work_id}/series`,{
+            method: 'POST',
+            body: JSON.stringify(current_series),
+            headers: {
+                'Content-Type' : 'application/json'
+            }
+        })
+        if(!res.ok){
+            return // TODO error handling
+        }
+    }
 
     async function submit_tags(this: HTMLFormElement){
         const res = await fetch(`/api/${work.work_id}/tag`,{
@@ -89,10 +105,16 @@
         <h1 class="text-2xl font-bold mb-4">{work.name}</h1>
         <h2 class="mb-3 font-semibold">by {work.author_name}</h2>
 
+        <!-- Series -->
+        <!-- <div class="bg-mid rounded-md h-32 leading-10 overflow-scroll"
+        bind:this={current_series} ></div> -->
+        <input class="bg-mid block leading-10 mb-2" bind:value={current_series}/>
+        <Button onclick={submit_series}>Submit Series &rarr;</Button>
+
         <!-- Current Tags-->
         <div class="bg-mid rounded-md h-32 leading-10 overflow-scroll"
              bind:this={current_tags_element} ></div>
-        <Button onclick={submit_tags}>Submit &rarr;</Button>
+        <Button onclick={submit_tags}>Submit Tags &rarr;</Button>
         
         <!-- Custom Tags -->
         <h2 class="text-2xl mt-3 ms-2 mb-3">Add Tag:</h2>

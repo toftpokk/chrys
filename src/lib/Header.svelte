@@ -27,7 +27,7 @@
         {#each links as link}
             <li class="m-4 inline-block link" class:link-current={current_page == link.url}>
                 <a class="text-lg inline" href={link.url}>
-                    <img class="w-4 icon inline" src={link.icon} alt={link.name}>
+                    <img class="w-4 mb-1 icon inline" src={link.icon} alt={link.name}>
                     <span class="text-md hidden sm:inline">{link.name}</span>
                 </a>
             </li>

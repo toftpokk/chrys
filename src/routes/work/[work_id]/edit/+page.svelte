@@ -25,6 +25,7 @@
     let current_tags = [...work.tags]
     let current_tags_element : HTMLElement;
     let current_series = work.series
+    let paste_text = ""
 
     let custom_tag = ""
     
@@ -55,6 +56,15 @@
             return // TODO error handling
         }
         included_tags = [...current_tags]
+        render_tags()
+    }
+
+    const copy_tags = ()=>{
+        navigator.clipboard.writeText(JSON.stringify(current_tags))
+    }
+    const paste_tags = ()=>{
+        let paste_json = JSON.parse(paste_text)
+        current_tags = paste_json
         render_tags()
     }
 
@@ -115,6 +125,10 @@
         <div class="bg-mid rounded-md h-32 leading-10 overflow-scroll"
              bind:this={current_tags_element} ></div>
         <Button onclick={submit_tags}>Submit Tags &rarr;</Button>
+        <Button onclick={copy_tags}>Copy Tags</Button>
+
+        <input class="bg-mid block leading-10 mb-2" bind:value={paste_text}/>
+        <Button onclick={paste_tags}>Paste Tags</Button>
         
         <!-- Custom Tags -->
         <h2 class="text-2xl mt-3 ms-2 mb-3">Add Tag:</h2>

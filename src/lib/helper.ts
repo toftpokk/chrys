@@ -21,11 +21,13 @@ export const emptyWork : work = {
 }
 
 export const IsEmptySeries = (seriesString : string | null)=>{
+    console.log(seriesString)
     if(seriesString == ""){
-        return false
+        return true
     } else if(seriesString == null){
-        return false
+        return true
     }
+    return false
 }
 
 export const tag_serialize = (tags : string[]) =>{

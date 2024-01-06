@@ -111,11 +111,11 @@ const scan = async ()=>{
     return work_list
 }
 
-const sync = async (work_list : Record<string,string[]>)=>{
+const sync = async (scanned_work_list : Record<string,string[]>)=>{
     // Syncs local sqlite to image server
-    const author_names = Object.keys(work_list)
+    const author_names = Object.keys(scanned_work_list)
     const author_id_list : number[] = []
-    // additive sync
+    // author additive sync
     author_names.forEach(async (author_name)=>{
         let author_id = -1
         const author = select_author_with_name(author_name)
@@ -128,7 +128,7 @@ const sync = async (work_list : Record<string,string[]>)=>{
             author_id = insert_author(author_name,author_name)
         }
         author_id_list.push(author_id)
-        work_list[author_name].map(async (work_name)=>{
+        scanned_work_list[author_name].map(async (work_name)=>{
             let work_id = -1
             const work = select_work_with_name_author(work_name,author_id)
             if(typeof work === "object"){
@@ -142,13 +142,22 @@ const sync = async (work_list : Record<string,string[]>)=>{
             }
         })
     })
-    // subtractive sync
+    // author subtractive sync
     const partial_work = select_work_authors()
     partial_work.forEach(async (work)=>{
         if (!author_id_list.includes(work.author_id)){
             // not exists
             update_active(work.work_id,false)
+            return
         }
+        // work subtractive sync
+        if(!scanned_work_list[work.author_name].includes(work.name)){
+            update_active(work.work_id,false)
+        }else{
+            // work additive sync
+            update_active(work.work_id,true)
+        }
+        // console.log(author_id_list[work.author_id])
     })
 }
 

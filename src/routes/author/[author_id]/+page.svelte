@@ -27,5 +27,5 @@
     <div class="flex justify-center">
         <AuthorReactions favorite={data.favorite} on:toggleFav={toggleFav}/>
     </div>
-    <CardList data={data}/>
+    <CardList data={data} groupSeries={true}/>
 </main>

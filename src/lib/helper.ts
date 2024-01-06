@@ -21,7 +21,6 @@ export const emptyWork : work = {
 }
 
 export const IsEmptySeries = (seriesString : string | null)=>{
-    console.log(seriesString)
     if(seriesString == ""){
         return true
     } else if(seriesString == null){

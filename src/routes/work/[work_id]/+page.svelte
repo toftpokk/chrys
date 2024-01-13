@@ -132,7 +132,7 @@
                 <p class="my-1">Author: <a class="text-lg px-1.5 py-0.5 rounded-lg underline hover:text-gray-20" href={author_url}>{work.author_name}</a></p>
                 <p class="my-1">Pages: <span class="text-lg  px-1.5 py-0.5 rounded-lg">{work.images.length}</span></p>
                 {#if work.series}
-                    <p>Series: <a class="text-lg px-1.5 py-0.5 rounded-lg" href={"/series/"+work.series}>{work.series}</a></p>
+                    <p>Series: <a class="text-lg px-1.5 py-0.5 rounded-lg underline hover:text-gray-20" href={"/series/"+work.series}>{work.series}</a></p>
                 {/if}
             </div>
             <div>
@@ -144,7 +144,7 @@
                         <Tag href={"/tag/"+tag}>{tag}</Tag>
                     {/each}
                 </div>
-                <a class="pill text-xl px-3 py-2" href={`/work/${work_id}/edit`}>Edit Tags &rarr;</a>
+                <a class="pill text-xl px-3 py-2 font-bold bg-gray-200" href={`/work/${work_id}/edit`}>Edit Tags &rarr;</a>
             </div>
         </aside>
         <div class="grow overflow-scroll h-screen">

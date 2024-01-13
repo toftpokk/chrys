@@ -26,7 +26,7 @@
 		<span class="font-bold break-words inline-block py-1 px-2 rounded-xl" class:bg-teal-100={isSeries}>{
 			isSeries? series : title
 			}</span>
-		<span class="block"><a class="relative text-lg px-2 py-1 rounded-lg bg-accent-dark z-20 hover:bg-accent" href={"/author/"+author_id}>{author}</a></span>
+		<span class="block"><a class="relative text-lg px-2 py-1 rounded-lg z-20 text-white hover:text-gray-20" href={"/author/"+author_id}>{author}</a></span>
 		{#if !isSeries}
 		<div class="inline-block my-3">
 			<img

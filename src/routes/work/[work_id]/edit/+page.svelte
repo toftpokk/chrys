@@ -25,7 +25,7 @@
     let current_tags_element : HTMLElement;
     let current_series = work.series
     let paste_text = ""
-    let series_list : string[] = data.series.map(s=>s.name)
+    let series_list : string[] = data.series.map(s=>s.series_name)
     let custom_tag = ""
     
     // let tag_included : Record<string,boolean> = {}
@@ -187,20 +187,9 @@
             {/each}
         </ul>
         <!-- Series -->
-        <h2 class="head">Series:</h2>
         <div class="flex flex-col">
-            <!-- <ul class="block my-4">
-                {#each series_list as s}
-                    <li class="inline-block">
-                        Fix <Tag>
-                        <Tag onclick={set_series(s)}
-                            size="lg"
-                            >{s}
-                        </Tag>
-                    </li>
-                {/each}
-            </ul> -->
             <select bind:value={current_series} class="text-xl pill bg-gray-50 overflow-hidden mb-2 inline-block px-2 py-2 rounded-lg mx-1 select-none bg-light">
+                <option value="">-- Select a Series --</option>
                 {#each series_list as s}
                     <option value={s}>{s}</option>
                 {/each}

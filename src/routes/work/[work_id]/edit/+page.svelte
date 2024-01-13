@@ -25,7 +25,7 @@
     let current_tags_element : HTMLElement;
     let current_series = work.series
     let paste_text = ""
-    let series_list : string[] = data.series.filter(s=>!IsEmptySeries(s))
+    let series_list : string[] = data.series.map(s=>s.name)
     let custom_tag = ""
     
     // let tag_included : Record<string,boolean> = {}
@@ -147,7 +147,7 @@
         </div>
 
         <div class="block mt-4">
-            <input class="relative leading-10 mb-2 h-10 rounded-lg bg-gray-70" bind:value={paste_text}/>
+            <input class="relative leading-10 mb-2 h-10 rounded-lg bg-gray-70 px-2" placeholder="Tag Data" bind:value={paste_text}/>
             <div class="">
                 <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-5" on:click={export_tags}>Export</button>
                 <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-5" on:click={import_tags}>Import</button>
@@ -157,8 +157,7 @@
 
         <!-- Custom Tags -->
         <div class="block">
-            <h2 class="subhead">New Tag:</h2>
-            <input bind:value={custom_tag} class="relative h-10 rounded-lg bg-gray-70 leading-10"/>
+            <input placeholder="New Tag" bind:value={custom_tag} class="relative h-10 rounded-lg bg-gray-70 leading-10 px-2"/>
             <button class="absolute h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-5" on:click={()=>toggle_tag_inclusion(custom_tag)}>Add</button>
         </div>
 
@@ -201,12 +200,12 @@
                     </li>
                 {/each}
             </ul> -->
-            <select bind:value={current_series} class="overflow-hidden mb-2 inline-block px-4 py-2 rounded-lg mx-1 select-none bg-light">
+            <select bind:value={current_series} class="text-xl pill bg-gray-50 overflow-hidden mb-2 inline-block px-2 py-2 rounded-lg mx-1 select-none bg-light">
                 {#each series_list as s}
                     <option value={s}>{s}</option>
                 {/each}
             </select>
-            <input class="bg-mid block leading-10 mb-2 py-1" bind:value={current_series}/>
+            <input class="text-xl leading-10 mb-2 h-10 rounded-lg bg-gray-70 px-2 block py-1" bind:value={current_series}/>
             <ButtonLoad refresh={submit_series} hidden={submit_series_hidden}>
                 Submit Series
             </ButtonLoad>

@@ -144,7 +144,7 @@
                         <Tag href={"/tag/"+tag}>{tag}</Tag>
                     {/each}
                 </div>
-                <a class="pill" href={`/work/${work_id}/edit`}>Edit Tags &rarr;</a>
+                <a class="pill text-xl px-3 py-2" href={`/work/${work_id}/edit`}>Edit Tags &rarr;</a>
             </div>
         </aside>
         <div class="grow overflow-scroll h-screen">

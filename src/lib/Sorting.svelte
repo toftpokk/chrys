@@ -30,7 +30,7 @@
     }
 </script>
 <form class="max-w-xs mx-12 px-4 py-3">
-    <label class="block mb-2 font-bold" for="sort">Sorting</label>
+    <label class="block mb-2 font-bold">Sorting</label>
     <select class="w-full mb-3 pill py-2" id="sort" bind:value={current_sort} on:change={change_sort}>
         {#each sort_type as t }
             <option value={t}>{t}</option>

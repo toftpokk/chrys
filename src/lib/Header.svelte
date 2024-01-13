@@ -22,7 +22,7 @@
         filter: invert(50%);
     }
 </style>
-<div class="bg-main mb-5 overflow-hidden">
+<div class="bg-main mb-5 overflow-hidden ">
     <ul class="block max-w-7xl w-max mx-auto">
         {#each links as link}
             <li class="m-4 inline-block link" class:link-current={current_page == link.url}>

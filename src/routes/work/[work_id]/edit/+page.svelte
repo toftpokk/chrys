@@ -63,12 +63,18 @@
         render_tags()
     }
 
-    const copy_tags = ()=>{
-        navigator.clipboard.writeText(JSON.stringify(current_tags))
+    const export_tags = ()=>{
+        paste_text = JSON.stringify(current_tags)
+        render_tags()
     }
-    const paste_tags = ()=>{
+    const import_tags = ()=>{
         let paste_json = JSON.parse(paste_text)
         current_tags = paste_json
+        render_tags()
+    }
+    const reset_tags = ()=>{
+        // let paste_json = JSON.parse(included_tags)
+        current_tags = included_tags
         render_tags()
     }
 
@@ -117,13 +123,14 @@
 <main class="w-full" >
     <Header/>
     <template id="template-tag-include">
-        <Tag variant={1} size="lg"></Tag>
+        <Tag variant={"activated"}></Tag>
     </template>
     <template id="template-tag">
-        <Tag variant={0} size="lg"></Tag>
+        <!-- TODO: Fix <Tag>-->
+        <Tag variant={"default"}></Tag>
     </template>
     <div class="max-w-4xl flex flex-col px-2 mx-auto my-8 text-xl gap-3">
-        <button class="text-start underline underline-offset-2 hover:text-accent-light text-accent" on:click={()=>history.back()}>&larr; Return</button>
+        <button class="text-start underline underline-offset-2 hover:text-gray-20 text-white" on:click={()=>history.back()}>&larr; Return</button>
         <div class="mb-4">
             <h1 class="text-3xl my-2">{work.name}</h1>
             <p>by <span class=" bg-slate-600 px-2 p-1 rounded-xl">{work.author_name}</span></p>
@@ -132,28 +139,27 @@
         <!-- Current Tags-->
         <h2 class="head">Tags:</h2>
         <div class="flex flex-col">
-            <div class="bg-mid rounded-md h-64 leading-10 overflow-scroll my-4 p-3 py-4"
+            <div class="bg-gray-200 text-xl rounded-md h-64 leading-10 overflow-scroll my-4 p-3 py-4"
                 bind:this={current_tags_element} ></div>
             <ButtonLoad refresh={submit_tags} hidden={submit_tags_hidden}>
                 Submit Tags
             </ButtonLoad>
-            <!-- <div class="mx-auto">
-                <button class="btn" on:click={submit_tags}>Submit Tags &rarr;</button>
-            </div> -->
         </div>
 
         <div class="block mt-4">
-            <h2 class="subhead">Paste Tags:</h2>
-            <input class="bg-light leading-10 mb-2" bind:value={paste_text}/>
-            <button class="btn bg-blue-400 rounded-xl" on:click={paste_tags}>Paste</button>
-            <button class="btn bg-blue-400 rounded-xl ms-2" on:click={copy_tags}>Copy</button>
+            <input class="relative leading-10 mb-2 h-10 rounded-lg bg-gray-70" bind:value={paste_text}/>
+            <div class="">
+                <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-5" on:click={export_tags}>Export</button>
+                <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-5" on:click={import_tags}>Import</button>
+                <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-5" on:click={reset_tags}>Reset</button>
+            </div>
         </div>
 
         <!-- Custom Tags -->
         <div class="block">
             <h2 class="subhead">New Tag:</h2>
-            <input bind:value={custom_tag} class="bg-light leading-10"/>
-            <button class="btn bg-blue-400 rounded-xl" on:click={()=>toggle_tag_inclusion(custom_tag)}>Add</button>
+            <input bind:value={custom_tag} class="relative h-10 rounded-lg bg-gray-70 leading-10"/>
+            <button class="absolute h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-5" on:click={()=>toggle_tag_inclusion(custom_tag)}>Add</button>
         </div>
 
         <!-- Suggestions -->
@@ -165,7 +171,7 @@
                     <li class="inline-block">
                         <Tag onclick={()=>{toggle_tag_inclusion(tag_name)}}
                             size="lg"
-                            variant={current_tags.includes(tag_name)?1:0}>
+                            variant={current_tags.includes(tag_name)?"activated":"deactivated"}>
                             {tag_name}
                         </Tag>
                     </li>
@@ -175,8 +181,7 @@
             {#each misc_tags as tag_name}
                 <li class="inline-block">
                     <Tag onclick={()=>{toggle_tag_inclusion(tag_name)}}
-                        size="lg"
-                        variant={current_tags.includes(tag_name)?1:0}>
+                        variant={current_tags.includes(tag_name)?"activated":"deactivated"}>
                         {tag_name}
                     </Tag>
                 </li>
@@ -188,6 +193,7 @@
             <!-- <ul class="block my-4">
                 {#each series_list as s}
                     <li class="inline-block">
+                        Fix <Tag>
                         <Tag onclick={set_series(s)}
                             size="lg"
                             >{s}

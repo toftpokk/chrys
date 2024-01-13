@@ -9,26 +9,38 @@
 </script>
 <main>
     <Header/>
-    <div class="md:w-full overflow-scroll md:max-w-7xl mx-auto ">
-    <table class="table-auto w-[600px] md:w-11/12 mx-auto">
-        <thead class="font-bold text-xl">
-            <tr>
-                <td></td>
-                <td class="w-32">Date</td>
+    <div class="overflow-scroll max-w-[60em] mx-auto border rounded-xl">
+    <table class="w-max table-auto border-gray-20 mx-auto">
+        <thead class="font-bold border-b border-gray-20">
+            <tr class="">
+                <td class="w-10"></td>
+                <td class="w-24 py-2">Date</td>
                 <td>Name</td>
             </tr>
         </thead>
-        <tbody class="text-xl">
+        <tbody class="w-full">
         {#each history as histitem}
-            <tr>
-                <td 
-                class:bg-green-500={histitem.viewed} 
-                class:bg-red-500={histitem.viewed?false:true}
-                class="text-center">{histitem.viewed?"O":" "}
+            <tr class="h-[2.5em] hover:bg-gray-80 border-b border-gray-50">
+                <td class="text-center">
+                {#if histitem.viewed}
+                    <span class="w-[1.6em] mx-auto block border border-teal-100 text-teal-100 rounded-full">
+                        &#10004;
+                    </span>
+                {:else}
+                    <span class="w-[1.6em] mx-auto border block border-red-100 text-red-100 rounded-full">
+                        &#10005;
+                    </span>
+                {/if}
                 </td>
-                <td>{histitem.datestring}</td>
+                <td class="">{histitem.datestring}</td>
                 <td>
-                    <a class="underline hover:text-gray-400" href={"/work/"+histitem.work_id}>{histitem.name}</a>
+
+                    {#if histitem.viewed}
+                        <a class="underline hover:text-gray-20" href={"/work/"+histitem.work_id} >{histitem.name}</a>
+                    {:else}
+                        <a class="text-red-100 underline hover:text-gray-20" href={"/work/"+histitem.work_id} >{histitem.name}</a>
+                    {/if}
+                    
                 </td>
             </tr>
         {/each}

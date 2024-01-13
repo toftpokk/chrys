@@ -19,8 +19,8 @@
     <div class="max-w-4xl block mx-auto my-8 text-xl">
         <h1 class="text-2xl font-bold mb-4">Settings</h1>
         <div class="inline">
-            <a class="btn" href="/export/favorite" download>Export Favorites &DoubleRightArrow;</a>
-            <a class="btn" href="/export/viewed" download>Export Viewed &DoubleRightArrow;</a>
+            <a class="pill" href="/export/favorite" download>Export Favorites <span class="pill-icon">&darr;</span></a>
+            <a class="pill" href="/export/viewed" download>Export Viewed <span class="pill-icon">&darr;</span></a>
             <ButtonLoad refresh={refresh} hidden={hidden}>
                 Refresh
             </ButtonLoad>

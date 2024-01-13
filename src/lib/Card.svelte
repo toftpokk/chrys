@@ -14,16 +14,19 @@
   		background-color: #00ADB5;
 	}
 </style>
-
-<li class="bg-mid w-48 sm:w-72 m-1" class:alt={isSeries} >
-	<a href={isSeries?"/series/"+series :url}>
-		<img alt="cover" class="h-72 w-72 object-cover" src={image} />
+<!--height="804" width="560"-->
+<li class="bg-gray-80 w-48 sm:w-72 m-1 overflow-hidden relative">
+	<a href={isSeries?"/series/"+series :url} class="absolute bottom-0 top-0 left-0 right-0 z-10 box-border">
 	</a>
+	<div class="h-[370px] bg-gray-200 object-cover overflow-hidden">
+		<img alt="cover" src={image} />
+	</div>
+	<!-- <img alt="cover" class="object-cover" height="804" width="560" src={image} /> -->
 	<div class="p-3">
-		<span class="font-bold block break-words">{
+		<span class="font-bold break-words inline-block py-1 px-2 rounded-xl" class:bg-teal-100={isSeries}>{
 			isSeries? series : title
 			}</span>
-		<span class="block"><a class="text-lg" href={"/author/"+author_id}>{author}</a></span>
+		<span class="block"><a class="relative text-lg px-2 py-1 rounded-lg bg-accent-dark z-20 hover:bg-accent" href={"/author/"+author_id}>{author}</a></span>
 		{#if !isSeries}
 		<div class="inline-block my-3">
 			<img

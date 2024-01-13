@@ -13,16 +13,15 @@
 </script>
 <main class="w-full" >
     <Header/>
-    <h1 class="text-4xl flex justify-center my-8">Authors</h1>
+    <h1 class="text-4xl flex justify-center my-8">Search</h1>
     <div class="max-w-7xl flex flex-wrap justify-center mx-auto">
         <div class="block mb-4">
             {#each data.alpha as char}
-                <a href={"/alpha/"+encodeURIComponent(char)} class="mb-2 text-xl inline-block bg-light px-2 py-1 rounded-lg mx-1">{char}</a>
+                <a href={"/alpha/"+encodeURIComponent(char)} class="pill w-8 text-center mb-2 rounded-lg mx-1">{char}</a>
             {/each}
         </div>
         <form on:submit={handleSubmit}>
-            <input id="search" class="h-10 text-black" />
-            <input class="btn" type="submit" value="Search"/>
+            <input id="search" class="h-10 text-black"/><input class="multipill pill h-10 pb-2" type="submit" value="Search"/>
         </form>
     </div>
 </main>

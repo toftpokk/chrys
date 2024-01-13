@@ -26,19 +26,23 @@
                 u.delete("has-viewed")
             }
         }
-        goto("?"+u.toString())
+        window.location = ("?"+u.toString()) as any
     }
 </script>
 <form class="max-w-xs mx-12 px-4 py-3">
     <label class="block mb-2 font-bold" for="sort">Sorting</label>
-    <select class="bg-main py-2 px-3 block w-full mb-3" id="sort" bind:value={current_sort} on:change={change_sort}>
+    <select class="w-full mb-3 pill py-2" id="sort" bind:value={current_sort} on:change={change_sort}>
         {#each sort_type as t }
             <option value={t}>{t}</option>
         {/each}
     </select>
     {#if filterView}
-        <input type="checkbox" class="bg-main py-2 px-3 inline w-4 h-4" id="hasViewed" 
-            bind:checked={hasViewed} on:change={change_sort}/>
-        <label class="mb-2" for="hasViewed">Viewed Items</label>
+        <span>
+
+        </span>
+        <div class="mb-2">
+            <input bind:checked={hasViewed} on:change={change_sort} class="scale-150 outline-none accent-teal-100 me-3" width="100" id="hasViewed" type="checkbox"/>
+            <label for="hasViewed">Show Viewed Items</label>
+        </div>
     {/if}
 </form>

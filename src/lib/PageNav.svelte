@@ -36,9 +36,9 @@
 </script>
 
 <div class="flex justify-center text-4xl mx-auto my-2">
-    <a class:invisible={leftMaxHidden} class="mx-2 leading-7 text-xl bg-slate-700 px-2 py-1" href={leftMaxUrl}>&laquo; First</a>
-    <a class:invisible={leftHidden} class="mx-2 leading-7 text-xl bg-slate-700 py-1 px-3" href={leftUrl}>&laquo;</a>
-    <span class="text-3xl w-10 mx-6 text-center">{page_num}</span>
-    <a class:invisible={rightHidden} class="mx-2 leading-7 text-xl bg-slate-700 py-1 px-3" href={rightUrl}>&raquo;</a>
-    <a class:invisible={rightMaxHidden} class="mx-2 leading-7 text-xl bg-slate-700 px-2 py-1" href={rightMaxUrl}>Last &raquo;</a>
+    <a class:invisible={leftMaxHidden} class="pill mx-1" href={leftMaxUrl}>&laquo; First</a>
+    <a class:invisible={leftHidden} class="pill px-3 pb-1.5 mx-1" href={leftUrl}>&laquo;</a>
+    <span class="text-2xl my-1 mx-4 w-[3ch] text-center">{page_num}</span>
+    <a class:invisible={rightHidden} class="pill px-3 pb-1.5 mx-1" href={rightUrl}>&raquo;</a>
+    <a class:invisible={rightMaxHidden} class="pill mx-1" href={rightMaxUrl}>Last &raquo;</a>
 </div>

@@ -13,7 +13,7 @@
     <div class="max-w-7xl flex-wrap justify-center mx-auto">
         <div class="block mb-4">
             {#each series as s}
-                <Tag href={"/series/"+s} size="lg">{s}</Tag>
+                <a href={"/series/"+s} class="pill m-1">{s}</a>
             {/each}
         </div>
     </div>

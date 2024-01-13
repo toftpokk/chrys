@@ -27,15 +27,15 @@
     <div class="max-w-7xl mx-auto">
         <div class="flex flex-wrap justify-center mb-4">
             {#each favorite_authors as author}
-                <a href={"/author/"+author.author_id} class="mb-2 text-xl inline-block bg-light px-2 py-1 rounded-lg mx-1">{author.name} <span class=" bg-gray-700 p-0.5">{author.work_count}</span></a>
+                <a href={"/author/"+author.author_id} class="pill m-1">{author.name} <span class="text-teal-100">({author.work_count})</span></a>
             {/each}
         </div>
         <div class="flex flex-wrap justify-center mb-4">
-            <button class="btn" on:click={toggleSort}>Sort: {sort}</button>
+            <button class="pill text-2xl px-3 py-2" on:click={toggleSort}>Sort: {sort}</button>
         </div>
         <div class="flex flex-wrap justify-center mb-4">
             {#each authors as author}
-                <a href={"/author/"+author.author_id} class="mb-2 text-xl inline-block bg-light px-2 py-1 rounded-lg mx-1">{author.name} <span class=" bg-gray-700 p-0.5">{author.work_count}</span></a>
+                <a href={"/author/"+author.author_id} class="pill m-1">{author.name} <span class="text-teal-100">({author.work_count})</span></a>
             {/each}
         </div>
     </div>

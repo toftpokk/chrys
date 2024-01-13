@@ -160,15 +160,32 @@ export const list_tags = () : string[]=>{
     return all_tags
 }
 
-export const list_series = () : string[]=>{
-    const works = select_works()
-    const all_series : string[] = []
-    works.forEach((w : any)=>{
-        if(!(all_series.includes(w.series))){
-            all_series.push(w.series)
+export const list_series = async ()=>{
+    const works = select_work_authors()
+    const all_series : any[] = []
+    const series : string[] = []
+    works.forEach((w : db_work & {author_name: string})=>{
+        if(!w.series || w.series == ""){
+            return
+        }
+        if(!(series.includes(w.series))){
+            all_series.push({
+                name: w.series,
+                firstWorkName: w.name,
+                firstWorkAuthor: w.author_name
+            })
+            series.push(w.series)
         }
     })
-    return all_series
+    return Promise.all(all_series.map(async (s)=>{
+        const images = await get_images(s.firstWorkAuthor,s.firstWorkName)
+        return {
+            series_name: s.name,
+            author_name: s.firstWorkAuthor,
+            name: s.firstWorkName,
+            image: images[0]
+        }
+    }))
 }
 
 export const list_authors = async ()=>{

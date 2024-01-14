@@ -11,7 +11,7 @@ import Header from '$lib/Header.svelte'
     <Header/>
     <h1 class="text-4xl flex justify-center my-8">Series</h1>
     <div class="max-w-7xl flex-wrap justify-center mx-auto">
-        <div class="mb-4 flex flex-wrap">
+        <ul class="mb-4 flex flex-wrap">
             {#each series as s}
                 <Card
                     image={`${PUBLIC_IMAGE_SERVER}/images/${PUBLIC_IMAGE_REPO}/${encodeURIComponent(s.author_name)}/${encodeURIComponent(s.name)}/${s.image}`}
@@ -26,6 +26,6 @@ import Header from '$lib/Header.svelte'
                 />
                 <!-- <a href={"/series/"+s.name} class="pill m-1">{s.name}</a> -->
             {/each}
-        </div>
+        </ul>
     </div>
 </main>

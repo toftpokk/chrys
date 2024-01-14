@@ -5,6 +5,9 @@
     const series = $page.params.name
     
 	export let data : import("./$types").PageData
+    data.work = data.work.sort((a,b)=>{
+        return a.name > b.name? 1:-1
+    })
 </script>
 <main class="w-full" >
     <Header/>

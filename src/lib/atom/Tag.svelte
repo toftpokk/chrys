@@ -15,15 +15,6 @@ if(typeof href === "string"){
     onclick = ()=>goto(link);
 }
 </script>
-<!-- <button on:click={()=>{onclick()}} {...$$restProps}
-    class="mb-2 inline-block px-2 py-1 rounded-lg mx-1 select-none pill"
-    class:border={variant == 0 || variant == 2}
-    class:text-test-100={variant == 2}
-    class:bg-teal-100={variant == 1}
-    class:hover:bg-teal-200={variant == 1}
-    >
-    <slot/>
-</button> -->
 <button
 on:click={()=>{onclick()}} {...$$restProps}
     class="pill m-1 "

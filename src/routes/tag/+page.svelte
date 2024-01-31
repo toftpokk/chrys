@@ -30,9 +30,7 @@
                 <hr class="my-3"/>
             {/each}
             {#each misc_tags as tag}
-            <!-- TODO: Fix <Tag>-->
                 <a class="pill m-1" href={"/tag/"+tag}>{tag}</a>
-                <!-- <Tag href={"/tag/"+tag} size="lg">{tag}</Tag> -->
             {/each}
         </div>
     </div>

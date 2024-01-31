@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
     export let data : import("./$types").PageData
     let authors = data.authors;
-    const favorite_authors = data.authors.filter((a)=>a.favorite == true)
+    const favorite_authors = data.authors.filter((a)=>a.favorite == true).sort()
     let sort = "Count";
     onMount(()=>{
         authors = data.authors.sort((a,b)=>a.name.localeCompare(b.name));

@@ -9,15 +9,10 @@
 	export let isSeries = false;
 	export let series = "Unknown Series";
 </script>
-<style>
-	.alt {
-  		background-color: #00ADB5;
-	}
-</style>
-<li class="bg-gray-80 w-48 sm:w-72 m-1 overflow-hidden relative">
-	<a href={isSeries?"/series/"+series :url} class="absolute bottom-0 top-0 left-0 right-0 z-10 box-border">
+<li class="bg-gray-80 w-48 sm:w-72 m-1 overflow-hidden">
+	<a href={isSeries?"/series/"+series :url} class="bottom-0 top-0 left-0 right-0 z-10 box-border">
+		<img alt="cover" class=" w-full h-[250px] object-cover overflow-hidden" src={image} />
 	</a>
-	<img alt="cover" class="object-cover" src={image} />
 	<div class="p-3">
 		<span class="font-bold break-words inline-block py-1 px-2 rounded-xl" class:bg-teal-100={isSeries}>{
 			isSeries? series : title

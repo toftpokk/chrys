@@ -139,9 +139,9 @@
                 <Reactions favorite={work.favorite} viewed={work.viewed} on:toggleView={toggleView} on:toggleFav={toggleFav}/>
                 <h2 class="font-bold text-lg mb-3">Tags</h2>
                 <!-- Tags -->
-                <div class="block mb-4">
+                <div class="block mb-4 max-h-[30%] overflow-y-scroll">
                     {#each work.tags as tag}
-                        <Tag href={"/tag/"+tag}>{tag}</Tag>
+                        <button class="pill m-1 text-sm">{tag}</button>
                     {/each}
                 </div>
                 <a class="pill text-xl px-3 py-2 font-bold bg-gray-200" href={`/work/${work_id}/edit`}>Edit Tags &rarr;</a>

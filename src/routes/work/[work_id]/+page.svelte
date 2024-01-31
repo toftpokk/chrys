@@ -125,8 +125,7 @@
                 </button>
             {/each}
         </aside>
-        <aside class:collapse={leftClose} class="bg-gray-100 border-r border-gray-70 absolute h-screen z-10 w-72 px-6 pt-14 overflow-scroll">
-            <!-- Details -->
+        <aside class:hidden={leftClose} class="bg-gray-100 border-r border-gray-70 absolute h-screen z-10 w-72 px-6 pt-14 overflow-scroll">
             <div>
                 <h1 class="text-2xl font-bold my-2 overflow-clip">{work.name}</h1>
                 <p class="my-1">Author: <a class="text-lg px-1.5 py-0.5 rounded-lg underline hover:text-gray-20" href={author_url}>{work.author_name}</a></p>
@@ -138,7 +137,6 @@
             <div>
                 <Reactions favorite={work.favorite} viewed={work.viewed} on:toggleView={toggleView} on:toggleFav={toggleFav}/>
                 <h2 class="font-bold text-lg mb-3">Tags</h2>
-                <!-- Tags -->
                 <div class="block mb-4 max-h-[30%] overflow-y-scroll">
                     {#each work.tags as tag}
                         <button class="pill m-1 text-sm">{tag}</button>
@@ -147,17 +145,15 @@
                 <a class="pill text-xl px-3 py-2 font-bold bg-gray-200" href={`/work/${work_id}/edit`}>Edit Tags &rarr;</a>
             </div>
         </aside>
-        <div class="grow overflow-scroll h-screen">
-            <div class="flex justify-center h-screen">
+        <div class="grow overflow-scroll h-full">
+            <div class="flex justify-between mb-3">
+                <button on:click={toggleLeftPane} class="touch-none select-none text-right text-xl px-4 py-2 pill z-10">&rarr;</button>
+                <button on:click={toggleRightPane} class="touch-none select-none text-left text-xl px-4 py-2 pill z-10">{(index+1)+"/"+work.images.length}</button>
+            </div>
+            <div class="flex justify-center h-full">
                 <button on:click={handleClick} class="object-fit h-full">
                     <img class="object-fit max-h-full" draggable="false" src={ `${image_prefix}/${work.images[index]}` } alt="page"/>
                 </button>
-            </div>
-            <div class="absolute text-white left-0 top-0 z-10">
-                <button on:click={toggleLeftPane} class="touch-none select-none text-right text-xl px-4 py-2 pill">&rarr;</button>
-            </div>
-            <div class="absolute text-white text-right right-0 top-0 z-10">
-                <button on:click={toggleRightPane} class="touch-none select-none text-left text-xl px-4 py-2 pill">{(index+1)+"/"+work.images.length}</button>
             </div>
         </div>
     </main>

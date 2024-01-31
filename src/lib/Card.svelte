@@ -14,14 +14,10 @@
   		background-color: #00ADB5;
 	}
 </style>
-<!--height="804" width="560"-->
 <li class="bg-gray-80 w-48 sm:w-72 m-1 overflow-hidden relative">
 	<a href={isSeries?"/series/"+series :url} class="absolute bottom-0 top-0 left-0 right-0 z-10 box-border">
 	</a>
-	<div class="h-[370px] bg-gray-200 object-cover overflow-hidden">
-		<img alt="cover" src={image} />
-	</div>
-	<!-- <img alt="cover" class="object-cover" height="804" width="560" src={image} /> -->
+	<img alt="cover" class="object-cover" src={image} />
 	<div class="p-3">
 		<span class="font-bold break-words inline-block py-1 px-2 rounded-xl" class:bg-teal-100={isSeries}>{
 			isSeries? series : title

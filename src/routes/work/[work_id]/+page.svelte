@@ -118,10 +118,10 @@
 <div>
     <main>
         <!-- Sidebar -->
-        <aside class:hidden={rightClose} class="flex w-[30em] flex-wrap gap-2 bg-gray-100 border-l border-gray-70 absolute h-screen right-0 z-10 px-8 pt-14 overflow-scroll">
+        <aside class:hidden={rightClose} class="grid grid-cols-3 gap-1 bg-gray-100 border-l border-gray-70 absolute h-screen right-0 z-10 px-8 pt-14 overflow-scroll">
             {#each previewImage as image, idx}
-                <button class="w-[30%]" on:click={()=>index=idx}>
-                    <img alt={image} src={`${image_prefix}/${image}`}>
+                <button class="" on:click={()=>index=idx}>
+                    <img alt={image} src={`${image_prefix}/${image}`} class="border-teal-100" class:border-4={idx==index}>
                 </button>
             {/each}
         </aside>

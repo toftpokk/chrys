@@ -1,3 +1,3 @@
-import { init_table } from "$lib/server/db/database";
+import { begin_hook } from "$lib/server/db/database";
 
-init_table()
+begin_hook()

@@ -8,6 +8,12 @@ import Fuse from 'fuse.js'
 export const db = new Database(DB_FILE)
 export let fuse : Fuse<ReturnType<typeof select_work_authors>[0]>;
 
+export const begin_hook = ()=>{
+    fuse = new Fuse(select_work_authors(),{
+        keys: ['name','tags']
+    })
+}
+
 export const init_table = async ()=>{
     // Initializes all tables and syncs data
     console.log("Initializing Tables")

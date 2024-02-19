@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Header from '$lib/Header.svelte'
     import type { work } from '$lib/types'
 	import CardList from '$lib/CardList.svelte';
 	import { page } from '$app/stores';
@@ -22,7 +21,6 @@
     }
 </script>
 <main class="w-full" >
-    <Header/>
     <h1 class="text-4xl flex justify-center my-8">Author: {author_name}</h1>
     <div class="flex justify-center">
         <AuthorReactions favorite={data.favorite} on:toggleFav={toggleFav}/>

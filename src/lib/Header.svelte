@@ -11,15 +11,6 @@
 	import { page } from "$app/stores";
     const current_page = $page.url.pathname;
 </script>
-<style>
-    .link { 
-        color: black;
-        filter: invert(100%);
-    }
-    .link-current { 
-        filter: invert(50%);
-    }
-</style>
 <div class="bg-main mb-5 overflow-hidden">
     <ul class="block max-w-7xl w-max mx-auto">
         <HeaderItem name="Index" url="/" icon={iconIndex} currentPage={current_page}/>

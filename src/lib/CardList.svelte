@@ -52,6 +52,7 @@
                 author_id={w.author_id}
                 isSeries={groupSeries? !IsEmptySeries(w.series): false}
                 series={w.series}
+                tags={w.tags}
             />
         {/each}
     </ul>

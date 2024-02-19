@@ -1,4 +1,8 @@
 <script lang="ts">
+	import Icon from "./Icon.svelte";
+	import iconHeart from "$lib/icon/heart.svg?raw"
+	import iconEye from "$lib/icon/eye.svg?raw"
+
 	export let image : string;
 	export let url : string;
 	export let title : string;
@@ -19,19 +23,19 @@
 			isSeries? series : title
 			}</span>
 		<span class="block"><a class="relative text-lg px-2 py-1 rounded-lg z-20 text-white hover:text-gray-20" href={"/author/"+author_id}>{author}</a></span>
-		{#if !isSeries}
 		<div class="inline-block my-3">
-			<img
-				alt="favorite"
-				class="h-5 mx-2 inline"
-				src={favorite ? "/icon-heart-on.svg" : "/icon-heart.svg"}
-			/>
-			<img
-				alt="Viewed"
-				class="h-5 mx-2 inline"
-				src={viewed ? "/icon-eye-on.svg" : "/icon-eye.svg"}
-			/>
+			{#if !isSeries}
+				<Icon
+					src={iconHeart}
+					color={favorite?"#EEE":"#535A65"}
+					margin="0 0.5rem"
+				/>
+				<Icon
+					src={iconEye}
+					color={viewed?"#EEE":"#535A65"}
+					margin="0 0.5rem"
+				/>
+			{/if}
 		</div>
-		{/if}
 	</div>
 </li>

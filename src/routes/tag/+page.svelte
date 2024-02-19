@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Header from '$lib/Header.svelte'
 	import Tag from '$lib/atom/Tag.svelte';
 	import { get_tag_suggestions } from '$lib/helper';
     export let data : import("./$types").PageData
@@ -14,7 +13,6 @@
     })
 </script>
 <main class="w-full" >
-    <Header/>
     <h1 class="text-4xl flex justify-center my-8">Tags</h1>
     <div class="max-w-7xl flex-wrap justify-center mx-auto">
         <div class="block mb-4">

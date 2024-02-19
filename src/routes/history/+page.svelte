@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Header from '$lib/Header.svelte'
 	import type { db_history } from '$lib/types';
     
 	export let data : import("./$types").PageData
@@ -69,8 +68,6 @@
     }
 </script>
 <main>
-    <Header/>
-
     <svg class="border rounded-lg" width="100%" height="5em" viewBox={`0 0 ${graphMeta.width} ${graphMeta.height}`}>
         {#each {length:graphMeta.backline_count+1} as _,idx}
             <line

@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Header from '$lib/Header.svelte'
 	import ButtonLoad from '$lib/atom/ButtonLoad.svelte';
 	import Tag from '$lib/atom/Tag.svelte';
 	import { IsEmptySeries, emptyWork, get_tag_suggestions } from '$lib/helper';
@@ -121,7 +120,6 @@
     }
 </style>
 <main class="w-full" >
-    <Header/>
     <template id="template-tag-include">
         <Tag variant={"activated"}></Tag>
     </template>

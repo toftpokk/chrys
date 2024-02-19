@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Header from '$lib/Header.svelte'
     export let data : import("./$types").PageData
     const handleSubmit = (e: Event)=>{
         const input = document.getElementById("search") as HTMLInputElement | null
@@ -12,7 +11,6 @@
     }
 </script>
 <main class="w-full" >
-    <Header/>
     <h1 class="text-4xl flex justify-center my-8">Search</h1>
     <div class="max-w-7xl flex flex-wrap justify-center mx-auto">
         <div class="block mb-4">

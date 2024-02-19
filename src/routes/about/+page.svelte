@@ -1,8 +1,4 @@
-<script>
-    import Header from '$lib/Header.svelte'
-</script>
 <main class="w-full" >
-    <Header/>
     <div class="max-w-4xl block mx-auto my-8 text-xl">
         <h1 class="text-2xl font-bold mb-4">Chrys</h1>
         <p class="mb-4">Image-set viewer for viewing manga, comics, and doujinshi</p>

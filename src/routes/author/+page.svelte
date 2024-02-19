@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Header from '$lib/Header.svelte'
 	import type { author } from '$lib/types';
 	import { onMount } from 'svelte';
     export let data : import("./$types").PageData
@@ -22,7 +21,6 @@
     }
 </script>
 <main class="w-full" >
-    <Header/>
     <h1 class="text-4xl flex justify-center my-8">Authors</h1>
     <div class="max-w-7xl mx-auto">
         <div class="flex flex-wrap justify-center mb-4">

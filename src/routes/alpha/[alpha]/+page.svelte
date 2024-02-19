@@ -8,7 +8,6 @@
 	export let data : import("./$types").PageData
 </script>
 <main class="w-full" >
-    <Header/>
     <h1 class="text-4xl flex justify-center my-8">Alphabet: {alpha}</h1>
     <CardList data={data} hasNav={true}/>
 </main>

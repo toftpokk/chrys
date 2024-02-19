@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Header from "$lib/Header.svelte";
 	import ButtonLoad from "$lib/atom/ButtonLoad.svelte";
 
     let hidden = true
@@ -15,7 +14,6 @@
     }
 </script>
 <main class="w-full">
-    <Header/>
     <div class="max-w-4xl block mx-auto my-8 text-xl">
         <h1 class="text-2xl font-bold mb-4">Settings</h1>
         <div class="inline">

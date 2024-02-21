@@ -102,7 +102,7 @@ const scan = async ()=>{
             author_list = data["dirs"]
         }
     } catch (error) {
-        console.log(`Error: Could not get author list image server ${env.PUBLIC_IMAGE_SERVER}`)
+        console.log(`Error: Could not get author list image server ${env.PUBLIC_IMAGE_SERVER}: ${error}`)
     } finally {
         work_list = {}
     }

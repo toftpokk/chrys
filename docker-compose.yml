@@ -17,7 +17,10 @@ services:
     ports:
       - 3001:3001
     volumes:
-      - type: volume
-        source: ./images
-        target: /usr/src/app/images
-        read_only: true
+      - chrys-nfs:/usr/src/app/images/works
+volumes:
+  chrys-nfs:
+    driver_opts:
+      type: "nfs"
+      o: "addr=${WORK_NFS_IP},nolock,ro"
+      device: ${WORK_NFS_DEVICE}

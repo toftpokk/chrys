@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-    import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER } from '$env/static/public';
+    import { env } from '$env/dynamic/public';
     import Reactions from '$lib/Reactions.svelte'
 	import Tag from '$lib/atom/Tag.svelte';
 	import { emptyWork } from '$lib/helper';
@@ -24,7 +24,7 @@
         author_comp = encodeURIComponent(work.author_name)
         work_comp = encodeURIComponent(work.name)
 
-        image_prefix = `${PUBLIC_IMAGE_SERVER}/images/${PUBLIC_IMAGE_REPO}/${author_comp}/${work_comp}`
+        image_prefix = `${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${author_comp}/${work_comp}`
     }
 
     const prevIndex = ()=>{

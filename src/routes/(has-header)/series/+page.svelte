@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
     import Card from '$lib/Card.svelte';
 	import Tag from '$lib/atom/Tag.svelte';
 	import { IsEmptySeries } from '$lib/helper';
@@ -12,7 +12,7 @@
         <ul class="mb-4 flex flex-wrap">
             {#each series as s}
                 <Card
-                    image={`${PUBLIC_IMAGE_SERVER}/images/${PUBLIC_IMAGE_REPO}/${encodeURIComponent(s.author_name)}/${encodeURIComponent(s.name)}/${s.image}`}
+                    image={`${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodeURIComponent(s.author_name)}/${encodeURIComponent(s.name)}/${s.image}`}
                     url={"/series/"+s.series_name}
                     title={s.series_name}
                     author={""}

@@ -4,7 +4,7 @@ import { page_size } from '$lib/consts'
 import { select_author_with_id, select_authors, select_work_author_with_id, select_work_authors, select_work_authors_with_id, select_works, update_favorite, update_tag, update_view, update_author_favorite, fuse, update_series } from './database'
 import { random_shuffle, sort_author, sort_fav, sort_name, sort_view } from './sort'
 import { tag_deserialize } from '$lib/helper'
-import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER, PUBLIC_RANDOM_SEED } from '$env/static/public'
+import { env } from '$env/dynamic/public'
 
 const paginate = (page: number)=>{
     const start = (page-1)*page_size
@@ -45,7 +45,7 @@ const get_images = async (author_name:string,work_name:string) : Promise<string[
     const work_comp = encodeURIComponent(work_name)
     let images = []
     try{
-        const res = await fetch(`${PUBLIC_IMAGE_SERVER}/api/repo/${PUBLIC_IMAGE_REPO}/${author_comp}/${work_comp}`)
+        const res = await fetch(`${env.PUBLIC_IMAGE_SERVER}/api/repo/${env.PUBLIC_IMAGE_REPO}/${author_comp}/${work_comp}`)
         if(!res.ok){
             throw new Error("Response not OK")
         }
@@ -267,7 +267,7 @@ export const list_works = async (options: {
         partial_works.sort(sort_author)
     }
     else if(options.sort === "random"){
-        let seed = PUBLIC_RANDOM_SEED === undefined? 0 : Number(PUBLIC_RANDOM_SEED)
+        let seed = env.PUBLIC_RANDOM_SEED === undefined? 0 : Number(env.PUBLIC_RANDOM_SEED)
         random_shuffle(partial_works, seed)
     }
     else if(options.sort === "id"){

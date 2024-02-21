@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PUBLIC_IMAGE_REPO, PUBLIC_IMAGE_SERVER } from "$env/static/public";
+	import { env } from "$env/dynamic/public";
 	import Card from "./Card.svelte";
     import PageNav from "./PageNav.svelte";
 	import Sorting from "./Sorting.svelte";
@@ -41,7 +41,7 @@
             <Card
                 image={
                     w.images[0]
-                    ?`${PUBLIC_IMAGE_SERVER}/images/${PUBLIC_IMAGE_REPO}/${encodeURIComponent(w.author_name)}/${encodeURIComponent(w.name)}/${w.images[0]}`
+                    ?`${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodeURIComponent(w.author_name)}/${encodeURIComponent(w.name)}/${w.images[0]}`
                     : '/image-not-found.jpg'
                 }
                 url={`/work/${w.work_id}`}

@@ -1,4 +1,4 @@
-import { PUBLIC_TAG_SUGGESTIONS } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 import type { work } from './types';
 export const get_page = (searchParams: URLSearchParams)=>{
     const page_str = searchParams.get("page")
@@ -45,7 +45,7 @@ export const tag_deserialize = (tag_string : string)=>{
 }
 
 export const get_tag_suggestions = ()=>{
-    const suggestion_subset = PUBLIC_TAG_SUGGESTIONS
+    const suggestion_subset = env.PUBLIC_TAG_SUGGESTIONS
         .split('\n')
         .filter((line)=>line != "")
 

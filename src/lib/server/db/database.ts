@@ -1,11 +1,11 @@
 import Database from 'better-sqlite3'
-import {DB_FILE } from '$env/static/private'
-import { PUBLIC_IMAGE_SERVER, PUBLIC_IMAGE_REPO } from '$env/static/public'
+import { env as penv } from '$env/dynamic/private'
+import { env } from '$env/dynamic/public'
 import { tag_serialize } from '$lib/helper'
 import type { author, db_history, db_work, work } from '$lib/types'
 import Fuse from 'fuse.js'
 
-export const db = new Database(DB_FILE)
+export const db = new Database(penv.DB_FILE)
 export let fuse : Fuse<ReturnType<typeof select_work_authors>[0]>;
 
 const initialize = ()=>{
@@ -93,7 +93,7 @@ const scan = async ()=>{
     let work_list : Record<string,string[]> = {}
     let res : Response;
     try {
-        res = await fetch(`${PUBLIC_IMAGE_SERVER}/api/repo/${PUBLIC_IMAGE_REPO}/`)
+        res = await fetch(`${env.PUBLIC_IMAGE_SERVER}/api/repo/${env.PUBLIC_IMAGE_REPO}/`)
         if(!res.ok){
             throw new Error("Response not OK")
         }
@@ -102,16 +102,16 @@ const scan = async ()=>{
             author_list = data["dirs"]
         }
     } catch (error) {
-        console.log(`Error: Could not get author list image server ${PUBLIC_IMAGE_SERVER}`)
+        console.log(`Error: Could not get author list image server ${env.PUBLIC_IMAGE_SERVER}`)
     } finally {
         work_list = {}
     }
     
     await Promise.all(author_list.map(async (author)=>{
-        const res = await fetch(`${PUBLIC_IMAGE_SERVER}/api/repo/${PUBLIC_IMAGE_REPO}/${author}`)
+        const res = await fetch(`${env.PUBLIC_IMAGE_SERVER}/api/repo/${env.PUBLIC_IMAGE_REPO}/${author}`)
         let works = []
         if(!res.ok){
-            console.log(`Could not get works from author '${author}' from image server ${PUBLIC_IMAGE_SERVER}`)
+            console.log(`Could not get works from author '${author}' from image server ${env.PUBLIC_IMAGE_SERVER}`)
         }
         else{
             const data = await res.json()

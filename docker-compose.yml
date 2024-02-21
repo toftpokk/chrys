@@ -17,4 +17,7 @@ services:
     ports:
       - 3001:3001
     volumes:
-      - ./images:/usr/src/app/images
+      - type: volume
+        source: ./images
+        target: /usr/src/app/images
+        read_only: true

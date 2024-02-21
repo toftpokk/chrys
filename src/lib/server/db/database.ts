@@ -8,7 +8,16 @@ import Fuse from 'fuse.js'
 export const db = new Database(DB_FILE)
 export let fuse : Fuse<ReturnType<typeof select_work_authors>[0]>;
 
+const initialize = ()=>{
+    console.log("Initializing Tables")
+    create_author()
+    create_work()
+    create_history()
+    add_series_if_not_exist()
+}
+
 export const begin_hook = ()=>{
+    initialize()
     fuse = new Fuse(select_work_authors(),{
         keys: ['name','tags']
     })
@@ -16,11 +25,7 @@ export const begin_hook = ()=>{
 
 export const init_table = async ()=>{
     // Initializes all tables and syncs data
-    console.log("Initializing Tables")
-    create_author()
-    create_work()
-    create_history()
-    add_series_if_not_exist()
+    initialize()
     console.log("Syncing Tables...")
     const work_list = await scan()
     await sync(work_list)

@@ -167,28 +167,24 @@ export const list_tags = ()=>{
 }
 
 export const list_series = async ()=>{
-    const works = select_work_authors()
-    const all_series : any[] = []
-    const series : string[] = []
-    works.forEach((w : db_work & {author_name: string})=>{
-        if(!w.series || w.series == ""){
-            return
-        }
-        if(!(series.includes(w.series))){
-            all_series.push({
-                name: w.series,
-                firstWorkName: w.name,
-                firstWorkAuthor: w.author_name
-            })
-            series.push(w.series)
-        }
-    })
+    const query = `
+    SELECT w.name AS name, 
+           w.series as series_name,
+           a.name AS author_name
+    FROM work w
+    LEFT JOIN author a
+    ON w.author_id = a.author_id
+    WHERE series != '' AND active = 1
+    GROUP BY series_name
+    ORDER BY name
+    `
+    const all_series = db.prepare(query).all([]) as {name: string, series_name: string, author_name: string}[]
     return Promise.all(all_series.map(async (s)=>{
-        const images = await get_images(s.firstWorkAuthor,s.firstWorkName)
+        const images = await get_images(s.author_name,s.name)
         return {
-            series_name: s.name,
-            author_name: s.firstWorkAuthor,
-            name: s.firstWorkName,
+            series_name: s.series_name,
+            author_name: s.author_name,
+            name: s.name,
             image: images[0]
         }
     }))

@@ -288,7 +288,6 @@ export const list_works = async (options: {
     }
 
     partial_works = db.prepare(query).all(args) as (db_work & {author_name: string})[]
-    console.log(partial_works)
     
     // No psuedorandom in sqlite, See: https://stackoverflow.com/questions/24256258/order-by-random-with-seed-in-sqlite
     if(options.sort === "random"){

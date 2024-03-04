@@ -1,10 +1,15 @@
 
 import type { author, db_work, work } from '$lib/types'
+import { env as penv } from '$env/dynamic/private'
+import Database from 'better-sqlite3'
 import { page_size } from '$lib/consts'
-import { select_author_with_id, select_authors, select_work_author_with_id, select_work_authors, select_work_authors_with_id, select_works, update_favorite, update_tag, update_view, update_author_favorite, fuse, update_series } from './database'
-import { random_shuffle, sort_author, sort_fav, sort_name, sort_view } from './sort'
+import { select_author_with_id, select_authors, select_work_author_with_id, select_work_authors, select_works, update_favorite, update_tag, update_view, update_author_favorite, fuse, update_series } from './database'
+import { random_shuffle } from './sort'
 import { tag_deserialize } from '$lib/helper'
 import { env } from '$env/dynamic/public'
+
+
+export const db = new Database(penv.DB_FILE)
 
 const paginate = (page: number)=>{
     const start = (page-1)*page_size
@@ -246,38 +251,51 @@ export const list_works = async (options: {
     let needs_active = options.needs_active || false;
     let partial_works
 
-    // Filter Author
-    if(typeof options.author_id === "number"){
-        partial_works = select_work_authors_with_id(
-            options.author_id,
-            needs_active)
+    let args : unknown[] = []
+    let query = `
+        SELECT *,w.name AS name, w.path as path, w.favorite as favorite,a.name AS author_name
+        FROM work w
+        LEFT JOIN author a
+        ON w.author_id = a.author_id`
+    
+    // Filter
+    if(needs_active){
+        query += ` WHERE active = 1`
     }
     else{
-        partial_works = select_work_authors()
+        query += ` WHERE active = 0`
+    }
+    if(typeof options.author_id === "number"){
+        query += ` AND a.author_id = ?`
+        args.push(options.author_id)
     }
 
     // Sorting
-    if(options.sort === "name"){
-        partial_works.sort(sort_name)
+    if(options.sort == "name"){
+        query += ` ORDER BY name`
     }
-    else if(options.sort === "favorite"){
-        partial_works.sort(sort_fav)
+    else if(options.sort == "favorite"){
+        query += ` ORDER BY favorite DESC`
     }
-    else if(options.sort === "viewed"){
-        partial_works.sort(sort_view)
+    else if(options.sort == "viewed"){
+        query += ` ORDER BY viewed DESC`
     }
-    else if(options.sort === "author"){
-        partial_works.sort(sort_author)
+    else if(options.sort == "author"){
+        query += ` ORDER BY author_name`
     }
-    else if(options.sort === "random"){
+    else if(options.sort == "id"){
+        query += ` ORDER BY work_id DESC`
+    }
+
+    partial_works = db.prepare(query).all(args) as (db_work & {author_name: string})[]
+    
+    // No psuedorandom in sqlite, See: https://stackoverflow.com/questions/24256258/order-by-random-with-seed-in-sqlite
+    if(options.sort === "random"){
         let seed = env.PUBLIC_RANDOM_SEED === undefined? 0 : Number(env.PUBLIC_RANDOM_SEED)
         random_shuffle(partial_works, seed)
     }
-    else if(options.sort === "id"){
-        partial_works.reverse()
-    }
 
-    // Filter out Viewed
+    // Filter out Viewed After
     if(options.has_viewed === false){
         partial_works = partial_works.filter((w)=>(!w.viewed))
     }

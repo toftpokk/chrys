@@ -245,29 +245,6 @@ export const select_work_author_with_id = (work_id: number) =>{
     `).get([work_id]) as db_work & {author_name: string}
 }
 
-export const select_work_authors_with_id = (author_id: number,needs_active: boolean) =>{
-    let sql;
-    if(needs_active){
-        sql=`
-        SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.series,w.active,a.name AS author_name
-        FROM work w
-        LEFT JOIN author a
-        ON w.author_id = a.author_id
-        WHERE w.active = 1 AND a.author_id = ?
-        `
-    }
-    else{
-        sql=`
-        SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.series,w.active,a.name AS author_name
-        FROM work w
-        LEFT JOIN author a
-        ON w.author_id = a.author_id
-        WHERE a.author_id = ?
-        `
-    }
-    return db.prepare(sql).all([author_id]) as (db_work & {author_name: string})[]
-}
-
 export const select_authors = ()=>{
     return db.prepare(`
     SELECT *

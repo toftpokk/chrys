@@ -115,16 +115,13 @@ export const list_work_with_series = async (series_name: string, page: number)=>
 // Lists
 
 export const list_alpha = () =>{
-    const works = select_works()
-    const alphabets : string[] = []
-    
-    works.forEach((w)=>{
-        const char = w.name[0].toUpperCase()
-        if(!alphabets.includes(char)){
-            alphabets.push(char)
-        }
-    })
-    alphabets.sort()
+    const query = `
+    SELECT DISTINCT upper(substr(name,1,1)) AS name
+    FROM work
+    WHERE active = 1
+    ORDER BY name`
+    const output = db.prepare(query).all([]) as {name: string}[]
+    const alphabets : string[]= output.map(v=>v.name)
     return alphabets
 }
 

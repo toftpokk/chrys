@@ -44,7 +44,7 @@ export const setView = async (work_id: number, state: boolean)=>{
     UPDATE work
     SET viewed = ?
     WHERE work_id = ?
-    `).run([0,work_id])
+    `).run([Number(state),work_id])
     const info = db.prepare('INSERT INTO history (work_id,datetime,viewed) VALUES (?,?,?)')
                    .run([work_id, Date.now(),Number(state)])
     return Number(info.lastInsertRowid)

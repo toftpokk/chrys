@@ -33,7 +33,6 @@
             if(diffDays(startDate, min_domain_date)<0){
                 min_domain_date = startDate
             }
-            console.log(startDate, min_domain_date)
         }
         domain = Math.floor(diffDays(min_domain_date, max_domain_date as any)/bucket_days)
         history.forEach(h=>{

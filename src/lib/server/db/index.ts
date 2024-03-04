@@ -239,10 +239,10 @@ export const list_work_with_tags = async (tag_name: string, page: number)=>{
 
 // TODO: fix optional, mandatory inputs
 export const list_works = async (options: {
-            page?: number, 
-            sort?: string, 
-            author_id?: number, 
-            needs_active?: boolean, 
+            page?: number,
+            sort?: string,
+            author_id?: number,
+            needs_active?: boolean,
             has_viewed?: boolean
         }) : Promise<{work:work[],num_pages:number}>=>{
 
@@ -256,17 +256,20 @@ export const list_works = async (options: {
         LEFT JOIN author a
         ON w.author_id = a.author_id`
     
-    // Filter
+    // Conditions
+    const conditions = []
     if(needs_active){
-        query += ` WHERE active = 1`
-    }
-    else{
-        query += ` WHERE active = 0`
+        conditions.push(`active = 1`)
     }
     if(typeof options.author_id === "number"){
-        query += ` AND a.author_id = ?`
+        conditions.push(`a.author_id = ?`)
         args.push(options.author_id)
     }
+    if(conditions.length > 0){
+        const condition_str = conditions.join(" AND ")
+        query += ` WHERE ${condition_str}`
+    }
+
 
     // Sorting
     if(options.sort == "name"){
@@ -286,6 +289,7 @@ export const list_works = async (options: {
     }
 
     partial_works = db.prepare(query).all(args) as (db_work & {author_name: string})[]
+    console.log(partial_works)
     
     // No psuedorandom in sqlite, See: https://stackoverflow.com/questions/24256258/order-by-random-with-seed-in-sqlite
     if(options.sort === "random"){

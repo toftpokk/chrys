@@ -237,12 +237,3 @@ const update_active = async (work_id: number, state: boolean)=>{
     `).run([Number(state),work_id])
     return state
 }
-
-export const update_view = async (work_id: number, state: boolean)=>{
-    db.prepare(`
-    UPDATE work SET viewed = ?
-    WHERE work_id = ?
-    `).run([Number(state),work_id])
-    insert_history(work_id,Date.now(),state)
-    return state
-}

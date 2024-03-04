@@ -4,8 +4,7 @@ import { env as penv } from '$env/dynamic/private'
 import Database from 'better-sqlite3'
 import { page_size } from '$lib/consts'
 import { fuse } from './database'
-import { random_shuffle } from './sort'
-import { tag_deserialize } from '$lib/helper'
+import { tag_deserialize, random_shuffle } from '$lib/helper'
 import { env } from '$env/dynamic/public'
 
 

@@ -7,7 +7,7 @@
     const work = data.work? data.work : emptyWork
 
     const tag_suggestions = get_tag_suggestions()
-    const all_work_tags = data.all_work_tags;
+    const all_work_tags = Object.keys(data.all_work_tags);
     const unsorted_misc_tags = all_work_tags.filter((tag_name)=>{
         for(let group_idx in tag_suggestions){
             if(tag_suggestions[group_idx].tags.includes(tag_name)){

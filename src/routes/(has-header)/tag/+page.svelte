@@ -3,7 +3,7 @@
 	import { get_tag_suggestions } from '$lib/helper';
     export let data : import("./$types").PageData
     const tag_suggestions = get_tag_suggestions();
-    const misc_tags = data.tags.filter((tag_name)=>{
+    const misc_tags = Object.keys(data.tags).filter((tag_name)=>{
         for(let group_idx in tag_suggestions){
             if(tag_suggestions[group_idx].tags.includes(tag_name)){
                 return false
@@ -19,8 +19,8 @@
             {#each tag_suggestions as suggestion_group}
                 <p>{suggestion_group.name}</p>
                 {#each suggestion_group.tags as tag}
-                    {#if data.tags.indexOf(tag) > -1}
-                        <a class="pill m-1" href={"/tag/"+tag}>{tag}</a>
+                    {#if data.tags[tag] > -1}
+                        <a class="pill m-1" href={"/tag/"+tag}>{tag} <span class="text-teal-100">({data.tags[tag]})</span></a>
                     {:else}
                         <a class="pill bg-gray-100 border-gray-100 hover:bg-gray-80 hover:border-gray-80 m-1" href={"/tag/"+tag}>{tag}</a>
                     {/if}
@@ -28,7 +28,7 @@
                 <hr class="my-3"/>
             {/each}
             {#each misc_tags as tag}
-                <a class="pill m-1" href={"/tag/"+tag}>{tag}</a>
+                <a class="pill m-1" href={"/tag/"+tag}>{tag} <span class="text-teal-100">({data.tags[tag]})</span></a>
             {/each}
         </div>
     </div>

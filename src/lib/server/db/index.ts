@@ -146,14 +146,17 @@ export const list_work_with_alpha = (alpha : string, page: number)=>{
     }
 }
 
-export const list_tags = () : string[]=>{
+export const list_tags = ()=>{
     const works = select_works()
-    const all_tags : string[] = []
+    const all_tags : Record<string,number> = {}
     works.forEach((w : any)=>{
         const tags = tag_deserialize(w.tags)
         tags.forEach((t : string)=>{
-            if(!(all_tags.includes(t))){
-                all_tags.push(t)
+            if(!Object.keys(all_tags).includes(t)){
+                all_tags[t] = 1
+            }
+            else{
+                all_tags[t]+=1
             }
         })
     })

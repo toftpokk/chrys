@@ -12,12 +12,14 @@ services:
       - PUBLIC_TAG_SUGGESTIONS=${PUBLIC_TAG_SUGGESTIONS}
     volumes:
       - ./data:/usr/src/app/data
+    restart: unless-stopped
   chrys_image:
     image: 'toftpokk/chrys_image'
     ports:
       - 3001:3001
     volumes:
       - chrys-nfs:/usr/src/app/images/works
+    restart: unless-stopped
 volumes:
   chrys-nfs:
     driver_opts:

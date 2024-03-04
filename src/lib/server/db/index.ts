@@ -191,15 +191,17 @@ export const list_series = async ()=>{
 }
 
 export const list_authors = async ()=>{
-    const work_authors = select_work_authors()
-    const authors = select_authors()
-    const author_num = authors.map((a)=>{
-        return {
-            ...a,
-            work_count: work_authors.filter((w)=>w.author_id == a.author_id).length
-        }
-    })
-    return author_num
+    const query = `
+    SELECT a.name as name,
+           a.favorite as favorite,
+           a.author_id as author_id,
+           COUNT(w.work_id) as work_count
+    FROM author a
+    LEFT JOIN work w ON w.author_id = a.author_id
+    WHERE active = 1
+    GROUP BY a.author_id
+    `
+    return db.prepare(query).all([]) as {name:string,favorite:1|null,work_count:number,author_id:string}[]
 }
 
 // TODO: use list_work

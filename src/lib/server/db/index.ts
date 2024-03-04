@@ -149,9 +149,10 @@ export const list_work_with_alpha = (alpha : string, page: number)=>{
 }
 
 export const list_tags = ()=>{
-    const works = select_works()
     const all_tags : Record<string,number> = {}
-    works.forEach((w : any)=>{
+    const query = `SELECT tags FROM work WHERE tags != ''`
+    const output = db.prepare(query).all([]) as {tags: string}[]
+    output.forEach((w)=>{
         const tags = tag_deserialize(w.tags)
         tags.forEach((t : string)=>{
             if(!Object.keys(all_tags).includes(t)){

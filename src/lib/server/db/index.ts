@@ -3,7 +3,7 @@ import type { author, db_work, work } from '$lib/types'
 import { env as penv } from '$env/dynamic/private'
 import Database from 'better-sqlite3'
 import { page_size } from '$lib/consts'
-import { select_author_with_id, select_work_author_with_id, select_work_authors, update_view, fuse } from './database'
+import { select_work_author_with_id, select_work_authors, update_view, fuse } from './database'
 import { random_shuffle } from './sort'
 import { tag_deserialize } from '$lib/helper'
 import { env } from '$env/dynamic/public'
@@ -85,12 +85,12 @@ const get_images = async (author_name:string,work_name:string) : Promise<string[
 
 // Single
 
-export const get_author = async (author_id:number) : Promise<author|null>=> {
-    const author = select_author_with_id(author_id)
-    if(typeof author === "object"){
-        return author
-    }
-    return null
+export const get_author = async (author_id:number)=> {
+    return db.prepare(`
+    SELECT *
+    FROM author
+    WHERE author_id = ?
+    `).get([author_id]) as author | undefined
 }
 
 export const get_work = async (work_id: number) : Promise<work|null> =>{
@@ -108,20 +108,21 @@ export const get_work = async (work_id: number) : Promise<work|null> =>{
 
 // TODO: use list_work
 export const list_work_with_series = async (series_name: string, page: number)=>{
-    const partial_works = select_work_authors()
-    const tagged_works = partial_works.filter((w: any)=>{
-        if(w.series == series_name){
-            return true
-        }
-        else{
-            return false
-        }
-    })
+    const query = `
+    SELECT *, w.name AS name, 
+              w.path as path,
+              w.favorite as favorite, 
+              a.name AS author_name
+    FROM work w
+    LEFT JOIN author a
+    ON w.author_id = a.author_id
+    WHERE series = ?`
+    const w = db.prepare(query).all([series_name]) as (db_work & {author_name: string})[]
 
     const {start,end} = paginate(page)
-    const works = tagged_works.slice(start,end)
+    const works = w.slice(start,end)
 
-    return Promise.all(works.map(async (w: db_work & {author_name: string})=>{
+    return Promise.all(works.map(async (w)=>{
         const images = await get_images(w.author_name,w.name)
         return {
             ...w,

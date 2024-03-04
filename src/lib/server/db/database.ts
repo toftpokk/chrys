@@ -209,14 +209,6 @@ const select_work_with_name_author = (name: string, author_id: number): db_work 
              .get([name,author_id]) as db_work | undefined
 }
 
-export const select_author_with_id = (work_id:number)=>{
-    return db.prepare(`
-    SELECT *
-    FROM author
-    WHERE author_id = ?
-    `).get([work_id]) as author | undefined
-}
-
 export const select_work_authors = () =>{
     return db.prepare(`
     SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.series,w.active,a.name AS author_name

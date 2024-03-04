@@ -3,7 +3,7 @@ import type { author, db_work, work } from '$lib/types'
 import { env as penv } from '$env/dynamic/private'
 import Database from 'better-sqlite3'
 import { page_size } from '$lib/consts'
-import { select_author_with_id, select_authors, select_work_author_with_id, select_work_authors, select_works, update_favorite, update_tag, update_view, update_author_favorite, fuse, update_series } from './database'
+import { select_author_with_id, select_work_author_with_id, select_work_authors, update_view, fuse } from './database'
 import { random_shuffle } from './sort'
 import { tag_deserialize } from '$lib/helper'
 import { env } from '$env/dynamic/public'
@@ -22,11 +22,21 @@ const paginate = (page: number)=>{
 // set
 
 export const setAuthorFav = async (author_id: number, state: boolean)=>{
-    return update_author_favorite(author_id, state)
+    // TODO use ouput to check changes
+    db.prepare(`
+    UPDATE author SET favorite = ?
+    WHERE author_id = ?
+    `).run([Number(state),author_id])
+    return state
 }
 
 export const setFav = async (work_id: number, state: boolean)=>{
-    return update_favorite(work_id, state)
+    // TODO use ouput to check changes
+    db.prepare(`
+    UPDATE work SET favorite = ?
+    WHERE work_id = ?
+    `).run([Number(state),work_id])
+    return state
 }
 
 export const setView = async (work_id: number, state: boolean)=>{
@@ -34,11 +44,19 @@ export const setView = async (work_id: number, state: boolean)=>{
 }
 
 export const setTag = async (work_id: number, tag_string: string)=>{
-    update_tag(work_id, tag_string)
+    // TODO use ouput to check changes
+    db.prepare(`
+    UPDATE work SET tags = ?
+    WHERE work_id = ?
+    `).run([tag_string,work_id])
 }
 
 export const setSeries = async (work_id: number, series: string)=>{
-    update_series(work_id, series)
+    // TODO use ouput to check changes
+    db.prepare(`
+    UPDATE work SET series = ?
+    WHERE work_id = ?
+    `).run([series,work_id])
 }
 
 // // GET

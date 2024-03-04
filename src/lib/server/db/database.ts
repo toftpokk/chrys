@@ -217,14 +217,6 @@ export const select_author_with_id = (work_id:number)=>{
     `).get([work_id]) as author | undefined
 }
 
-export const select_works = () =>{
-    return db.prepare(`
-    SELECT *
-    FROM work
-    WHERE active = 1
-    `).all([]) as db_work[]
-}
-
 export const select_work_authors = () =>{
     return db.prepare(`
     SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.series,w.active,a.name AS author_name
@@ -243,13 +235,6 @@ export const select_work_author_with_id = (work_id: number) =>{
     ON w.author_id = a.author_id
     WHERE w.active = 1 AND w.work_id = ?
     `).get([work_id]) as db_work & {author_name: string}
-}
-
-export const select_authors = ()=>{
-    return db.prepare(`
-    SELECT *
-    FROM author
-    `).all([]) as author[]
 }
 
 export const select_histories = ()=>{
@@ -277,35 +262,5 @@ export const update_view = async (work_id: number, state: boolean)=>{
     WHERE work_id = ?
     `).run([Number(state),work_id])
     insert_history(work_id,Date.now(),state)
-    return state
-}
-
-export const update_favorite = async (work_id: number, state: boolean)=>{
-    db.prepare(`
-    UPDATE work SET favorite = ?
-    WHERE work_id = ?
-    `).run([Number(state),work_id])
-    return state
-}
-
-export const update_tag = async (work_id: number, tag_string: string)=>{
-    db.prepare(`
-    UPDATE work SET tags = ?
-    WHERE work_id = ?
-    `).run([tag_string,work_id])
-}
-
-export const update_series = async (work_id: number, series: string)=>{
-    db.prepare(`
-    UPDATE work SET series = ?
-    WHERE work_id = ?
-    `).run([series,work_id])
-}
-
-export const update_author_favorite = async (author_id: number, state: boolean)=>{
-    db.prepare(`
-    UPDATE author SET favorite = ?
-    WHERE author_id = ?
-    `).run([Number(state),author_id])
     return state
 }

@@ -251,7 +251,10 @@ export const list_works = async (options: {
 
     let args : unknown[] = []
     let query = `
-        SELECT *,w.name AS name, w.path as path, w.favorite as favorite,a.name AS author_name
+        SELECT *, w.name AS name, 
+                  w.path as path,
+                  w.favorite as favorite, 
+                  a.name AS author_name
         FROM work w
         LEFT JOIN author a
         ON w.author_id = a.author_id`

@@ -219,16 +219,6 @@ export const select_work_authors = () =>{
     `).all([]) as (db_work & {author_name: string})[]
 }
 
-export const select_work_author_with_id = (work_id: number) =>{
-    return db.prepare(`
-    SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.series,w.active,a.name AS author_name
-    FROM work w
-    LEFT JOIN author a
-    ON w.author_id = a.author_id
-    WHERE w.active = 1 AND w.work_id = ?
-    `).get([work_id]) as db_work & {author_name: string}
-}
-
 export const select_histories = ()=>{
     return db.prepare(`
     SELECT h.history_id,h.datetime,h.viewed,w.name,w.work_id

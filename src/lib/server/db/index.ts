@@ -3,7 +3,7 @@ import type { author, db_work, work } from '$lib/types'
 import { env as penv } from '$env/dynamic/private'
 import Database from 'better-sqlite3'
 import { page_size } from '$lib/consts'
-import { select_work_author_with_id, select_work_authors, update_view, fuse } from './database'
+import { fuse } from './database'
 import { random_shuffle } from './sort'
 import { tag_deserialize } from '$lib/helper'
 import { env } from '$env/dynamic/public'
@@ -40,7 +40,14 @@ export const setFav = async (work_id: number, state: boolean)=>{
 }
 
 export const setView = async (work_id: number, state: boolean)=>{
-    return update_view(work_id, state)
+    db.prepare(`
+    UPDATE work
+    SET viewed = ?
+    WHERE work_id = ?
+    `).run([0,work_id])
+    const info = db.prepare('INSERT INTO history (work_id,datetime,viewed) VALUES (?,?,?)')
+                   .run([work_id, Date.now(),Number(state)])
+    return Number(info.lastInsertRowid)
 }
 
 export const setTag = async (work_id: number, tag_string: string)=>{
@@ -94,7 +101,15 @@ export const get_author = async (author_id:number)=> {
 }
 
 export const get_work = async (work_id: number) : Promise<work|null> =>{
-    const work = select_work_author_with_id(work_id)
+    const work = db.prepare(`
+    SELECT *, w.name AS name, 
+              w.path as path,
+              w.favorite as favorite, 
+              a.name AS author_name
+    FROM work w
+    LEFT JOIN author a
+    ON w.author_id = a.author_id
+    WHERE work_id = ?`).get([work_id]) as db_work & {author_name: string}
     if(typeof work === "object"){
         const images = await get_images(work.author_name,work.name)
         return {
@@ -225,7 +240,15 @@ export const list_authors = async ()=>{
 
 // TODO: use list_work
 export const list_work_with_tags = async (tag_name: string, page: number)=>{
-    const partial_works = select_work_authors()
+    const partial_works = db.prepare(`
+    SELECT *, w.name AS name, 
+              w.path as path,
+              w.favorite as favorite, 
+              a.name AS author_name
+    FROM work w
+    LEFT JOIN author a
+    ON w.author_id = a.author_id
+    WHERE w.active = 1`).all([]) as (db_work & {author_name: string})[]
     const tagged_works = partial_works.filter((w: any)=>{
         if(w.tags == ''){
             return false

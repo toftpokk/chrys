@@ -1,13 +1,9 @@
 <script lang="ts">
 	import type { author } from '$lib/types';
-	import { onMount } from 'svelte';
     export let data : import("./$types").PageData
-    let authors = data.authors;
+    let authors = data.authors.sort((a,b)=>a.name.localeCompare(b.name));
     const favorite_authors = data.authors.filter((a)=>a.favorite == 1).sort()
     let sort = "Count";
-    onMount(()=>{
-        authors = data.authors.sort((a,b)=>a.name.localeCompare(b.name));
-    })
 
     const toggleSort = ()=>{
         if(sort === "Alphabet"){

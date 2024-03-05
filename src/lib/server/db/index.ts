@@ -304,6 +304,9 @@ export const list_works = async (options: {
     if(options.has_compilation === false){
         conditions.push("tags NOT LIKE '%compilation%'")
     }
+    if(options.has_viewed === false){
+        conditions.push("viewed = 0")
+    }
     if(needs_active){
         conditions.push(`active = 1`)
     }
@@ -338,11 +341,6 @@ export const list_works = async (options: {
     }
 
     partial_works = db.prepare(query).all(args) as (db_work & {author_name: string})[]
-
-    // Filter out Viewed After
-    if(options.has_viewed === false){
-        partial_works = partial_works.filter((w)=>(!w.viewed))
-    }
 
     // Paging 
     let works : typeof partial_works = []

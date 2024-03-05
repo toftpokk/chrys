@@ -332,14 +332,12 @@ export const list_works = async (options: {
     else if(options.sort == "id"){
         query += ` ORDER BY work_id DESC`
     }
+    else if(options.sort == "random"){
+        // See: https://stackoverflow.com/questions/24256258/order-by-random-with-seed-in-sqlite
+        query += ` ORDER BY (substr(work_id * '${env.PUBLIC_RANDOM_SEED}', length(work_id)+2)) DESC`
+    }
 
     partial_works = db.prepare(query).all(args) as (db_work & {author_name: string})[]
-    
-    // No psuedorandom in sqlite, See: https://stackoverflow.com/questions/24256258/order-by-random-with-seed-in-sqlite
-    if(options.sort === "random"){
-        let seed = env.PUBLIC_RANDOM_SEED === undefined? 0 : Number(env.PUBLIC_RANDOM_SEED)
-        random_shuffle(partial_works, seed)
-    }
 
     // Filter out Viewed After
     if(options.has_viewed === false){

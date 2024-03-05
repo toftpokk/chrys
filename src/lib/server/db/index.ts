@@ -183,7 +183,7 @@ export const list_work_with_alpha = (alpha : string, page: number)=>{
 
 export const list_tags = ()=>{
     const all_tags : Record<string,number> = {}
-    const query = `SELECT tags FROM work WHERE tags != ''`
+    const query = `SELECT tags FROM work WHERE tags != '' AND active = 1`
     const output = db.prepare(query).all([]) as {tags: string}[]
     output.forEach((w)=>{
         const tags = tag_deserialize(w.tags)

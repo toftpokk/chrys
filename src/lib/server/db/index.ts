@@ -4,7 +4,7 @@ import { env as penv } from '$env/dynamic/private'
 import Database from 'better-sqlite3'
 import { page_size } from '$lib/consts'
 import { fuse } from './database'
-import { tag_deserialize, random_shuffle } from '$lib/helper'
+import { tag_deserialize } from '$lib/helper'
 import { env } from '$env/dynamic/public'
 
 
@@ -215,9 +215,7 @@ export const list_series = async ()=>{
     return Promise.all(all_series.map(async (s)=>{
         const images = await get_images(s.author_name,s.name)
         return {
-            series_name: s.series_name,
-            author_name: s.author_name,
-            name: s.name,
+            ...s,
             image: images[0]
         }
     }))

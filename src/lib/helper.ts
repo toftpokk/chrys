@@ -44,24 +44,6 @@ export const tag_deserialize = (tag_string : string)=>{
     return tags
 }
 
-export const random_shuffle = (array : any[], seed: number):any[]=>{
-    let m = array.length;
-    let t, i;
-    while(m){
-        i = Math.floor(random(seed)*m--);
-        t = array[m];
-        array[m] = array[i];
-        array[i] = t;
-        ++seed
-    }
-    return array
-}
-
-const random = (seed:number):number =>{
-    let x = Math.sin(seed++)*10000;
-    return x - Math.floor(x);
-}
-
 export const get_tag_suggestions = ()=>{
     const suggestion_subset = env.PUBLIC_TAG_SUGGESTIONS
         .split('\n')

@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
     import { page } from '$app/stores';
 	import { sort_type } from "./consts";
-    export let filterView = false;
+    export let hasFilters = false;
     const searchParams = $page.url.searchParams
     
     let current_sort : string;
@@ -19,8 +19,8 @@
         u.set("page","1") // reset page
         u.set("sort",current_sort)
 
-        // view filter available only when filterView is true
-        if(filterView){
+        // view filter available only when hasFilters is true
+        if(hasFilters){
             u.set("has-viewed",String(hasViewed))
             u.set("has-compilation",String(hasCompilation))
         }
@@ -42,14 +42,14 @@
             <option value={t}>{t}</option>
         {/each}
     </select>
-    {#if filterView}
+    {#if hasFilters}
         <div class="mb-2">
             <input bind:checked={hasViewed} on:change={change_sort} class="scale-150 outline-none accent-teal-100 me-3" width="100" id="hasViewed" type="checkbox"/>
             <label for="hasViewed">Show Viewed Items</label>
         </div>
+        <div class="mb-2">
+            <input bind:checked={hasCompilation} on:change={change_sort} class="scale-150 outline-none accent-teal-100 me-3" width="100" id="hasCompilation" type="checkbox"/>
+            <label for="hasCompilation">Show Compilations</label>
+        </div>
     {/if}
-    <div class="mb-2">
-        <input bind:checked={hasCompilation} on:change={change_sort} class="scale-150 outline-none accent-teal-100 me-3" width="100" id="hasCompilation" type="checkbox"/>
-        <label for="hasCompilation">Show Compilations</label>
-    </div>
 </form>

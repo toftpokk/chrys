@@ -8,7 +8,7 @@
 
     export let data: {work: work[], num_pages?: number}
     export let hasNav = true;
-    export let filterView = false;
+    export let hasFilters = false;
     export let groupSeries = false; // set to default false
 
     let page_max = -1;
@@ -33,7 +33,7 @@
 <div class="max-w-7xl mx-auto" data-sveltekit-reload> <!-- Or else page wont load-->
     {#if hasNav}
         <PageNav max={page_max}/>
-        <Sorting filterView={filterView}/>
+        <Sorting hasFilters={hasFilters}/>
     {/if}
     
     <ul class="flex flex-wrap justify-center">

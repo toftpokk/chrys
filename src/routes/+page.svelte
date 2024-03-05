@@ -6,5 +6,5 @@
 </script>
 <main class="w-full" >
     <Header/>
-    <CardList data={data} filterView={true} groupSeries={true}/>
+    <CardList data={data} hasFilters={true} groupSeries={true}/>
 </main>

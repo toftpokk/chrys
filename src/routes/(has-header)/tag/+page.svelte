@@ -24,7 +24,7 @@
                 <p>{suggestion_group.name}</p>
                 {#each suggestion_group.tags as tag}
                     {#if data.tags[tag] > -1}
-                        <a class="pill m-1" href={"/tag/"+tag}>{tag} <span class="text-teal-100">({data.tags[tag]})</span></a>
+                        <a class="pill m-1" href={"/tag/"+tag}>{tag} <span class="text-gray-30">{data.tags[tag]}</span></a>
                     {:else}
                         <a class="pill bg-gray-100 border-gray-100 hover:bg-gray-80 hover:border-gray-80 m-1" href={"/tag/"+tag}>{tag}</a>
                     {/if}
@@ -32,7 +32,7 @@
                 <hr class="my-3"/>
             {/each}
             {#each misc_tags as tag}
-                <a class="pill m-1" href={"/tag/"+tag}>{tag} <span class="text-teal-100">({data.tags[tag]})</span></a>
+                <a class="pill m-1" href={"/tag/"+tag}>{tag} <span class="text-gray-30">{data.tags[tag]}</span></a>
             {/each}
         </div>
     </div>

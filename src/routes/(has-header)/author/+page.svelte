@@ -25,7 +25,7 @@
     <div class="max-w-7xl mx-auto">
         <div class="flex flex-wrap justify-center mb-4">
             {#each favorite_authors as author}
-                <a href={"/author/"+author.author_id} class="pill m-1">{author.name} <span class="text-teal-100">({author.work_count})</span></a>
+                <a href={"/author/"+author.author_id} class="pill m-1">{author.name} <span class="text-gray-30">{author.work_count}</span></a>
             {/each}
         </div>
         <div class="flex flex-wrap justify-center mb-4">
@@ -33,7 +33,7 @@
         </div>
         <div class="flex flex-wrap justify-center mb-4">
             {#each authors as author}
-                <a href={"/author/"+author.author_id} class="pill m-1">{author.name} <span class="text-teal-100">({author.work_count})</span></a>
+                <a href={"/author/"+author.author_id} class="pill m-1">{author.name} <span class="text-gray-30">{author.work_count}</span></a>
             {/each}
         </div>
     </div>

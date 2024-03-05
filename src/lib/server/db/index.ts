@@ -282,6 +282,7 @@ export const list_works = async (options: {
             sort?: string,
             author_id?: number,
             needs_active?: boolean,
+            has_compilation?: boolean
             has_viewed?: boolean
         }) : Promise<{work:work[],num_pages:number}>=>{
 
@@ -300,6 +301,9 @@ export const list_works = async (options: {
     
     // Conditions
     const conditions = []
+    if(options.has_compilation === false){
+        conditions.push("tags NOT LIKE '%compilation%'")
+    }
     if(needs_active){
         conditions.push(`active = 1`)
     }
@@ -311,7 +315,6 @@ export const list_works = async (options: {
         const condition_str = conditions.join(" AND ")
         query += ` WHERE ${condition_str}`
     }
-
 
     // Sorting
     if(options.sort == "name"){

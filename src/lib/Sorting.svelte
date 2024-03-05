@@ -7,9 +7,11 @@
     
     let current_sort : string;
     let hasViewed = false;
+    let hasCompilation = false;
     $:{
         current_sort  = searchParams.get("sort") || "random";
         hasViewed = searchParams.get("has-viewed")==="true" ? true : false;
+        hasCompilation = searchParams.get("has-compilation")==="true" ? true : false;
     }
     
     function change_sort(){
@@ -20,10 +22,14 @@
         // view filter available only when filterView is true
         if(filterView){
             u.set("has-viewed",String(hasViewed))
+            u.set("has-compilation",String(hasCompilation))
         }
         else{
             if(u.get("has-viewed")){
                 u.delete("has-viewed")
+            }
+            if(u.get("has-compilation")){
+                u.delete("has-compilation")
             }
         }
         window.location = ("?"+u.toString()) as any
@@ -37,12 +43,13 @@
         {/each}
     </select>
     {#if filterView}
-        <span>
-
-        </span>
         <div class="mb-2">
             <input bind:checked={hasViewed} on:change={change_sort} class="scale-150 outline-none accent-teal-100 me-3" width="100" id="hasViewed" type="checkbox"/>
             <label for="hasViewed">Show Viewed Items</label>
         </div>
     {/if}
+    <div class="mb-2">
+        <input bind:checked={hasCompilation} on:change={change_sort} class="scale-150 outline-none accent-teal-100 me-3" width="100" id="hasCompilation" type="checkbox"/>
+        <label for="hasCompilation">Show Compilations</label>
+    </div>
 </form>

@@ -113,6 +113,7 @@
   {#each images_load as image}
     <link rel="preload" as="image" href={`${image_prefix}/${image}`} />
   {/each}
+    <title>{work.name} - Chrys</title>
 </svelte:head>
 
 <div>

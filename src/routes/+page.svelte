@@ -4,6 +4,9 @@
     
 	export let data : import("./$types").PageData
 </script>
+<svelte:head>
+    <title>Chrys</title>
+</svelte:head>
 <main class="w-full" >
     <Header/>
     <CardList data={data} hasFilters={true} groupSeries={true}/>

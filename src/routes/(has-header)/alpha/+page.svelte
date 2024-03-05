@@ -10,6 +10,9 @@
         }
     }
 </script>
+<svelte:head>
+    <title>Search - Chrys</title>
+</svelte:head>
 <main class="w-full" >
     <h1 class="text-4xl flex justify-center my-8">Search</h1>
     <div class="max-w-7xl flex flex-wrap justify-center mx-auto">

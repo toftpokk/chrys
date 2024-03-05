@@ -8,6 +8,10 @@
         return a.name > b.name? 1:-1
     })
 </script>
+
+<svelte:head>
+    <title>{series} - Chrys</title>
+</svelte:head>
 <main class="w-full" >
     <h1 class="text-4xl flex justify-center my-8">Series: {series}</h1>
     <CardList data={data}/>

@@ -6,6 +6,10 @@
     export let data : import("./$types").PageData
     let series = data.series.sort()
 </script>
+
+<svelte:head>
+    <title>Series - Chrys</title>
+</svelte:head>
 <main class="w-full" >
     <h1 class="text-4xl flex justify-center my-8">Series</h1>
     <div class="max-w-7xl flex-wrap justify-center mx-auto">

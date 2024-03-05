@@ -66,6 +66,10 @@
         backline_count: graphData.range/2
     }
 </script>
+
+<svelte:head>
+    <title>History - Chrys</title>
+</svelte:head>
 <main>
     <svg class="border rounded-lg" width="100%" height="5em" viewBox={`0 0 ${graphMeta.width} ${graphMeta.height}`}>
         {#each {length:graphMeta.backline_count+1} as _,idx}

@@ -16,6 +16,10 @@
         }
     }
 </script>
+
+<svelte:head>
+    <title>Authors - Chrys</title>
+</svelte:head>
 <main class="w-full" >
     <h1 class="text-4xl flex justify-center my-8">Authors</h1>
     <div class="max-w-7xl mx-auto">

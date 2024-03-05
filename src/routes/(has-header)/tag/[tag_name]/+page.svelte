@@ -6,6 +6,10 @@
     
 	export let data : {work: work[]};
 </script>
+
+<svelte:head>
+    <title>{tag_name} - Chrys</title>
+</svelte:head>
 <main class="w-full" >
     <h1 class="text-4xl flex justify-center my-8">Tag: {tag_name}</h1>
     <CardList data={data}/>

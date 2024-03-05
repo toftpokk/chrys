@@ -12,6 +12,10 @@
         return true
     })
 </script>
+
+<svelte:head>
+    <title>Tags - Chrys</title>
+</svelte:head>
 <main class="w-full" >
     <h1 class="text-4xl flex justify-center my-8">Tags</h1>
     <div class="max-w-7xl flex-wrap justify-center mx-auto">

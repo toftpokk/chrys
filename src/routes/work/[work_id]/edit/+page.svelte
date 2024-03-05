@@ -119,6 +119,10 @@
         @apply text-2xl;
     }
 </style>
+
+<svelte:head>
+    <title>Edit - Chrys</title>
+</svelte:head>
 <main class="w-full" >
     <template id="template-tag-include">
         <Tag variant={"activated"}></Tag>

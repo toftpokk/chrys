@@ -13,6 +13,9 @@
         })
     }
 </script>
+<svelte:head>
+    <title>Settings - Chrys</title>
+</svelte:head>
 <main class="w-full">
     <div class="max-w-4xl block mx-auto my-8 text-xl">
         <h1 class="text-2xl font-bold mb-4">Settings</h1>

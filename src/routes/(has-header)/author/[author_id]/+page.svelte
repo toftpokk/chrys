@@ -20,6 +20,10 @@
         data.favorite = results.state
     }
 </script>
+
+<svelte:head>
+    <title>{author_name} - Chrys</title>
+</svelte:head>
 <main class="w-full" >
     <h1 class="text-4xl flex justify-center my-8">Author: {author_name}</h1>
     <div class="flex justify-center">

@@ -65,16 +65,23 @@ export const setSeries = async (work_id: number, series: string)=>{
     `).run([series,work_id])
 }
 
+export const setName = async (work_id: number, name: string)=>{
+    // TODO use ouput to check changes
+    db.prepare(`
+    UPDATE work SET name = ?
+    WHERE work_id = ?
+    `).run([name,work_id])
+}
+
 // // GET
 
 // Images
 
-const get_images = async (author_name:string,work_name:string) : Promise<string[]>=>{
-    const author_comp = encodeURIComponent(author_name)
-    const work_comp = encodeURIComponent(work_name)
+const get_images = async (relpath: string) : Promise<string[]>=>{
+    const imagepath = encodeURI(relpath)
     let images = []
     try{
-        const res = await fetch(`${env.PUBLIC_IMAGE_SERVER}/api/repo/${env.PUBLIC_IMAGE_REPO}/${author_comp}/${work_comp}`)
+        const res = await fetch(`${env.PUBLIC_IMAGE_SERVER}/api/repo/${env.PUBLIC_IMAGE_REPO}/${imagepath}`)
         if(!res.ok){
             throw new Error("Response not OK")
         }
@@ -84,7 +91,7 @@ const get_images = async (author_name:string,work_name:string) : Promise<string[
         }
     }
     catch(error){
-        console.log(`Error: Could not get images of ${work_name} by ${author_name} from image server`)
+        console.log(`Error: Could not get images of ${imagepath} from image server`)
     }
     return images
 }
@@ -110,7 +117,7 @@ export const get_work = async (work_id: number) : Promise<work|null> =>{
     ON w.author_id = a.author_id
     WHERE work_id = ?`).get([work_id]) as db_work & {author_name: string}
     if(typeof work === "object"){
-        const images = await get_images(work.author_name,work.name)
+        const images = await get_images(work.path)
         return {
             ...work,
             images,
@@ -137,7 +144,7 @@ export const list_work_with_series = async (series_name: string, page: number)=>
     const works = w.slice(start,end)
 
     return Promise.all(works.map(async (w)=>{
-        const images = await get_images(w.author_name,w.name)
+        const images = await get_images(w.path)
         return {
             ...w,
             images,
@@ -168,7 +175,7 @@ export const list_work_with_alpha = (alpha : string, page: number)=>{
     
     const work_list = alpha_works.slice(start,end)
     const work = Promise.all(work_list.map(async (w: db_work & {author_name: string})=>{
-        const images = await get_images(w.author_name,w.name)
+        const images = await get_images(w.path)
         return {
             ...w,
             images,
@@ -202,6 +209,7 @@ export const list_tags = ()=>{
 export const list_series = async ()=>{
     const query = `
     SELECT w.name AS name, 
+           w.path AS path,
            w.series as series_name,
            a.name AS author_name
     FROM work w
@@ -211,9 +219,9 @@ export const list_series = async ()=>{
     GROUP BY series_name
     ORDER BY name
     `
-    const all_series = db.prepare(query).all([]) as {name: string, series_name: string, author_name: string}[]
+    const all_series = db.prepare(query).all([]) as {name: string, series_name: string, author_name: string, path: string}[]
     return Promise.all(all_series.map(async (s)=>{
-        const images = await get_images(s.author_name,s.name)
+        const images = await get_images(`${s.path}`)
         return {
             ...s,
             image: images[0]
@@ -265,7 +273,7 @@ export const list_work_with_tags = async (tag_name: string, page: number)=>{
     const works = tagged_works.slice(start,end)
 
     return Promise.all(works.map(async (w: db_work & {author_name: string})=>{
-        const images = await get_images(w.author_name,w.name)
+        const images = await get_images(w.path)
         return {
             ...w,
             images,
@@ -354,7 +362,7 @@ export const list_works = async (options: {
 
     // Images
     const result = await Promise.all(works.map(async (w: db_work & {author_name: string})=>{
-        const images = await get_images(w.author_name,w.name)
+        const images = await get_images(w.path)
         return {
             ...w,
             images,

@@ -16,7 +16,7 @@
         <ul class="mb-4 flex flex-wrap">
             {#each series as s}
                 <Card
-                    image={`${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodeURIComponent(s.author_name)}/${encodeURIComponent(s.name)}/${s.image}`}
+                    image={`${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodeURI(s.path)}/${s.image}`}
                     url={"/series/"+s.series_name}
                     title={s.series_name}
                     author={""}

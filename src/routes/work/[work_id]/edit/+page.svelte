@@ -23,6 +23,7 @@
     let current_tags = [...work.tags]
     let current_tags_element : HTMLElement;
     let current_series = work.series
+    let current_name = work.name
     let paste_text = ""
     let series_list : string[] = data.series.map(s=>s.series_name)
     let custom_tag = ""
@@ -60,6 +61,22 @@
         submit_tags_hidden = true
         included_tags = [...current_tags]
         render_tags()
+    }
+
+    let save_name_hidden = true;
+    async function save_name(this: HTMLFormElement){
+        save_name_hidden = false
+        const res = await fetch(`/api/${work.work_id}/rename`,{
+            method: 'POST',
+            body: JSON.stringify(current_name),
+            headers: {
+                'Content-Type' : 'application/json'
+            }
+        })
+        if(!res.ok){
+            return // TODO error handling
+        }
+        save_name_hidden = true
     }
 
     const export_tags = ()=>{
@@ -134,8 +151,12 @@
     <div class="max-w-4xl flex flex-col px-2 mx-auto my-8 text-xl gap-3">
         <button class="text-start underline underline-offset-2 hover:text-gray-20 text-white" on:click={()=>history.back()}>&larr; Return</button>
         <div class="mb-4">
-            <h1 class="text-3xl my-2">{work.name}</h1>
-            <p>by <span class=" bg-slate-600 px-2 p-1 rounded-xl">{work.author_name}</span></p>
+            <p class="text-gray-30 text-lg ms-2">{work.path}</p>
+            <input bind:value={current_name} class="bg-gray-200 p-2 w-full text-2xl my-1"/>
+            <ButtonLoad refresh={save_name} hidden={save_name_hidden}>
+                Save Name
+            </ButtonLoad>
+            <p>by<span class=" bg-slate-600 px-2 p-1 rounded-xl">{work.author_name}</span></p>
         </div>
 
         <!-- Current Tags-->

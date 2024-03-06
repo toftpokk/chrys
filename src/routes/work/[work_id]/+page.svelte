@@ -20,11 +20,8 @@
 
     if(data.work){
         author_url = `/author/${data.work.author_id}`
-        
-        author_comp = encodeURIComponent(work.author_name)
-        work_comp = encodeURIComponent(work.name)
 
-        image_prefix = `${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${author_comp}/${work_comp}`
+        image_prefix = `${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${work.path}`
     }
 
     const prevIndex = ()=>{

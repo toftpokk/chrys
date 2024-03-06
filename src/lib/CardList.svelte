@@ -41,7 +41,7 @@
             <Card
                 image={
                     w.images[0]
-                    ?`${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodeURIComponent(w.author_name)}/${encodeURIComponent(w.name)}/${w.images[0]}`
+                    ?`${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodeURI(w.path)}/${w.images[0]}`
                     : '/image-not-found.jpg'
                 }
                 url={`/work/${w.work_id}`}

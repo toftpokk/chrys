@@ -3,6 +3,9 @@
 	import Tag from '$lib/atom/Tag.svelte';
 	import { IsEmptySeries, emptyWork, get_tag_suggestions } from '$lib/helper';
 	import { onMount } from 'svelte';
+	import iconUpload from "$lib/icon/upload.svg?raw"
+	import iconErase from "$lib/icon/erase.svg?raw"
+	import iconDownload from "$lib/icon/download.svg?raw"
     export let data : import("./$types").PageData
     const work = data.work? data.work : emptyWork
 
@@ -160,7 +163,15 @@
         </div>
 
         <!-- Current Tags-->
-        <h2 class="head">Tags:</h2>
+        <div class="inline-block mt-4">
+            <h2 class="head inline-block">Tags:</h2>
+            <div class="inline-block ms-2 text-black">
+                <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-3" on:click={reset_tags}>{@html iconErase}</button>
+                <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-3" on:click={export_tags}>{@html iconUpload}</button>
+                <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-3" on:click={import_tags}>{@html iconDownload}</button>
+            </div>
+            <input class="leading-10 mb-2 h-10 rounded-lg bg-gray-70 px-2" placeholder="Tag Data" bind:value={paste_text}/>
+        </div>
         <div class="flex flex-col">
             <div class="bg-gray-200 text-xl rounded-md h-64 leading-10 overflow-scroll my-4 p-3 py-4"
                 bind:this={current_tags_element} ></div>
@@ -169,19 +180,11 @@
             </ButtonLoad>
         </div>
 
-        <div class="block mt-4">
-            <input class="relative leading-10 mb-2 h-10 rounded-lg bg-gray-70 px-2" placeholder="Tag Data" bind:value={paste_text}/>
-            <div class="">
-                <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-5" on:click={export_tags}>Export</button>
-                <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-5" on:click={import_tags}>Import</button>
-                <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-5" on:click={reset_tags}>Reset</button>
-            </div>
-        </div>
 
         <!-- Custom Tags -->
         <div class="block">
             <input placeholder="New Tag" bind:value={custom_tag} class="relative h-10 rounded-lg bg-gray-70 leading-10 px-2"/>
-            <button class="absolute h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-5" on:click={()=>toggle_tag_inclusion(custom_tag)}>Add</button>
+            <button class="absolute h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-2xl px-4 text-black" on:click={()=>toggle_tag_inclusion(custom_tag)}>+</button>
         </div>
 
         <!-- Suggestions -->

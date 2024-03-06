@@ -38,6 +38,7 @@
     
     <ul class="flex flex-wrap justify-center">
         {#each work as w}
+            <!-- TODO encodeURI does not do '?' -->
             <Card
                 image={
                     w.images[0]

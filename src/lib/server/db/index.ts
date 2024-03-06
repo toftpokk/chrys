@@ -78,6 +78,7 @@ export const setName = async (work_id: number, name: string)=>{
 // Images
 
 const get_images = async (relpath: string) : Promise<string[]>=>{
+    // TODO encodeURI does not do '?'
     const imagepath = encodeURI(relpath)
     let images = []
     try{

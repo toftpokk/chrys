@@ -139,9 +139,10 @@ const sync = async (scanned_work_list : Record<string,string[]>)=>{
             author_id = insert_author(author_name,author_name)
         }
         author_id_list.push(author_id)
-        scanned_work_list[author_name].map(async (work_name)=>{
+        scanned_work_list[author_name].map(async (work_slug)=>{
             let work_id = -1
-            const work = select_work_with_name_author(work_name,author_id)
+            const relpath = `${author_name}/${work_slug}` 
+            const work = select_work_with_path_author(relpath,author_id)
             if(typeof work === "object"){
                 // old work_id
                 work_id = work.work_id
@@ -149,7 +150,7 @@ const sync = async (scanned_work_list : Record<string,string[]>)=>{
             }
             else{
                 // new work_id
-                work_id = insert_work(work_name, `${author_name}/${work_name}`,author_id,[])
+                work_id = insert_work(work_slug, `${author_name}/${work_slug}`,author_id,[])
             }
         })
     })
@@ -161,8 +162,10 @@ const sync = async (scanned_work_list : Record<string,string[]>)=>{
             update_active(work.work_id,false)
             return
         }
+        
+        const work_slug = work.path.split("/")[1]
         // work subtractive sync
-        if(!scanned_work_list[work.author_name].includes(work.name)){
+        if(!scanned_work_list[work.author_name].includes(work_slug)){
             update_active(work.work_id,false)
         }else{
             // work additive sync
@@ -204,9 +207,9 @@ const select_author_with_name = (name: string): author | undefined => {
              .get([name]) as author | undefined
 }
 
-const select_work_with_name_author = (name: string, author_id: number): db_work | undefined =>{
-    return db.prepare('SELECT * FROM work WHERE name = ? AND author_id = ?')
-             .get([name,author_id]) as db_work | undefined
+const select_work_with_path_author = (path: string, author_id: number): db_work | undefined =>{
+    return db.prepare('SELECT * FROM work WHERE path = ? AND author_id = ?')
+             .get([path,author_id]) as db_work | undefined
 }
 
 export const select_work_authors = () =>{

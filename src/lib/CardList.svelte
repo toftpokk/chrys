@@ -3,7 +3,7 @@
 	import Card from "./Card.svelte";
     import PageNav from "./PageNav.svelte";
 	import Sorting from "./Sorting.svelte";
-	import { IsEmptySeries } from "./helper";
+	import { IsEmptySeries, encodePathURI } from "./helper";
 	import type { work } from "./types";
 
     export let data: {work: work[], num_pages?: number}
@@ -38,11 +38,10 @@
     
     <ul class="flex flex-wrap justify-center">
         {#each work as w}
-            <!-- TODO encodeURI does not do '?' -->
             <Card
                 image={
                     w.images[0]
-                    ?`${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodeURI(w.path)}/${w.images[0]}`
+                    ?`${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodePathURI(w.path)}/${w.images[0]}`
                     : '/image-not-found.jpg'
                 }
                 url={`/work/${w.work_id}`}

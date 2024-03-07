@@ -4,7 +4,7 @@ import { env as penv } from '$env/dynamic/private'
 import Database from 'better-sqlite3'
 import { page_size } from '$lib/consts'
 import { fuse } from './database'
-import { tag_deserialize } from '$lib/helper'
+import { encodePathURI, tag_deserialize } from '$lib/helper'
 import { env } from '$env/dynamic/public'
 
 
@@ -78,8 +78,7 @@ export const setName = async (work_id: number, name: string)=>{
 // Images
 
 const get_images = async (relpath: string) : Promise<string[]>=>{
-    // TODO encodeURI does not do '?'
-    const imagepath = encodeURI(relpath)
+    const imagepath = encodePathURI(relpath)
     let images = []
     try{
         const res = await fetch(`${env.PUBLIC_IMAGE_SERVER}/api/repo/${env.PUBLIC_IMAGE_REPO}/${imagepath}`)

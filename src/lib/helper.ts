@@ -62,3 +62,8 @@ export const get_tag_suggestions = ()=>{
     })
     return tag_suggestions
 }
+export const encodePathURI = (path: string) : string=>{
+    return path.split("/")
+        .map(string=>encodeURIComponent(string))
+        .join("/")
+}

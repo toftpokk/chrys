@@ -3,7 +3,7 @@
     import { env } from '$env/dynamic/public';
     import Reactions from '$lib/Reactions.svelte'
 	import Tag from '$lib/atom/Tag.svelte';
-	import { emptyWork } from '$lib/helper';
+	import { emptyWork, encodePathURI } from '$lib/helper';
     import type { work } from '$lib/types'
     export let data : import("./$types").PageData
 
@@ -21,7 +21,7 @@
     if(data.work){
         author_url = `/author/${data.work.author_id}`
 
-        image_prefix = `${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${work.path}`
+        image_prefix = `${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodePathURI(work.path)}`
     }
 
     const prevIndex = ()=>{

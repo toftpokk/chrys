@@ -19,9 +19,18 @@
 		<img alt="cover" class=" w-full h-[250px] object-cover overflow-hidden" src={image} />
 	</a>
 	<div class="p-3">
-		<span class="font-bold break-words inline-block py-1 px-2 rounded-xl" class:bg-teal-100={isSeries} class:bg-red-100={tags.includes("compilation")}>{
-			isSeries? series : title
-			}</span>
+		<div class="font-bold break-words inline-block py-1 px-2 rounded-xl w-full" class:bg-teal-100={isSeries} class:bg-red-100={tags.includes("compilation")}>
+			{#if tags.includes("japanese")}
+				<img alt="JP" width="25rem" class="inline-block mx-1 mb-1" src="/flag-jp.png"/>
+			{:else if tags.includes("english")}
+				<img alt="EN" width="25rem" class="inline-block mx-1 mb-1" src="/flag-uk.webp"/>
+			{:else if tags.includes("korean")}
+				<img alt="KR" width="25rem" class="inline-block mx-1 mb-1" src="/flag-korea.png"/>
+			{:else if tags.includes("chinese")}
+				<img alt="CH" width="25rem" class="inline-block mx-1 mb-1" src="/flag-china.png"/>
+			{/if}
+			<span>{isSeries? series : title}</span>
+		</div>
 		<span class="block"><a class="relative text-lg px-2 py-1 rounded-lg z-20 text-white hover:text-gray-20" href={"/author/"+author_id}>{author}</a></span>
 		<div class="inline-block my-3">
 			{#if !isSeries}

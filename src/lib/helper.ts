@@ -45,21 +45,18 @@ export const tag_deserialize = (tag_string : string)=>{
 }
 
 export const get_tag_suggestions = ()=>{
-    const suggestion_subset = env.PUBLIC_TAG_SUGGESTIONS
-        .split('\n')
-        .filter((line)=>line != "")
-
-    const tag_split = suggestion_subset.map((tag_subset)=>(
-        tag_subset.split(" ").filter((t)=>t != "")
-    ))
-    const tag_suggestions = tag_split.map((group)=>{
-        const name = group[0]
-        const tags = group.slice(1)
-        return {
-            name,
-            tags
+    const tag_suggestions = 
+    env.PUBLIC_TAG_SUGGESTIONS
+    .split("\n\n").map(
+        (t)=>{
+            const linesplits = t.trim().split("\n")
+            return {
+                name: linesplits[0],
+                tags: linesplits.slice(1).join(" ").split(" ")
+                    .filter((t)=>t != "")
+            }
         }
-    })
+    )
     return tag_suggestions
 }
 export const encodePathURI = (path: string) : string=>{

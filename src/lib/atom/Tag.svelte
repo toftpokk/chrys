@@ -17,7 +17,7 @@ if(typeof href === "string"){
 </script>
 <button
 on:click={()=>{onclick()}} {...$$restProps}
-    class="pill m-1 "
+    class="pill m-0.5 sm:text-lg text-[1rem]"
     class:bg-gray-70={variant=="default"}
     class:border-gray-80={variant == "default"||variant == "activated"}
     class:bg-teal-100={variant == "activated"}

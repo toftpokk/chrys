@@ -151,32 +151,27 @@
         <!-- TODO: Fix <Tag>-->
         <Tag variant={"default"}></Tag>
     </template>
-    <div class="max-w-4xl flex flex-col px-2 mx-auto my-8 text-xl gap-3">
+    <div class="max-w-4xl flex flex-col px-2 mx-auto my-4 text-xl gap-3">
         <button class="text-start underline underline-offset-2 hover:text-gray-20 text-white" on:click={()=>history.back()}>&larr; Return</button>
-        <div class="mb-4">
-            <p class="text-gray-30 text-lg ms-2">{work.path}</p>
-            <input bind:value={current_name} class="bg-gray-200 p-2 w-full text-2xl my-1"/>
+        <div class="flex gap-1 h-9">
             <ButtonLoad refresh={save_name} hidden={save_name_hidden}>
-                Save Name
+                Save&nbsp;Name
             </ButtonLoad>
-            <p>by<span class=" bg-slate-600 px-2 p-1 rounded-xl">{work.author_name}</span></p>
         </div>
+        <p>by<span class=" bg-slate-600 px-2 p-1 rounded-xl">{work.author_name}</span></p>
 
         <!-- Current Tags-->
-        <div class="inline-block mt-4">
-            <h2 class="head inline-block">Tags:</h2>
-            <div class="inline-block ms-2 text-black">
+        <div class="flex mt-4 gap-1 text-black">
                 <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-3" on:click={reset_tags}>{@html iconErase}</button>
                 <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-3" on:click={export_tags}>{@html iconUpload}</button>
                 <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-3" on:click={import_tags}>{@html iconDownload}</button>
-            </div>
-            <input class="leading-10 mb-2 h-10 rounded-lg bg-gray-70 px-2" placeholder="Tag Data" bind:value={paste_text}/>
+            <input class="leading-10 mb-2 h-10 rounded-lg bg-gray-70 ps-2" placeholder="Tag Data" bind:value={paste_text}/>
         </div>
         <div class="flex flex-col">
-            <div class="bg-gray-200 text-xl rounded-md h-64 leading-10 overflow-scroll my-4 p-3 py-4"
+            <div class="bg-gray-200 text-xl rounded-md h-48 leading-10 overflow-scroll my-2 p-3 py-4"
                 bind:this={current_tags_element} ></div>
             <ButtonLoad refresh={submit_tags} hidden={submit_tags_hidden}>
-                Submit Tags
+                Save Tags
             </ButtonLoad>
         </div>
 
@@ -188,7 +183,6 @@
         </div>
 
         <!-- Suggestions -->
-        <h2 class="subhead">Suggestions:</h2>
         <ul class="my-3 block">
             {#each tag_suggestions as suggestion_group}
                 <p class="text-lg">{suggestion_group.name}</p>

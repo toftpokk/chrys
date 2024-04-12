@@ -73,6 +73,14 @@ export const setName = async (work_id: number, name: string)=>{
     `).run([name,work_id])
 }
 
+export const setPath = async (work_id: number, path: string)=>{
+    // TODO use ouput to check changes
+    db.prepare(`
+    UPDATE work SET path = ?
+    WHERE work_id = ?
+    `).run([path,work_id])
+}
+
 // // GET
 
 // Images

@@ -27,6 +27,7 @@
     let current_tags_element : HTMLElement;
     let current_series = work.series
     let current_name = work.name
+    let current_path = work.path
     let paste_text = ""
     let series_list : string[] = data.series.map(s=>s.series_name)
     let custom_tag = ""
@@ -80,6 +81,22 @@
             return // TODO error handling
         }
         save_name_hidden = true
+    }
+
+    let save_path_hidden = true;
+    async function save_path(this: HTMLFormElement){
+        save_path_hidden = false
+        const res = await fetch(`/api/${work.work_id}/rename_path`,{
+            method: 'POST',
+            body: JSON.stringify(current_path),
+            headers: {
+                'Content-Type' : 'application/json'
+            }
+        })
+        if(!res.ok){
+            return // TODO error handling
+        }
+        save_path_hidden = true
     }
 
     const export_tags = ()=>{
@@ -154,6 +171,13 @@
     <div class="max-w-4xl flex flex-col px-2 mx-auto my-4 text-xl gap-3">
         <button class="text-start underline underline-offset-2 hover:text-gray-20 text-white" on:click={()=>history.back()}>&larr; Return</button>
         <div class="flex gap-1 h-9">
+            <input bind:value={current_path} class="bg-gray-200 p-1 w-full text-xl"/>
+            <ButtonLoad refresh={save_path} hidden={save_path_hidden}>
+                Save&nbsp;Path
+            </ButtonLoad>
+        </div>
+        <div class="flex gap-1 h-9">
+            <input bind:value={current_name} class="bg-gray-200 p-1 w-full text-xl"/>
             <ButtonLoad refresh={save_name} hidden={save_name_hidden}>
                 Save&nbsp;Name
             </ButtonLoad>
@@ -162,9 +186,9 @@
 
         <!-- Current Tags-->
         <div class="flex mt-4 gap-1 text-black">
-                <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-3" on:click={reset_tags}>{@html iconErase}</button>
-                <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-3" on:click={export_tags}>{@html iconUpload}</button>
-                <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-3" on:click={import_tags}>{@html iconDownload}</button>
+            <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-3" on:click={reset_tags}>{@html iconErase}</button>
+            <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-3" on:click={export_tags}>{@html iconUpload}</button>
+            <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-3" on:click={import_tags}>{@html iconDownload}</button>
             <input class="leading-10 mb-2 h-10 rounded-lg bg-gray-70 ps-2" placeholder="Tag Data" bind:value={paste_text}/>
         </div>
         <div class="flex flex-col">

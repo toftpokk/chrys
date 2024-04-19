@@ -16,7 +16,7 @@
 </script>
 <li class="bg-gray-80 w-48 sm:w-72 m-1 overflow-hidden">
 	<a href={isSeries?"/series/"+series :url} class="bottom-0 top-0 left-0 right-0 z-10 box-border">
-		<img alt="cover" class=" w-full h-[250px] object-cover overflow-hidden" src={image} />
+		<img loading="lazy" alt="cover" class=" w-full h-[250px] object-cover overflow-hidden" src={image} />
 	</a>
 	<div class="p-3">
 		<div class="font-bold break-words inline-block py-1 px-2 rounded-xl w-full" class:bg-teal-100={isSeries} class:bg-red-100={tags.includes("compilation")}>

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
     import { env } from '$env/dynamic/public';
+	import Icon from '$lib/Icon.svelte';
+    import iconIndex from "$lib/icon/index.svg?raw"
     import Reactions from '$lib/Reactions.svelte'
 	import { emptyWork, encodePathURI } from '$lib/helper';
     import type { work } from '$lib/types'
@@ -168,7 +170,12 @@
         </aside>
         <div class="grow overflow-scroll h-full">
             <div class="flex justify-between mb-3">
-                <button on:click={toggleLeftPane} class="touch-none select-none text-right text-xl px-4 py-2 pill z-10">&rarr;</button>
+                <div class="z-10">
+                    <button on:click={toggleLeftPane} class="touch-none select-none text-right text-xl px-4 py-2 pill">&rarr;</button>
+                    <a href="/" class="touch-none select-none text-right text-xl px-4 py-2 pill">
+                        <Icon src={iconIndex} color={false ? "#949daa" : "#FFF"} size={16}/>
+                    </a>
+                </div>
                 <button on:click={toggleRightPane} class="touch-none select-none text-left text-xl px-4 py-2 pill z-10">{(index+1)+"/"+work.images.length}</button>
             </div>
             <div class="flex justify-center h-full">

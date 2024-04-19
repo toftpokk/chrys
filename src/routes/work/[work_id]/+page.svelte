@@ -6,10 +6,11 @@
     import type { work } from '$lib/types'
     export let data : import("./$types").PageData
 
-    const work_id = $page.params.work_id
+    let work_id = ""
+    $: work_id = $page.params.work_id
+
     let work : work = emptyWork
     $: work = data.work ? data.work : emptyWork
-    let author_url = ""
     let images_load : string[] = []
     $: images_load = work.images.slice(index, index+3)
     let previewImage : string[] = []
@@ -18,6 +19,7 @@
     let index = 0
     $: index = data ? 0 : 0
 
+    let author_url = ""
     $: author_url = `/author/${work.author_id}`
 
     let image_prefix = ""

@@ -7,7 +7,7 @@ import { fuse } from './database'
 import { encodePathURI, tag_deserialize } from '$lib/helper'
 import { env } from '$env/dynamic/public'
 
-
+const SIMILAR = 5
 export const db = new Database(penv.DB_FILE)
 
 const paginate = (page: number)=>{
@@ -133,6 +133,52 @@ export const get_work = async (work_id: number) : Promise<work|null> =>{
         }
     }
     return null
+}
+
+////// JACCARD
+const union = function (a : any[], b : any[]) {
+    let x : any[] = [];
+    function pushx(e : any){
+        // not found e in x
+        if (!~x.indexOf(e)) x.push(e);
+    }
+    a.forEach(v=>pushx(v))
+    b.forEach(v=>pushx(v))
+    return x
+}
+
+const intersect = function (a : any[], b : any[]) {
+    let x : any[] = [];
+    function pushx(e : any){
+        // found e in a
+        if (!!~a.indexOf(e)) x.push(e);
+    }
+    b.forEach(v=>pushx(v))
+    return x
+}
+
+
+export const get_similar = async (tags: string[]) =>{
+    const work = db.prepare(`
+    SELECT *
+    FROM work
+    WHERE active = 1 AND tags != ''
+    `).all([]) as (db_work & {author_name: string})[]
+    const work_tags = await Promise.all(work.map(async (w)=>{
+        const t = tag_deserialize(w.tags)
+        const i = intersect(tags,t)
+        const u = union(tags,t)
+        const j = i.length / u.length
+
+        const images = await get_images(w.path)
+        return {
+            ...w,
+            images,
+            jaccard: j
+        }
+    }))
+    const similar_works = work_tags.sort((a,b)=>b.jaccard - a.jaccard).slice(1,SIMILAR+1)
+    return similar_works
 }
 
 // TODO: use list_work

@@ -2,27 +2,26 @@
 	import { page } from '$app/stores';
     import { env } from '$env/dynamic/public';
     import Reactions from '$lib/Reactions.svelte'
-	import Tag from '$lib/atom/Tag.svelte';
 	import { emptyWork, encodePathURI } from '$lib/helper';
     import type { work } from '$lib/types'
     export let data : import("./$types").PageData
 
     const work_id = $page.params.work_id
-    let work : work = data.work ? data.work : emptyWork
+    let work : work = emptyWork
+    $: work = data.work ? data.work : emptyWork
     let author_url = ""
     let images_load : string[] = []
     $: images_load = work.images.slice(index, index+3)
-    let index = 0
-    let image_prefix = ""
-    let author_comp = ""
-    let work_comp = ""
     let previewImage : string[] = []
 
-    if(data.work){
-        author_url = `/author/${data.work.author_id}`
+    // reset index on data change
+    let index = 0
+    $: index = data ? 0 : 0
 
-        image_prefix = `${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodePathURI(work.path)}`
-    }
+    $: author_url = `/author/${work.author_id}`
+
+    let image_prefix = ""
+    $: image_prefix = `${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodePathURI(work.path)}`
 
     const prevIndex = ()=>{
         if(index > 0){
@@ -141,6 +140,19 @@
                     {/each}
                 </div>
                 <a class="pill text-xl px-3 py-2 font-bold bg-gray-200" href={`/work/${work_id}/edit`}>Edit Tags &rarr;</a>
+            </div>
+            <div class="mt-4">
+                <h2 class="font-bold text-lg mb-3">Similar Works:</h2>
+                <div class="flex flex-wrap gap-1 justify-around">
+                    {#each data.similar as sim}
+                        <a class="my-1 w-5/12" href={`/work/${sim.work_id}`}>
+                            <div class="">
+                                <img alt={sim.name} src={`${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodePathURI(sim.path)}/${sim.images[0]}`}/>
+                                <p>{sim.name}</p>
+                            </div>
+                        </a>
+                    {/each}
+                </div>
             </div>
         </aside>
         <div class="grow overflow-scroll h-full">

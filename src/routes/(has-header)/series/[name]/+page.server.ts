@@ -6,9 +6,5 @@ export const load = async ({params,url})=>{
         page = 1
     }
     const series = params.name
-    const work = await list_work_with_series(series,page)
-
-    return {
-        work,
-    }
+    return await list_work_with_series(series,page)
 }

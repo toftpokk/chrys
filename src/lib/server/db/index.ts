@@ -196,9 +196,10 @@ export const list_work_with_series = async (series_name: string, page: number)=>
     const w = db.prepare(query).all([series_name]) as (db_work & {author_name: string})[]
 
     const {start,end} = paginate(page)
-    const works = w.slice(start,end)
+    const work = w.slice(start,end)
+    const num_pages = Math.ceil(w.length/page_size);
 
-    return Promise.all(works.map(async (w)=>{
+    let work_image = Promise.all(work.map(async (w)=>{
         const images = await get_images(w.path)
         return {
             ...w,
@@ -206,6 +207,10 @@ export const list_work_with_series = async (series_name: string, page: number)=>
             tags: tag_deserialize(w.tags)
         }
     }))
+    return {
+        work: work_image,
+        num_pages
+    }
 }
 // Lists
 

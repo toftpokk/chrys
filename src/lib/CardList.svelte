@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { navigating } from "$app/stores";
 	import { env } from "$env/dynamic/public";
 	import Card from "./Card.svelte";
     import PageNav from "./PageNav.svelte";
@@ -13,7 +14,8 @@
 
     let page_max = -1;
     let series : string[] = []
-    let work= data.work
+    let work : work[] = []
+    $: work = data.work
     if (groupSeries){
         work = work.filter(filterDuplicateSeries)
     }
@@ -30,7 +32,7 @@
         return true
     }
 </script>
-<div class="max-w-7xl mx-auto" data-sveltekit-reload> <!-- Or else page wont load-->
+<div class="max-w-7xl mx-auto">
     {#if hasNav}
         <PageNav max={page_max}/>
         <Sorting hasFilters={hasFilters}/>
@@ -38,22 +40,37 @@
     
     <ul class="flex flex-wrap justify-center">
         {#each work as w}
-            <Card
-                image={
-                    w.images[0]
-                    ?`${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodePathURI(w.path)}/${w.images[0]}`
-                    : '/image-not-found.jpg'
-                }
-                url={`/work/${w.work_id}`}
-                author={w.author_name}
-                title={w.name}
-                viewed={w.viewed}
-                favorite={w.favorite}
-                author_id={w.author_id}
-                isSeries={groupSeries? !IsEmptySeries(w.series): false}
-                series={w.series}
-                tags={w.tags}
-            />
+            {#if $navigating}
+                <Card
+                    image={''}
+                    url={""}
+                    author={"Loading..."}
+                    title={"Loading..."}
+                    viewed={false}
+                    favorite={false}
+                    author_id={0}
+                    isSeries={false}
+                    series={""}
+                    tags={[]}
+                />
+            {:else}
+                <Card
+                    image={
+                        w.images[0]
+                        ?`${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodePathURI(w.path)}/${w.images[0]}`
+                        : '/image-not-found.jpg'
+                    }
+                    url={`/work/${w.work_id}`}
+                    author={w.author_name}
+                    title={w.name}
+                    viewed={w.viewed}
+                    favorite={w.favorite}
+                    author_id={w.author_id}
+                    isSeries={groupSeries? !IsEmptySeries(w.series): false}
+                    series={w.series}
+                    tags={w.tags}
+                />
+            {/if}
         {/each}
     </ul>
     {#if hasNav}

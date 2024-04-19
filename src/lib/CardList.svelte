@@ -15,10 +15,7 @@
     let page_max = -1;
     let series : string[] = []
     let work : work[] = []
-    $: work = data.work
-    if (groupSeries){
-        work = work.filter(filterDuplicateSeries)
-    }
+    $: work = groupSeries? data.work.filter(filterDuplicateSeries) : data.work
     if(data.num_pages) page_max = data.num_pages
 
     function filterDuplicateSeries(w : work){

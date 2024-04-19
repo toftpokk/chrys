@@ -158,7 +158,7 @@ const intersect = function (a : any[], b : any[]) {
 }
 
 
-export const get_similar = async (tags: string[]) =>{
+export const get_similar = async (work_id : number, tags: string[]) =>{
     if(tags.length < 1) return []
     const work = db.prepare(`
     SELECT *
@@ -178,7 +178,10 @@ export const get_similar = async (tags: string[]) =>{
             jaccard: j
         }
     })
-    const similar_works = work_tags.sort((a,b)=>b.jaccard - a.jaccard).slice(1,SIMILAR+1)
+    const similar_works = work_tags
+        .filter((w)=>w.work_id != work_id)
+        .sort((a,b)=>b.jaccard - a.jaccard)
+        .slice(0,SIMILAR)
     return similar_works
 }
 

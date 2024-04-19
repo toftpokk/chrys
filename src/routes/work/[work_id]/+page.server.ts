@@ -5,7 +5,7 @@ export const load = async ({params})=>{
     const work = await get_work(work_id)
     let similar : any[] = []
     if(work){
-        similar = await get_similar(work.tags)
+        similar = await get_similar(work_id, work.tags)
     }
     return {
         work,

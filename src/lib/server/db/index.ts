@@ -159,24 +159,25 @@ const intersect = function (a : any[], b : any[]) {
 
 
 export const get_similar = async (tags: string[]) =>{
+    if(tags.length < 1) return []
     const work = db.prepare(`
     SELECT *
     FROM work
     WHERE active = 1 AND tags != ''
     `).all([]) as (db_work & {author_name: string})[]
-    const work_tags = await Promise.all(work.map(async (w)=>{
+    const work_tags = work.map((w)=>{
         const t = tag_deserialize(w.tags)
         const i = intersect(tags,t)
         const u = union(tags,t)
         const j = i.length / u.length
 
-        const images = await get_images(w.path)
+        const images = get_images(w.path)
         return {
             ...w,
             images,
             jaccard: j
         }
-    }))
+    })
     const similar_works = work_tags.sort((a,b)=>b.jaccard - a.jaccard).slice(1,SIMILAR+1)
     return similar_works
 }

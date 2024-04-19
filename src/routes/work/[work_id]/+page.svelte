@@ -142,12 +142,21 @@
                 <a class="pill text-xl px-3 py-2 font-bold bg-gray-200" href={`/work/${work_id}/edit`}>Edit Tags &rarr;</a>
             </div>
             <div class="mt-4">
-                <h2 class="font-bold text-lg mb-3">Similar Works:</h2>
+                {#if data.similar.length > 0}
+                    <h2 class="font-bold text-lg mb-3">Similar Works:</h2>
+                {/if}
                 <div class="flex flex-wrap gap-1 justify-around">
                     {#each data.similar as sim}
+
                         <a class="my-1 w-5/12" href={`/work/${sim.work_id}`}>
                             <div class="">
-                                <img alt={sim.name} src={`${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodePathURI(sim.path)}/${sim.images[0]}`}/>
+                                {#await sim.images}
+                                    <img/>
+                                {:then images}
+                                    <img loading="lazy" alt={sim.name} src={`${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodePathURI(sim.path)}/${images[0]}`}/>
+                                {:catch error}
+                                    <p>Error {error}</p>
+                                {/await}
                                 <p>{sim.name}</p>
                             </div>
                         </a>

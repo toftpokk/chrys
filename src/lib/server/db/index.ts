@@ -407,8 +407,8 @@ export const list_works = async (options: {
     else if(options.sort == "random"){
         // See: https://stackoverflow.com/questions/24256258/order-by-random-with-seed-in-sqlite
         const today = new Date()
-        const dateSum = today.getDay()+today.getMonth()+today.getFullYear()
-        query += ` ORDER BY (substr(work_id * '${env.PUBLIC_RANDOM_SEED}' * '${dateSum}', length(work_id)+2)) DESC`
+        const dateSum = today.getDay()+today.getMonth()*31+today.getFullYear()
+        query += ` ORDER BY (substr(work_id * '${env.PUBLIC_RANDOM_SEED}' * '${dateSum}', length(work_id * '${dateSum}')+2)) DESC`
     }
 
     partial_works = db.prepare(query).all(args) as (db_work & {author_name: string})[]

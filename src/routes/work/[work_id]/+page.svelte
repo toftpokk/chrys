@@ -154,13 +154,7 @@
 
                         <a class="my-1 w-5/12" href={`/work/${sim.work_id}`}>
                             <div class="">
-                                {#await sim.images}
-                                    <img/>
-                                {:then images}
-                                    <img loading="lazy" alt={sim.name} src={`${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodePathURI(sim.path)}/${images[0]}`}/>
-                                {:catch error}
-                                    <p>Error {error}</p>
-                                {/await}
+                                <img loading="lazy" alt={sim.name} src={`${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodePathURI(sim.path)}/${sim.cover}`}/>
                                 <p>{sim.name}</p>
                             </div>
                         </a>

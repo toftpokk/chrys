@@ -237,7 +237,7 @@ const select_work_with_path_author = (path: string, author_id: number): db_work 
 
 export const select_work_authors = () =>{
     return db.prepare(`
-    SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.series,w.active,a.name AS author_name
+    SELECT w.work_id,w.name,w.path,w.author_id,w.favorite,w.viewed,w.tags,w.series,w.active,w.cover,a.name AS author_name
     FROM work w
     LEFT JOIN author a
     ON w.author_id = a.author_id

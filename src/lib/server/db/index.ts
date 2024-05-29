@@ -170,11 +170,8 @@ export const get_similar = async (work_id : number, tags: string[]) =>{
         const i = intersect(tags,t)
         const u = union(tags,t)
         const j = i.length / u.length
-
-        const images = get_images(w.path)
         return {
             ...w,
-            images,
             jaccard: j
         }
     })
@@ -203,10 +200,8 @@ export const list_work_with_series = async (series_name: string, page: number)=>
     const num_pages = Math.ceil(w.length/page_size);
 
     let work_image = Promise.all(work.map(async (w)=>{
-        const images = await get_images(w.path)
         return {
             ...w,
-            images,
             tags: tag_deserialize(w.tags)
         }
     }))
@@ -238,10 +233,8 @@ export const list_work_with_alpha = (alpha : string, page: number)=>{
     
     const work_list = alpha_works.slice(start,end)
     const work = Promise.all(work_list.map(async (w: db_work & {author_name: string})=>{
-        const images = await get_images(w.path)
         return {
             ...w,
-            images,
             tags: tag_deserialize(w.tags)
         }
     }))
@@ -273,6 +266,7 @@ export const list_series = async ()=>{
     const query = `
     SELECT w.name AS name, 
            w.path AS path,
+           w.cover AS cover,
            w.series as series_name,
            a.name AS author_name
     FROM work w
@@ -282,14 +276,13 @@ export const list_series = async ()=>{
     GROUP BY series_name
     ORDER BY name
     `
-    const all_series = db.prepare(query).all([]) as {name: string, series_name: string, author_name: string, path: string}[]
-    return Promise.all(all_series.map(async (s)=>{
-        const images = await get_images(`${s.path}`)
+    const all_series = db.prepare(query).all([]) as {name: string, series_name: string, author_name: string, path: string, cover: string}[]
+    return all_series.map((s)=>{
         return {
             ...s,
-            image: images[0]
+            image: s.cover
         }
-    }))
+    })
 }
 
 export const list_authors = async ()=>{
@@ -336,10 +329,8 @@ export const list_work_with_tags = async (tag_name: string, page: number)=>{
     const works = tagged_works.slice(start,end)
 
     return Promise.all(works.map(async (w: db_work & {author_name: string})=>{
-        const images = await get_images(w.path)
         return {
             ...w,
-            images,
             tags: tag_deserialize(w.tags)
         }
     }))

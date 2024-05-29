@@ -1,4 +1,4 @@
 #!/bin/sh
-docker save -t toftpokk/chrys -o chrys.tar
-rsync -av --progress chrys.tar server:docker_images/
+docker save toftpokk/chrys -o chrys.tar && \
+rsync -av --progress chrys.tar 192.168.1.XXX:docker_images/ && \
 rm chrys.tar

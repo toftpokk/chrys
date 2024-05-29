@@ -1,0 +1,4 @@
+#!/bin/sh
+docker save -t toftpokk/chrys -o chrys.tar
+rsync -av --progress chrys.tar server:docker_images/
+rm chrys.tar

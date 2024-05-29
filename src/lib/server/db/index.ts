@@ -405,10 +405,10 @@ export const list_works = async (options: {
         query += ` ORDER BY work_id DESC`
     }
     else if(options.sort == "random"){
-        // See: https://stackoverflow.com/questions/24256258/order-by-random-with-seed-in-sqlite
+        // See: https://www.sqlite.org/forum/forumpost/e2216583a4
         const today = new Date()
         const dateSum = today.getDay()+today.getMonth()*31+today.getFullYear()
-        query += ` ORDER BY (substr(work_id * '${env.PUBLIC_RANDOM_SEED}' * '${dateSum}', length(work_id * '${dateSum}')+2)) DESC`
+        query += ` ORDER BY SIN(work_id * '${env.PUBLIC_RANDOM_SEED}' * '${dateSum}')`
     }
 
     partial_works = db.prepare(query).all(args) as (db_work & {author_name: string})[]

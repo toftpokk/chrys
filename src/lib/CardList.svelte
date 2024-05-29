@@ -13,20 +13,21 @@
     export let groupSeries = false; // set to default false
 
     let page_max = -1;
-    let series : string[] = []
     let work : work[] = []
-    $: work = groupSeries? data.work.filter(filterDuplicateSeries) : data.work
-    if(data.num_pages) page_max = data.num_pages
-
-    function filterDuplicateSeries(w : work){
-        if(IsEmptySeries(w.series)){
+    $: work = filterDuplicateSeries(data.work)
+    
+    function filterDuplicateSeries(works : work[]){
+        let series : string[]= []
+        return works.filter((w)=>{
+            if(IsEmptySeries(w.series)){
+                return true
+            }
+            if(series.includes(w.series)){
+                return false
+            }
+            series.push(w.series)
             return true
-        }
-        if(series.includes(w.series)){
-            return false
-        }
-        series.push(w.series)
-        return true
+        })
     }
 </script>
 <div class="max-w-7xl mx-auto">

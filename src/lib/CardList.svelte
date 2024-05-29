@@ -39,8 +39,8 @@
         {#each work as w}
             <Card
                 image={
-                    w.images[0]
-                    ?`${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodePathURI(w.path)}/${w.images[0]}`
+                    w.cover
+                    ?`${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodePathURI(w.path)}/${w.cover}`
                     : '/image-not-found.jpg'
                 }
                 url={`/work/${w.work_id}`}

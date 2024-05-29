@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3'
 import { env as penv } from '$env/dynamic/private'
 import { env } from '$env/dynamic/public'
-import { tag_serialize } from '$lib/helper'
+import { encodePathURI, tag_serialize } from '$lib/helper'
 import type { author, db_history, db_work, work } from '$lib/types'
 import Fuse from 'fuse.js'
 
@@ -13,7 +13,7 @@ const initialize = ()=>{
     create_author()
     create_work()
     create_history()
-    add_series_if_not_exist()
+    add_cover_if_not_exist()
 }
 
 export const begin_hook = ()=>{
@@ -55,6 +55,7 @@ const create_work = ()=>{
         work_id INTEGER PRIMARY KEY AUTOINCREMENT,
         name VARCHAR(50),
         path VARCHAR(50),
+        cover VARCHAR(50),
         author_id INTEGER,
         viewed INTEGER(1),
         favorite INTEGER(1),
@@ -65,12 +66,12 @@ const create_work = ()=>{
     )`).run()
 }
 
-const add_series_if_not_exist = ()=>{
+const add_cover_if_not_exist = ()=>{
     // Add active column if does not exist
     const table_info : any = db.prepare("PRAGMA table_info(work)").all()
     const col_names = table_info.map((c: any)=>(c.name))
-    if(!col_names.includes("series")){
-        db.prepare("ALTER TABLE work ADD series VARCHAR(50)").run()
+    if(!col_names.includes("cover")){
+        db.prepare("ALTER TABLE work ADD cover VARCHAR(50)").run()
         console.log("Warning: no column series")
     }
     console.log("Warning: series ok")
@@ -122,6 +123,26 @@ const scan = async ()=>{
     return work_list
 }
 
+// TODO merge with other image function
+const get_images = async (relpath: string) : Promise<string[]>=>{
+    const imagepath = encodePathURI(relpath)
+    let images = []
+    try{
+        const res = await fetch(`${env.PUBLIC_IMAGE_SERVER}/api/repo/${env.PUBLIC_IMAGE_REPO}/${imagepath}`)
+        if(!res.ok){
+            throw new Error("Response not OK")
+        }
+        else{
+            const data = await res.json()
+            images = data["items"]
+        }
+    }
+    catch(error){
+        console.log(`Error: Could not get images of ${imagepath} from image server`)
+    }
+    return images
+}
+
 const sync = async (scanned_work_list : Record<string,string[]>)=>{
     // Syncs local sqlite to image server
     const author_names = Object.keys(scanned_work_list)
@@ -143,14 +164,16 @@ const sync = async (scanned_work_list : Record<string,string[]>)=>{
             let work_id = -1
             const relpath = `${author_name}/${work_slug}` 
             const work = select_work_with_path_author(relpath,author_id)
+            let images = await get_images(`${author_name}/${work_slug}`)
             if(typeof work === "object"){
                 // old work_id
                 work_id = work.work_id
                 update_active(work_id,true)
+                update_cover(work_id,images[0])
             }
             else{
                 // new work_id
-                work_id = insert_work(work_slug, `${author_name}/${work_slug}`,author_id,[])
+                work_id = insert_work(work_slug, `${author_name}/${work_slug}`,author_id,[],images[0])
             }
         })
     })
@@ -185,11 +208,11 @@ const insert_author = (name: string, path: string): number =>{
     return Number(info.lastInsertRowid)
 }
 
-const insert_work = (name: string, path: string, author_id: number,tags: string[], active=true, series="") : number =>{
+const insert_work = (name: string, path: string, author_id: number,tags: string[], cover: string, active=true, series="") : number =>{
     const t = tag_serialize(tags)
     let active_val = active?1:0;
-    const info = db.prepare('INSERT INTO work (name,path,author_id,viewed,favorite,tags,series,active) VALUES (?,?,?,?,?,?,?,?)')
-                   .run([name, path, author_id, 0, 0,t,series,active_val])
+    const info = db.prepare('INSERT INTO work (name,path,author_id,viewed,favorite,tags,series,active,cover) VALUES (?,?,?,?,?,?,?,?,?)')
+                   .run([name, path, author_id, 0, 0,t,series,active_val,cover])
     return Number(info.lastInsertRowid)
 }
 
@@ -239,4 +262,12 @@ const update_active = async (work_id: number, state: boolean)=>{
     WHERE work_id = ?
     `).run([Number(state),work_id])
     return state
+}
+
+const update_cover = async (work_id: number, cover: string)=>{
+    db.prepare(`
+    UPDATE work SET cover = ?
+    WHERE work_id = ?
+    `).run([cover,work_id])
+    return
 }

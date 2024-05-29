@@ -427,10 +427,9 @@ export const list_works = async (options: {
 
     // Images
     const result = await Promise.all(works.map(async (w: db_work & {author_name: string})=>{
-        const images = await get_images(w.path)
         return {
             ...w,
-            images,
+            images: [],
             tags: tag_deserialize(w.tags)
         }
     }))

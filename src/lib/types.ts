@@ -10,6 +10,7 @@ export interface db_work {
     viewed: boolean;
     tags: string;
     series: string;
+    cover: string;
     active: boolean;
 }
 

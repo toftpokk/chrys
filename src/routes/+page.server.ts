@@ -1,8 +1,9 @@
 import { sort_type } from "$lib/consts.js";
 import { get_page } from "$lib/helper.js"
 import { list_works } from "$lib/server/db";
+import type { PageServerLoad } from "./$types";
 
-export async function load({url}){
+export const load : PageServerLoad = async ({url}) => {
     let page = get_page(url.searchParams)
     let sort = url.searchParams.get("sort")
     let has_viewed = url.searchParams.get("has-viewed")==="true" ? true : false;

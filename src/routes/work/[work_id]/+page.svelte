@@ -40,9 +40,11 @@
 
     const handleKeyDown = (event:KeyboardEvent)=>{
         if(event.key == "ArrowRight"){
+            window.scrollTo(0,0)
             nextIndex()
         }
         if(event.key == "ArrowLeft"){
+            window.scrollTo(0,0)
             prevIndex()
         }
     }
@@ -99,6 +101,7 @@
         const image = e.target as EventTarget & {width:number}
         const imageWidth = image.width
         const clickXPercent = (e.offsetX / imageWidth);
+        window.scrollTo(0,0)
         if(clickXPercent > 0.5){
             nextIndex()
         }

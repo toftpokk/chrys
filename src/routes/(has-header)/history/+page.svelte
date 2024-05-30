@@ -57,11 +57,11 @@
         }
     }
     const aggregate = 1
-    const graphData = getDataArray(aggregate,new Date("2023-11-15"))
+    const graphData = getDataArray(aggregate,new Date("2023-08-07"))
     const graphMeta = {
         height: 15,
-        width: (graphData.domain+1)*2.1,
-        bar_width: 2,
+        width: (graphData.domain+1)*1.5,
+        bar_width: 1.5,
         bar_gap: 0.1,
         backline_count: graphData.range/2
     }
@@ -71,25 +71,27 @@
     <title>History - Chrys</title>
 </svelte:head>
 <main>
-    <svg class="border rounded-lg" width="100%" height="5em" viewBox={`0 0 ${graphMeta.width} ${graphMeta.height}`}>
-        {#each {length:graphMeta.backline_count+1} as _,idx}
-            <line
-            class="stroke-gray-50"
-            x1="0" 
-            y1={(idx/graphMeta.backline_count)*graphMeta.height} 
-            x2={(graphData.domain+1)*2.1}
-            y2={(idx/graphMeta.backline_count)*graphMeta.height} 
-            stroke-width="0.1"/>
-        {/each}
-        {#each Object.keys(graphData.data) as d}
-            <rect 
-                class="fill-red-100" 
-                x={(graphMeta.bar_width+graphMeta.bar_gap)*Number(d)} 
-                y={((graphData.range-graphData.data[Number(d)])*graphMeta.height)/graphData.range} 
-                width={graphMeta.bar_width} 
-                height={(graphData.data[Number(d)]/graphData.range)*graphMeta.height}/>
-        {/each}
-    </svg>
+    <div class="overflow-scroll max-w-[60em] mx-auto border rounded-lg">
+        <svg height="5em" viewBox={`0 0 ${graphMeta.width} ${graphMeta.height}`}>
+            {#each {length:graphMeta.backline_count+1} as _,idx}
+                <line
+                class="stroke-gray-50"
+                x1="0" 
+                y1={(idx/graphMeta.backline_count)*graphMeta.height} 
+                x2={(graphData.domain+1)*2.1}
+                y2={(idx/graphMeta.backline_count)*graphMeta.height} 
+                stroke-width="0.1"/>
+            {/each}
+            {#each Object.keys(graphData.data) as d}
+                <rect 
+                    class="fill-red-100" 
+                    x={(graphMeta.bar_width+graphMeta.bar_gap)*Number(d)} 
+                    y={((graphData.range-graphData.data[Number(d)])*graphMeta.height)/graphData.range} 
+                    width={graphMeta.bar_width} 
+                    height={(graphData.data[Number(d)]/graphData.range)*graphMeta.height}/>
+            {/each}
+        </svg>
+    </div>
     <div class="overflow-scroll max-w-[60em] mx-auto border rounded-xl">
     <table class="w-max table-auto border-gray-20 mx-auto">
         <thead class="font-bold border-b border-gray-20">

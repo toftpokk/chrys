@@ -148,14 +148,6 @@
         render_tags()
     })
 </script>
-<style>
-    .head {
-        @apply text-3xl leading-3 font-bold my-2;
-    }
-    .subhead{
-        @apply text-2xl;
-    }
-</style>
 
 <svelte:head>
     <title>Edit - Chrys</title>

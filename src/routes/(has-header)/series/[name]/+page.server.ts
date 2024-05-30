@@ -1,10 +1,10 @@
 import { list_work_with_series } from '$lib/server/db'
 
-export const load = async ({params,url})=>{
+export const load = ({params,url})=>{
     let page = Number(url.searchParams.get("page"))
     if(page == 0){
         page = 1
     }
     const series = params.name
-    return await list_work_with_series(series,page)
+    return list_work_with_series(series,page)
 }

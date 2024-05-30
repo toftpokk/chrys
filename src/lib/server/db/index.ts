@@ -183,7 +183,7 @@ export const get_similar = async (work_id : number, tags: string[]) =>{
 }
 
 // TODO: use list_work
-export const list_work_with_series = async (series_name: string, page: number)=>{
+export const list_work_with_series = (series_name: string, page: number)=>{
     const query = `
     SELECT *, w.name AS name, 
               w.path as path,
@@ -199,12 +199,12 @@ export const list_work_with_series = async (series_name: string, page: number)=>
     const work = w.slice(start,end)
     const num_pages = Math.ceil(w.length/page_size);
 
-    let work_image = Promise.all(work.map(async (w)=>{
+    let work_image = work.map((w)=>{
         return {
             ...w,
             tags: tag_deserialize(w.tags)
         }
-    }))
+    })
     return {
         work: work_image,
         num_pages

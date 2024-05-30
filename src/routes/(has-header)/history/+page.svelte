@@ -107,11 +107,11 @@
                 <td class="text-center">
                 {#if histitem.viewed}
                     <span class="w-[1.6em] mx-auto block border border-teal-100 text-teal-100 rounded-full">
-                        &#10004;
+                        O
                     </span>
                 {:else}
                     <span class="w-[1.6em] mx-auto border block border-red-100 text-red-100 rounded-full">
-                        &#10005;
+                        X
                     </span>
                 {/if}
                 </td>

@@ -326,14 +326,18 @@ export const list_work_with_tags = async (tag_name: string, page: number)=>{
     })
 
     const {start,end} = paginate(page)
-    const works = tagged_works.slice(start,end)
-
-    return Promise.all(works.map(async (w: db_work & {author_name: string})=>{
+    let works = tagged_works.slice(start,end)
+    const num_pages = Math.ceil(tagged_works.length/page_size);
+    let result = Promise.all(works.map(async (w: db_work & {author_name: string})=>{
         return {
             ...w,
             tags: tag_deserialize(w.tags)
         }
     }))
+    return {
+        works: result,
+        num_pages: num_pages
+    }
 }
 
 // TODO: fix optional, mandatory inputs

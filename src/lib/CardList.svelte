@@ -7,16 +7,17 @@
 	import { IsEmptySeries, encodePathURI } from "./helper";
 	import type { work } from "./types";
 
-    export let data: {work: work[], num_pages?: number}
+    export let data: {work: Omit<work,"images">[], num_pages: number}
     export let hasNav = true;
     export let hasFilters = false;
     export let groupSeries = false; // set to default false
 
     let page_max = -1;
-    let work : work[] = []
+    let work : Omit<work,"images">[] = []
     $: work = groupSeries ? filterDuplicateSeries(data.work) : data.work
+    $: page_max = data.num_pages
 
-    function filterDuplicateSeries(works : work[]){
+    function filterDuplicateSeries(works : Omit<work,"images">[]){
         let series : string[]= []
         return works.filter((w)=>{
             if(IsEmptySeries(w.series)){

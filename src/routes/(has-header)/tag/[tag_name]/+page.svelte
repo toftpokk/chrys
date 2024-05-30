@@ -4,7 +4,7 @@
 	import CardList from '$lib/CardList.svelte';
     const tag_name = $page.params.tag_name
     
-	export let data : {work: work[]};
+	export let data;
 </script>
 
 <svelte:head>

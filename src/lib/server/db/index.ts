@@ -172,7 +172,8 @@ export const get_similar = async (work_id : number, tags: string[]) =>{
         const j = i.length / u.length
         return {
             ...w,
-            jaccard: j
+            jaccard: j,
+            tags: t
         }
     })
     const similar_works = work_tags

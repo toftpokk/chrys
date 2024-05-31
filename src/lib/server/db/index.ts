@@ -177,6 +177,10 @@ export const get_similar = async (work_id : number, tags: string[]) =>{
     })
     const similar_works = work_tags
         .filter((w)=>w.work_id != work_id)
+        .sort((a,b)=>{
+            // Nearest work_id first
+            return Math.abs(work_id - a.work_id) - Math.abs(work_id - b.work_id)
+        })
         .sort((a,b)=>b.jaccard - a.jaccard)
         .slice(0,SIMILAR)
     return similar_works

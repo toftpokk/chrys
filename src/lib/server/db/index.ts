@@ -157,6 +157,47 @@ const intersect = function (a : any[], b : any[]) {
     return x
 }
 
+function calcjaccard(t1: string[],t2: string[]){
+    const i = intersect(t1,t2)
+    const u = union(t1,t2)
+    const j = i.length / u.length
+    return j
+}
+
+export const get_similar_batch = async ()=>{
+    const work = db.prepare(`
+    SELECT *
+    FROM work
+    WHERE active = 1 AND tags != ''
+    `).all([]) as (db_work & {author_name: string})[]
+    const work_tags = work.map((w)=>{
+        return {
+            ...w,
+            tags: tag_deserialize(w.tags)
+        }
+    })
+    const jaccards = work_tags.map((work1)=>{
+        const w1 = work1.work_id
+        const t1 = work1.tags
+        const jc = work_tags.map((work2)=>{
+            return {
+                jaccard: calcjaccard(t1,work2.tags),
+                work: work2
+            }
+        })
+        const sim = jc.filter(w=>w.work.work_id != w1)
+            .sort((a,b)=>{
+                // Nearest work_id first
+                return Math.abs(w1 - a.work.work_id) - Math.abs(w1 - b.work.work_id)
+            })
+            .sort((a,b)=>b.jaccard - a.jaccard)
+        return {
+            ...work1,
+            similar: sim
+        }
+    })
+    return jaccards
+}
 
 export const get_similar = async (work_id : number, tags: string[]) =>{
     if(tags.length < 1) return []
@@ -167,12 +208,9 @@ export const get_similar = async (work_id : number, tags: string[]) =>{
     `).all([]) as (db_work & {author_name: string})[]
     const work_tags = work.map((w)=>{
         const t = tag_deserialize(w.tags)
-        const i = intersect(tags,t)
-        const u = union(tags,t)
-        const j = i.length / u.length
         return {
             ...w,
-            jaccard: j,
+            jaccard: calcjaccard(t, tags),
             tags: t
         }
     })

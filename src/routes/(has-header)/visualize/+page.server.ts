@@ -1,9 +1,9 @@
-import { get_similar, list_works } from "$lib/server/db";
+import { get_similar_batch, list_works } from "$lib/server/db";
 import type { PageServerLoad } from "./$types";
 
 
 export const load: PageServerLoad = () => {
-    const make_links = async ()=>{
+    const gengraph = async ()=>{
         const works = (await list_works({})).work
         const included : Record<string,boolean> = {}
         const graph : {
@@ -13,45 +13,36 @@ export const load: PageServerLoad = () => {
             nodes: [],
             links: []
         }
-        for(let i=0;i<works.length;i++){
-            const work = works[i]
-            if(work.tags.length < 1){
-                continue
-            }
-            let sims = await get_similar(work.work_id,work.tags)
+        const jaccards = await get_similar_batch()
+        jaccards.forEach((j)=>{
+            if(j.tags.length < 1) return
+            if(j.similar.length < 1) return
 
-            if(sims.length < 1){
-                continue
-            }
-            let most_similar = sims[0]
-
-            if(!included[work.work_id]){
-                included[work.work_id] = true
+            const most_similar = j.similar[0]
+            if(!included[j.work_id]){
+                included[j.work_id] = true
                 graph.nodes.push({
-                    name: work.name,
-                    id: work.work_id,
-                    tags: work.tags
+                    name: j.name,
+                    id: j.work_id,
+                    tags: j.tags
                 })
             }
-            
-            if(!included[most_similar.work_id]){
-                included[most_similar.work_id] = true
+            if(!included[most_similar.work.work_id]){
+                included[most_similar.work.work_id] = true
                 graph.nodes.push({
-                    name: most_similar.name,
-                    id: most_similar.work_id,
-                    tags: most_similar.tags
+                    name: most_similar.work.name,
+                    id: most_similar.work.work_id,
+                    tags: most_similar.work.tags
                 })
             }
-            const x = {
-                target: work.work_id,
-                source: most_similar.work_id,
-                tags: most_similar.tags
-            }
-            graph.links.push(x)
-        }
+            graph.links.push({
+                target: most_similar.work.work_id,
+                source: j.work_id
+            })
+        })
         return graph
     }
     return {
-        graph: make_links()
+        graph: gengraph()
     }
 };

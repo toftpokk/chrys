@@ -6,6 +6,7 @@
     import Reactions from '$lib/Reactions.svelte'
 	import { emptyWork, encodePathURI } from '$lib/helper';
     import type { work } from '$lib/types'
+	import { onMount } from 'svelte';
     export let data : import("./$types").PageData
 
     let work_id = ""
@@ -16,6 +17,7 @@
     let images_load : string[] = []
     $: images_load = work.images.slice(index, index+3)
     let previewImage : string[] = []
+    let imageTemplate : HTMLTemplateElement;
 
     // reset index on data change
     let index = 0
@@ -27,26 +29,36 @@
     let image_prefix = ""
     $: image_prefix = `${env.PUBLIC_IMAGE_SERVER}/images/${env.PUBLIC_IMAGE_REPO}/${encodePathURI(work.path)}`
 
+    const loadImage = (src : string)=>{
+        // Note: decode does not work with templates
+        const im = new Image()
+        // Actually loads the image: https://stackoverflow.com/questions/39543290/how-to-know-when-browser-finish-to-process-an-image-after-loading-it
+        im.decode()
+        im.src = src
+        return im
+    }
+    let loadIm : HTMLImageElement[]
+
+    let figure : HTMLElement;
+    const changeImage = ()=>{
+        const firstChild = figure.firstChild
+        if(firstChild){
+            figure.removeChild(firstChild)
+        }
+        figure.appendChild(loadIm[index])
+    }
+
     const prevIndex = ()=>{
         if(index > 0){
             index-=1
         }
+        changeImage()
     }
     const nextIndex = ()=>{
         if(index< work.images.length-1){
             index+=1
         }
-    }
-
-    const handleKeyDown = (event:KeyboardEvent)=>{
-        if(event.key == "ArrowRight"){
-            window.scrollTo(0,0)
-            nextIndex()
-        }
-        if(event.key == "ArrowLeft"){
-            window.scrollTo(0,0)
-            prevIndex()
-        }
+        changeImage()
     }
 
     const toggleView = async ()=>{
@@ -109,13 +121,24 @@
             prevIndex()
         }
     };
+    const handleKeyDown = (event:KeyboardEvent)=>{
+        if(event.key == "ArrowRight"){
+            window.scrollTo(0,0)
+            nextIndex()
+        }
+        if(event.key == "ArrowLeft"){
+            window.scrollTo(0,0)
+            prevIndex()
+        }
+    }
+    onMount(()=>{
+        loadIm = work.images.map((i)=>loadImage(`${image_prefix}/${i}`))
+        changeImage()
+    })
 </script>
 
 <svelte:window on:keydown={handleKeyDown}/>
 <svelte:head>
-  {#each images_load as image}
-    <link rel="preload" as="image" href={`${image_prefix}/${image}`} />
-  {/each}
     <title>{work.name} - Chrys</title>
 </svelte:head>
 
@@ -124,7 +147,7 @@
         <!-- Sidebar -->
         <aside class:hidden={rightClose} class="grid grid-cols-3 gap-1 bg-gray-100 border-l border-gray-70 absolute h-screen right-0 z-10 px-8 pt-14 overflow-scroll">
             {#each previewImage as image, idx}
-                <button class="" on:click={()=>index=idx}>
+                <button class="" on:click={()=>{index=idx; changeImage()}}>
                     <img alt={image} src={`${image_prefix}/${image}`} class="border-teal-100" class:border-4={idx==index}>
                 </button>
             {/each}
@@ -177,7 +200,8 @@
             </div>
             <div class="flex justify-center h-full">
                 <button on:click={handleClick} class="object-fit h-full">
-                    <img class="object-fit max-h-full" draggable="false" src={ `${image_prefix}/${work.images[index]}` } alt="page"/>
+                    <figure bind:this={figure}>
+                    </figure>
                 </button>
             </div>
         </div>

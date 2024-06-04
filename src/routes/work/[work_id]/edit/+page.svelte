@@ -181,7 +181,7 @@
             <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-3" on:click={reset_tags}>{@html iconErase}</button>
             <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-3" on:click={export_tags}>{@html iconUpload}</button>
             <button class="h-10 bg-teal-100 hover:bg-teal-200 rounded-lg text-base px-3" on:click={import_tags}>{@html iconDownload}</button>
-            <input class="leading-10 mb-2 h-10 rounded-lg bg-gray-70 ps-2" placeholder="Tag Data" bind:value={paste_text}/>
+            <input class="leading-10 grow mb-2 h-10 min-w-0 rounded-lg bg-gray-70 ps-2" placeholder="Tag Data" bind:value={paste_text}/>
         </div>
         <div class="flex flex-col">
             <div class="bg-gray-200 text-xl rounded-md h-48 leading-10 overflow-scroll my-2 p-3 py-4"

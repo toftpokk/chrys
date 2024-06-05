@@ -33,8 +33,8 @@
 </script>
 <div class="max-w-7xl mx-auto">
     {#if hasNav}
-        <PageNav max={page_max}/>
         <Sorting hasFilters={hasFilters}/>
+        <PageNav max={page_max}/>
     {/if}
     
     <ul class="flex flex-wrap justify-center">

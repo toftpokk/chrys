@@ -35,19 +35,19 @@
         window.location = ("?"+u.toString()) as any
     }
 </script>
-<form class="max-w-xs mx-12 px-4 py-3">
-    <p class="block mb-2 font-bold">Sorting</p>
-    <select class="w-full mb-3 pill py-2" id="sort" bind:value={current_sort} on:change={change_sort}>
+<form class="max-w-xs mx-12 px-4">
+    <p class="block mb-1 font-bold">Sorting</p>
+    <select class="w-full mb-3 pill py-1" id="sort" bind:value={current_sort} on:change={change_sort}>
         {#each sort_type as t }
             <option value={t}>{t}</option>
         {/each}
     </select>
     {#if hasFilters}
-        <div class="mb-2">
+        <div class="mb-1">
             <input bind:checked={hasViewed} on:change={change_sort} class="scale-150 outline-none accent-teal-100 me-3" width="100" id="hasViewed" type="checkbox"/>
             <label for="hasViewed">Show Viewed Items</label>
         </div>
-        <div class="mb-2">
+        <div class="mb-1">
             <input bind:checked={hasCompilation} on:change={change_sort} class="scale-150 outline-none accent-teal-100 me-3" width="100" id="hasCompilation" type="checkbox"/>
             <label for="hasCompilation">Show Compilations</label>
         </div>

@@ -12,5 +12,5 @@
 </svelte:head>
 <main class="w-full" >
     <h1 class="text-4xl flex justify-center my-8">Tag: {tag_name}</h1>
-    <CardList data={data}/>
+    <CardList data={data} hasFilters={true}/>
 </main>

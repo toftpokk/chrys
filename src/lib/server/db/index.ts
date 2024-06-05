@@ -342,59 +342,19 @@ export const list_authors = async ()=>{
     return db.prepare(query).all([]) as {name:string,favorite:1|null,work_count:number,author_id:string}[]
 }
 
-// TODO: use list_work
-export const list_work_with_tags = async (tag_name: string, page: number)=>{
-    const partial_works = db.prepare(`
-    SELECT *, w.name AS name, 
-              w.path as path,
-              w.favorite as favorite, 
-              a.name AS author_name
-    FROM work w
-    LEFT JOIN author a
-    ON w.author_id = a.author_id
-    WHERE w.active = 1`).all([]) as (db_work & {author_name: string})[]
-    const tagged_works = partial_works.filter((w: any)=>{
-        if(w.tags == ''){
-            return false
-        }
-        else{
-            const tags = tag_deserialize(w.tags)
-            if(tags.includes(tag_name)){
-                return true
-            }
-            else{
-                return false
-            }
-        }
-    })
-
-    const {start,end} = paginate(page)
-    let works = tagged_works.slice(start,end)
-    const num_pages = Math.ceil(tagged_works.length/page_size);
-    let result = Promise.all(works.map(async (w: db_work & {author_name: string})=>{
-        return {
-            ...w,
-            tags: tag_deserialize(w.tags)
-        }
-    }))
-    return {
-        works: result,
-        num_pages: num_pages
-    }
-}
-
 // TODO: fix optional, mandatory inputs
 export const list_works = async (options: {
-            page?: number,
-            sort?: string,
-            author_id?: number,
-            needs_active?: boolean,
+            page?: number
+            sort?: string
+            author_id?: number
+            needs_active?: boolean
             has_compilation?: boolean
             has_viewed?: boolean
+            with_tag?: string
         }) : Promise<{work:work[],num_pages:number}>=>{
 
     let needs_active = options.needs_active || false;
-    let partial_works
+    let works
 
     let args : unknown[] = []
     let query = `
@@ -449,30 +409,38 @@ export const list_works = async (options: {
         query += ` ORDER BY SIN(work_id * '${env.PUBLIC_RANDOM_SEED}' * '${dateSum}')`
     }
 
-    partial_works = db.prepare(query).all(args) as (db_work & {author_name: string})[]
+    works = db.prepare(query).all(args) as (db_work & {author_name: string})[]
 
-    // Paging 
-    let works : typeof partial_works = []
+    let tagged_work = works.map((w: db_work & {author_name: string})=>{
+        return {
+            ...w,
+            tags: tag_deserialize(w.tags)
+        }
+    })
+
+    // Filter by tags
+    if(typeof options.with_tag === "string"){
+        const t = options.with_tag
+        tagged_work = tagged_work.filter((w)=>w.tags.includes(t))
+    }
+
+    // Paging
+    let result_work = tagged_work
     let num_pages = -1;
     if(typeof options.page === "number"){
         const {start,end} = paginate(options.page)
-        works = partial_works.slice(start,end)
-        num_pages = Math.ceil(partial_works.length/page_size)
-    }
-    else{
-        works = partial_works
+        num_pages = Math.ceil(result_work.length/page_size)
+        result_work = result_work.slice(start,end)
     }
 
-    // Images
-    const result = await Promise.all(works.map(async (w: db_work & {author_name: string})=>{
-        return {
-            ...w,
-            images: [],
-            tags: tag_deserialize(w.tags)
-        }
+    // Add Images
+    const output_work = result_work.map(w=>({
+        ...w,
+        images: []
     }))
+
     return {
         num_pages,
-        work: result
+        work: output_work
     }
 }

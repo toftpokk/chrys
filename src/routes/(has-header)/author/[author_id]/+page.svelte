@@ -3,8 +3,9 @@
 	import CardList from '$lib/CardList.svelte';
 	import { page } from '$app/stores';
 	import AuthorReactions from '$lib/AuthorReactions.svelte';
+	import type { PageData } from './$types';
     
-	export let data : {work: work[], author_name: string, favorite: boolean};
+	export let data : PageData;
     const author_id = $page.params.author_id
     const author_name = data.author_name
 
@@ -29,5 +30,5 @@
     <div class="flex justify-center">
         <AuthorReactions favorite={data.favorite} on:toggleFav={toggleFav}/>
     </div>
-    <CardList data={data} groupSeries={true}/>
+    <CardList data={data} groupSeries={true} hasNav={true} hasSort={false}/>
 </main>

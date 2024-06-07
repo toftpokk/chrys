@@ -9,6 +9,7 @@
 
     export let data: {work: Omit<work,"images">[], num_pages: number}
     export let hasNav = true;
+    export let hasSort = true;
     export let hasFilters = false;
     export let groupSeries = false; // set to default false
 
@@ -32,8 +33,10 @@
     }
 </script>
 <div class="max-w-7xl mx-auto">
-    {#if hasNav}
+    {#if hasSort}
         <Sorting hasFilters={hasFilters}/>
+    {/if}
+    {#if hasNav}
         <PageNav max={page_max}/>
     {/if}
     

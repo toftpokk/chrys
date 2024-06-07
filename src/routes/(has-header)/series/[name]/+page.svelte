@@ -14,5 +14,5 @@
 </svelte:head>
 <main class="w-full" >
     <h1 class="text-4xl flex justify-center my-8">Series: {series}</h1>
-    <CardList data={data}/>
+    <CardList data={data} hasNav={true} hasSort={false}/>
 </main>

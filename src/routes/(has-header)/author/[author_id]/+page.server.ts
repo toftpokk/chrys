@@ -10,7 +10,7 @@ export const load : PageServerLoad = async ({params,url})=>{
     const data = await list_works({page,author_id: author_id,needs_active:true,sort:"name"})
     const author = await get_author(author_id)
     const author_name = author? author.name : "Unnamed Author"
-    const author_fav = author? author.favorite : 0
+    const author_fav = author? author.favorite : false
 
     return {
         author_name,

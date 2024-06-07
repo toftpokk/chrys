@@ -12,7 +12,7 @@ export const load : PageServerLoad = async ({params,url})=>{
         page = 1
     }
     if(!sort){
-        sort = "id"
+        sort = "random"
     }
     const data = await list_works({
         page,sort,has_viewed,needs_active:true,has_compilation,

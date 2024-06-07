@@ -32,7 +32,7 @@
                 <hr class="my-3"/>
             {/each}
             {#each misc_tags as tag}
-                <a class="pill m-1" href={"/tag/"+tag}>{tag} <span class="text-gray-30">{data.tags[tag]}</span></a>
+                <a class="pill m-1" href={"/tag/"+tag+"?has-viewed=true&has-compilation=true"}>{tag} <span class="text-gray-30">{data.tags[tag]}</span></a>
             {/each}
         </div>
     </div>

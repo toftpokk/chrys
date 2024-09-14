@@ -13,7 +13,8 @@ const initialize = ()=>{
     create_author()
     create_work()
     create_history()
-    add_cover_if_not_exist()
+    add_updates_if_not_exist()
+    create_trigger()
 }
 
 export const begin_hook = ()=>{
@@ -62,19 +63,36 @@ const create_work = ()=>{
         series VARCHAR(50),
         tags VARCHAR(100),
         active INTEGER(1),
+        created_at VARCHAR(50),
+        updated_at VARCHAR(50),
         FOREIGN KEY(author_id) REFERENCES author(author_id)
     )`).run()
 }
 
-const add_cover_if_not_exist = ()=>{
+const add_updates_if_not_exist = ()=>{
     // Add active column if does not exist
     const table_info : any = db.prepare("PRAGMA table_info(work)").all()
     const col_names = table_info.map((c: any)=>(c.name))
-    if(!col_names.includes("cover")){
-        db.prepare("ALTER TABLE work ADD cover VARCHAR(50)").run()
-        console.log("Warning: no column series")
+    if(!col_names.includes("created_at")){
+        db.prepare("ALTER TABLE work ADD created_at VARCHAR(50)").run()
+        console.log("Warning: no column created_at")
     }
-    console.log("Warning: series ok")
+    if(!col_names.includes("updated_at")){
+        db.prepare("ALTER TABLE work ADD updated_at VARCHAR(50)").run()
+        console.log("Warning: no column updated_at")
+    }
+    console.log("Warning: updated_at,created_at ok")
+}
+
+const create_trigger = ()=>{
+    db.prepare(`CREATE TRIGGER IF NOT EXISTS update_work_updated_at 
+    BEFORE UPDATE
+        ON work
+    BEGIN
+        UPDATE work
+            SET updated_at = strftime('%Y-%m-%d%H:%M:%S:%s', 'now', 'localtime') 
+        WHERE work_id = old.work_id;
+    END;`).run()
 }
 
 const create_history = ()=>{
@@ -211,8 +229,10 @@ const insert_author = (name: string, path: string): number =>{
 const insert_work = (name: string, path: string, author_id: number,tags: string[], cover: string, active=true, series="") : number =>{
     const t = tag_serialize(tags)
     let active_val = active?1:0;
-    const info = db.prepare('INSERT INTO work (name,path,author_id,viewed,favorite,tags,series,active,cover) VALUES (?,?,?,?,?,?,?,?,?)')
-                   .run([name, path, author_id, 0, 0,t,series,active_val,cover])
+    // Remove nanosecs
+    const now = new Date().toISOString().replace(/\..+/,'')
+    const info = db.prepare('INSERT INTO work (name,path,author_id,viewed,favorite,tags,series,active,cover,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)')
+                   .run([name, path, author_id, 0, 0,t,series,active_val,cover, now, now])
     return Number(info.lastInsertRowid)
 }
 

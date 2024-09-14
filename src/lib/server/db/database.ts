@@ -90,7 +90,7 @@ const create_trigger = ()=>{
         ON work
     BEGIN
         UPDATE work
-            SET updated_at = strftime('%Y-%m-%d%H:%M:%S:%s', 'now', 'localtime') 
+            SET updated_at = strftime('%Y-%m-%dT%H:%M:%S:%s', 'now', 'localtime') 
         WHERE work_id = old.work_id;
     END;`).run()
 }
@@ -182,15 +182,16 @@ const sync = async (scanned_work_list : Record<string,string[]>)=>{
             let work_id = -1
             const relpath = `${author_name}/${work_slug}` 
             const work = select_work_with_path_author(relpath,author_id)
-            let images = await get_images(`${author_name}/${work_slug}`)
             if(typeof work === "object"){
                 // old work_id
+                let images = await get_images(work.path)
                 work_id = work.work_id
                 update_active(work_id,true)
                 update_cover(work_id,images[0])
             }
             else{
                 // new work_id
+                let images = await get_images(`${author_name}/${work_slug}`)
                 work_id = insert_work(work_slug, `${author_name}/${work_slug}`,author_id,[],images[0])
             }
         })
